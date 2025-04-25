@@ -54,7 +54,7 @@
             <!-- Starts Staff Menu Listing -->
 
             <li class="nav-item">
-                <!-- <a class="nav-link" data-toggle="collapse" href="#staff" role="button" aria-expanded="" aria-controls="staff">
+                <a class="nav-link" data-toggle="collapse" href="#staff" role="button" aria-expanded="" aria-controls="staff">
                     <i class="link-icon" data-feather="user-plus"></i>
                     <span class="link-title">School Mgmt.</span>
                     <i class="link-arrow" data-feather="chevron-down"></i>
@@ -62,21 +62,21 @@
 
                 <div class="collapse" id="staff">
                     <ul class="nav sub-menu">
-                        <li class="nav-item">
+                        <!-- <li class="nav-item">
                             <a href="#" class="nav-link">Staff Info</a>
-                        </li>
+                        </li> -->
                         <li class="nav-item">
-                            <a href="#" class="nav-link">Add Staff</a>
+                            <a href="{{ url('/staff/index') }}" class="nav-link">Staff Management</a>
                         </li>
-                        <li class="nav-item">
+                        <!-- <li class="nav-item">
                             <a href="#" class="nav-link">Pay Slips</a>
-                        </li>
-                        <li class="nav-item">
+                        </li> -->
+                        <!-- <li class="nav-item">
                             <a href="#" class="nav-link">Others</a>
-                        </li>
+                        </li> -->
 
                     </ul>
-                </div> -->
+                </div>
             </li>
 
             <!-- Ends Staff Menu Listing -->

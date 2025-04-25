@@ -35,7 +35,7 @@ class QuestionController extends Controller
         return datatables()->of($qns)
             ->addColumn('action', function ($selected) {
                 return
-                    '<a class="btn btn-success" href="' . $selected->id . '/show" title="Detailed view of this Record"><i class="fas fa-eye"></i></a>&nbsp;&nbsp;&nbsp;&nbsp;<a class="btn btn-warning" title="Edit this Record" href="' . $selected->id . '/edit"><i class="fas fa-edit"></i></a>&nbsp;&nbsp;&nbsp;&nbsp;<a class="btn btn-success" href="' . $selected->id . '/generate" title="Generate Questions...."><i class="fas fa-plus"></i></a>&nbsp;&nbsp;&nbsp;&nbsp;<a class="btn btn-success" href="' . $selected->id . '/generatedit" title="Edit Generated Questions...."><i class="fas fa-minus"></i></a>&nbsp;&nbsp;&nbsp;&nbsp;<a class="btn btn-danger" href="' . $selected->id . '/destroy" onclick="return confirmation();" title="Delete this Record"><i class="fas fa-trash"></i></a>';
+                    '<a class="btn btn-success" href="' . $selected->id . '/show" title="Detailed view of this Record"><i class="fas fa-eye"></i></a>&nbsp;&nbsp;&nbsp;&nbsp;<a class="btn btn-warning" title="Edit this Record" href="' . $selected->id . '/edit"><i class="fas fa-edit"></i></a>&nbsp;&nbsp;&nbsp;&nbsp;<a class="btn btn-success" id="checkRec" alt="'. $selected->id . '" href="' . $selected->id . '/generate" title="Generate Questions...."><i class="fas fa-plus"></i></a>&nbsp;&nbsp;&nbsp;&nbsp;<a class="btn btn-success" href="' . $selected->id . '/generatedit" title="Edit Generated Questions...."><i class="fas fa-minus"></i></a>&nbsp;&nbsp;&nbsp;&nbsp;<a class="btn btn-danger" href="' . $selected->id . '/destroy" onclick="return confirmation();" title="Delete this Record"><i class="fas fa-trash"></i></a>';
             })->toJson();
     }
 
@@ -55,6 +55,14 @@ class QuestionController extends Controller
 
     public function generate($id)
     {
+
+        $result2 = DB::select("select count(*) as norec from question_master_qns_ans WHERE is_active = 1 AND qn_master_temp_id=$id");
+        $norec = $result2[0]->norec;
+
+        if($norec > 0) {
+            return redirect()->route('question.index')->with('message', "Question Template already generated - Try with different Question Template !!!");
+        }
+
         $qnstemp = DB::select("select question_template from question_master_template WHERE id=$id AND is_active = 1");
         // echo "<pre>";
         // print_r($qnstemp);
@@ -83,10 +91,10 @@ class QuestionController extends Controller
 
         $romanLetters = array (1 => "I", 2 => "II", 3 => "III", 4 => "IV", 5 => "V", 6 => "VI", 7 => "VII", 8 => "VIII", 9 => "IX", 10 => "X", 11 => "XI", 12 => "XII", 13 => "XIII", 14 => "XIV", 15 => "XV");
 
-        return view('pages.masters.question.generate')->with('qns', $qns)->with('qhead', $qnheads_det)->with('qncnt', $qn_count)->with('qnmark', $qn_mark)->with('romlet', $romanLetters);
-
+        return view('pages.masters.question.generate')->with('qns', $qns)->with('qhead', $qnheads_det)->with('qncnt', $qn_count)->with('qnmark', $qn_mark)->with('romlet', $romanLetters)->with('qntempl',$id);
 
     }
+
 
     public function generatedit($id)
     {
@@ -159,156 +167,173 @@ class QuestionController extends Controller
         return view('pages.masters.question.create', $data)->with('qntemp', $qntemp);;
     }
 
+
+
+    public function checkexists($id)
+    {
+        // echo $id;
+        // exit;
+        $result2 = DB::select("select count(*) as norec from question_master_qns_ans WHERE is_active = 1 AND qn_master_temp_id=$id");
+        $norec = $result2[0]->norec;
+        return $norec;
+        // exit;
+    }
+
+
     public function storeqns(Request $request)
     {
-        $qn_master_temp_id = $request->qn_temp_id;
-
-        $result2 = DB::select("select count(*) as norec from question_master_qns_ans WHERE is_active = 1 AND qn_master_temp_id=$qn_master_temp_id");
-        $norec = $result2[0]->norec;
+        // return 0;
+        // echo "<pre>";
+        // print_r($request->all());
+        // echo "</pre>";
         // exit;
 
-        if ($norec > 0) {
-            return redirect()->route('question.index')->with('message', "Question already prepared ! - Try with different Question !!!");
-        } else {
+        $qn_master_temp_id = $request->qn_temp_id;
 
-            //echo "<pre>";
-            //print_r($request->all());
-            // print_r($request->file());
-            //echo "</pre>";
-            //echo $qn_master_temp_id;
-            //exit;
+        $imgInfoArray = array();
 
-                $imgInfoArray = array();
+        // if ($request->file()) {
 
-                if ($request->file()) {
+        //     foreach ($request->file() as $folder => $imgfile) {
+        //         $storeAt = "storage\images\\$folder";
+        //         if (!file_exists($storeAt)) {
+        //             mkdir($storeAt, 0700);
+        //         }
 
-                    foreach ($request->file() as $folder => $imgfile) {
-                        $storeAt = "storage\images\\$folder";
-                        if (!file_exists($storeAt)) {
-                            mkdir($storeAt, 0700);
-                        }
+        //         if (isset($imgfile[0])) {
+        //             $mcqimgque = $imgfile[0]->getClientOriginalName();
+        //             $imgfile[0]->move($storeAt, $mcqimgque);
+        //             $imgInfoArray[$folder][0] = $mcqimgque;
+        //         }
+        //         if (isset($imgfile[1])) {
+        //             $mcqimgchoice1 = $imgfile[1]->getClientOriginalName();
+        //             $imgfile[1]->move($storeAt, $mcqimgchoice1);
+        //             $imgInfoArray[$folder][1] = $mcqimgchoice1;
+        //         }
+        //         if (isset($imgfile[2])) {
+        //             $mcqimgchoice2 = $imgfile[2]->getClientOriginalName();
+        //             $imgfile[2]->move($storeAt, $mcqimgchoice2);
+        //             $imgInfoArray[$folder][2] = $mcqimgchoice2;
+        //         }
+        //         if (isset($imgfile[3])) {
+        //             $mcqimgchoice3 = $imgfile[3]->getClientOriginalName();
+        //             $imgfile[3]->move($storeAt, $mcqimgchoice3);
+        //             $imgInfoArray[$folder][3] = $mcqimgchoice3;
+        //         }
+        //         if (isset($imgfile[4])) {
+        //             $mcqimgchoice4 = $imgfile[4]->getClientOriginalName();
+        //             $imgfile[4]->move($storeAt, $mcqimgchoice4);
+        //             $imgInfoArray[$folder][4] = $mcqimgchoice4;
+        //         }
+        //         if (isset($imgfile[5])) {
+        //             $mcqimgchoice5 = $imgfile[5]->getClientOriginalName();
+        //             $imgfile[5]->move($storeAt, $mcqimgchoice5);
+        //             $imgInfoArray[$folder][5] = $mcqimgchoice5;
+        //         }
+        //         if (isset($imgfile[6])) {
+        //             $mcqimgchoice6 = $imgfile[6]->getClientOriginalName();
+        //             $imgfile[6]->move($storeAt, $mcqimgchoice6);
+        //             $imgInfoArray[$folder][6] = $mcqimgchoice6;
+        //         }
+        //     }
 
-                        if (isset($imgfile[0])) {
-                            $mcqimgque = $imgfile[0]->getClientOriginalName();
-                            $imgfile[0]->move($storeAt, $mcqimgque);
-                            $imgInfoArray[$folder][0] = $mcqimgque;
-                        }
-                        if (isset($imgfile[1])) {
-                            $mcqimgchoice1 = $imgfile[1]->getClientOriginalName();
-                            $imgfile[1]->move($storeAt, $mcqimgchoice1);
-                            $imgInfoArray[$folder][1] = $mcqimgchoice1;
-                        }
-                        if (isset($imgfile[2])) {
-                            $mcqimgchoice2 = $imgfile[2]->getClientOriginalName();
-                            $imgfile[2]->move($storeAt, $mcqimgchoice2);
-                            $imgInfoArray[$folder][2] = $mcqimgchoice2;
-                        }
-                        if (isset($imgfile[3])) {
-                            $mcqimgchoice3 = $imgfile[3]->getClientOriginalName();
-                            $imgfile[3]->move($storeAt, $mcqimgchoice3);
-                            $imgInfoArray[$folder][3] = $mcqimgchoice3;
-                        }
-                        if (isset($imgfile[4])) {
-                            $mcqimgchoice4 = $imgfile[4]->getClientOriginalName();
-                            $imgfile[4]->move($storeAt, $mcqimgchoice4);
-                            $imgInfoArray[$folder][4] = $mcqimgchoice4;
-                        }
-                        if (isset($imgfile[5])) {
-                            $mcqimgchoice5 = $imgfile[5]->getClientOriginalName();
-                            $imgfile[5]->move($storeAt, $mcqimgchoice5);
-                            $imgInfoArray[$folder][5] = $mcqimgchoice5;
-                        }
-                        if (isset($imgfile[6])) {
-                            $mcqimgchoice6 = $imgfile[6]->getClientOriginalName();
-                            $imgfile[6]->move($storeAt, $mcqimgchoice6);
-                            $imgInfoArray[$folder][6] = $mcqimgchoice6;
-                        }
-                    }
-                }
+        // echo "<pre>";
+        // print_r($imgInfoArray);
+        // echo "</pre>";
 
-                // echo "<pre>";
-                // print_r($imgInfoArray);
-                // echo "</pre>";
-
-                foreach ($request->all() as $key => $vals) {
-                    if ($key == "_token" || $key == "qn_temp_id") {
-                        continue;
-                    } else {
-                        $splitque = explode("_", $key);
-                        //echo "<pre>";
-                        ///print_r($splitque);
-                        // exit;
-                        if ($splitque[0] == "que") {
-                            if ($splitque[1] == 7) {
-                                if ($splitque[2] == 1) {
-                                    $joinOptions = $vals . "~~~~~" . $request->ops_7_1a . "~~~~~" . $request->ops_7_1b . "~~~~~" . $request->ops_7_1c . "~~~~~" . $request->ops_7_1d . "~~~~~" . $request->ops_7_1e . "~~~~~" . $request->ops_7_1f;
-                                } else if ($splitque[2] == 2) {
-                                    $joinOptions = $vals . "~~~~~" . $request->ops_7_2a . "~~~~~" . $request->ops_7_2b . "~~~~~" . $request->ops_7_2c . "~~~~~" . $request->ops_7_2d . "~~~~~" . $request->ops_7_2e . "~~~~~" . $request->ops_7_2f;
-                                } else if ($splitque[2] == 3) {
-                                    $joinOptions = $vals . "~~~~~" . $request->ops_7_3a . "~~~~~" . $request->ops_7_3b . "~~~~~" . $request->ops_7_3c . "~~~~~" . $request->ops_7_3d . "~~~~~" . $request->ops_7_3e . "~~~~~" . $request->ops_7_3f;
-                                } else if ($splitque[2] == 4) {
-                                    $joinOptions = $vals . "~~~~~" . $request->ops_7_4a . "~~~~~" . $request->ops_7_4b . "~~~~~" . $request->ops_7_4c . "~~~~~" . $request->ops_7_4d . "~~~~~" . $request->ops_7_4e . "~~~~~" . $request->ops_7_4f;
-                                } else if ($splitque[2] == 5) {
-                                    $joinOptions = $vals . "~~~~~" . $request->ops_7_5a . "~~~~~" . $request->ops_7_5b . "~~~~~" . $request->ops_7_5c . "~~~~~" . $request->ops_7_5d . "~~~~~" . $request->ops_7_5e . "~~~~~" . $request->ops_7_5f;
-                                } else if ($splitque[2] == 6) {
-                                    $joinOptions = $vals . "~~~~~" . $request->ops_7_6a . "~~~~~" . $request->ops_7_6b . "~~~~~" . $request->ops_7_6c . "~~~~~" . $request->ops_7_6d . "~~~~~" . $request->ops_7_6e . "~~~~~" . $request->ops_7_6f;
-                                } else {
-                                    $joinOptions = $vals . "~~~~~" . $request->ops_7_7a . "~~~~~" . $request->ops_7_7b . "~~~~~" . $request->ops_7_7c . "~~~~~" . $request->ops_7_7d . "~~~~~" . $request->ops_7_7e . "~~~~~" . $request->ops_7_7f;
-                                }
-
-                                $qnstemp[$splitque[1] . "_" . $splitque[2]] = $joinOptions;
-
-                            } elseif ($splitque[1] == 6) {
-                                $qnstemp[$splitque[1] . "_" . $splitque[2]] = $vals;
-
-                                for($nn=1; $nn <= 15; $nn++) {
-                                    $str2 = "ReOrd_6-".$nn;
-                                    // echo $str2 . "<br>";
-                                    $joinOptions[$nn] = $request->{$str2};
-                                }
-
-                                $reord_array = array_filter($joinOptions);
-
-                                // $qnstemp[$splitque[1] . "_" . $splitque[2]] = $vals;
-                                $qnstemp['ReOrd6'] = $reord_array;
-
-                            } elseif ($splitque[1] == 10) {
-
-                                for($nn=1; $nn <= 5; $nn++) {
-                                    $str2 = "que_10_".$nn."-left";
-                                    $str3 = "que_10_".$nn."-right";
-                                    // echo $str2 . "<br>";
-                                    $diffCols["Qleft_10"][$nn] = $request->{$str2};
-                                    $diffCols["Qright_10"][$nn] = $request->{$str3};
-
-                                    $qnstemp['10_0'] = $diffCols;
-                                }
-
-                                // $reord_array = array_filter($joinOptions);
-
-                                // // $qnstemp[$splitque[1] . "_" . $splitque[2]] = $vals;
-                                // $qnstemp['ReOrd6'] = $reord_array;
-
-
-                            } else {
-                                $qnstemp[$splitque[1] . "_" . $splitque[2]] = $vals;
-                            }
+        foreach ($request->all() as $key => $vals) {
+            if ($key == "_token" || $key == "qn_temp_id") {
+                continue;
+            } else {
+                $splitque = explode("_", $key);
+                //echo "<pre>";
+                //print_r($splitque);
+                // exit;
+                if ($splitque[0] == "que") {
+                    if ($splitque[1] == 7) {
+                        if ($splitque[2] == 1) {
+                            $joinOptions = $vals . "~~~~~" . $request->ops_7_1a . "~~~~~" . $request->ops_7_1b . "~~~~~" . $request->ops_7_1c . "~~~~~" . $request->ops_7_1d . "~~~~~" . $request->ops_7_1e . "~~~~~" . $request->ops_7_1f;
+                        } else if ($splitque[2] == 2) {
+                            $joinOptions = $vals . "~~~~~" . $request->ops_7_2a . "~~~~~" . $request->ops_7_2b . "~~~~~" . $request->ops_7_2c . "~~~~~" . $request->ops_7_2d . "~~~~~" . $request->ops_7_2e . "~~~~~" . $request->ops_7_2f;
+                        } else if ($splitque[2] == 3) {
+                            $joinOptions = $vals . "~~~~~" . $request->ops_7_3a . "~~~~~" . $request->ops_7_3b . "~~~~~" . $request->ops_7_3c . "~~~~~" . $request->ops_7_3d . "~~~~~" . $request->ops_7_3e . "~~~~~" . $request->ops_7_3f;
+                        } else if ($splitque[2] == 4) {
+                            $joinOptions = $vals . "~~~~~" . $request->ops_7_4a . "~~~~~" . $request->ops_7_4b . "~~~~~" . $request->ops_7_4c . "~~~~~" . $request->ops_7_4d . "~~~~~" . $request->ops_7_4e . "~~~~~" . $request->ops_7_4f;
+                        } else if ($splitque[2] == 5) {
+                            $joinOptions = $vals . "~~~~~" . $request->ops_7_5a . "~~~~~" . $request->ops_7_5b . "~~~~~" . $request->ops_7_5c . "~~~~~" . $request->ops_7_5d . "~~~~~" . $request->ops_7_5e . "~~~~~" . $request->ops_7_5f;
+                        } else if ($splitque[2] == 6) {
+                            $joinOptions = $vals . "~~~~~" . $request->ops_7_6a . "~~~~~" . $request->ops_7_6b . "~~~~~" . $request->ops_7_6c . "~~~~~" . $request->ops_7_6d . "~~~~~" . $request->ops_7_6e . "~~~~~" . $request->ops_7_6f;
                         } else {
-                            if( isset($splitque[1]) && $splitque[1] <> 6 ) {
-                                $anstemp[$splitque[0] . "_" . $splitque[1]] = $vals;
-                            }
+                            $joinOptions = $vals . "~~~~~" . $request->ops_7_7a . "~~~~~" . $request->ops_7_7b . "~~~~~" . $request->ops_7_7c . "~~~~~" . $request->ops_7_7d . "~~~~~" . $request->ops_7_7e . "~~~~~" . $request->ops_7_7f;
+                        }
 
+                        $qnstemp[$splitque[1] . "_" . $splitque[2]] = $joinOptions;
+
+                    } elseif ($splitque[1] == 10) {
+
+                        for($nn=1; $nn <= 5; $nn++) {
+                            $str2 = "que_10_".$nn."-left";
+                            $str3 = "que_10_".$nn."-right";
+                            // echo $str2 . "<br>";
+                            $diffCols["Qleft_10"][$nn] = $request->{$str2};
+                            $diffCols["Qright_10"][$nn] = $request->{$str3};
+
+                            $qnstemp['10_0'] = $diffCols;
+                        }
+
+                        // $reord_array = array_filter($joinOptions);
+
+                        // // $qnstemp[$splitque[1] . "_" . $splitque[2]] = $vals;
+                        // $qnstemp['ReOrd6'] = $reord_array;
+
+
+                    } else {
+                        $qnstemp[$splitque[1] . "_" . $splitque[2]] = $vals;
+                    }
+                } elseif ($splitque[0] == "key6" ) {
+                    if(!empty($splitque[1])) {
+                        if ($splitque[1] == 1 && !empty($vals)) {
+                            $qnstemp['AAA'][1] = $vals;
+                        } elseif ($splitque[1] == 2 && !empty($vals)) {
+                            $qnstemp['AAA'][2] = $vals;
+                        } elseif ($splitque[1] == 3 && !empty($vals)) {
+                            $qnstemp['AAA'][3] = $vals;
+                        } elseif ($splitque[1] == 4 && !empty($vals)) {
+                            $qnstemp['AAA'][4] = $vals;
+                        } elseif ($splitque[1] == 5 && !empty($vals)) {
+                            $qnstemp['AAA'][5] = $vals;
+                        } elseif ($splitque[1] == 6 && !empty($vals)) {
+                            $qnstemp['AAA'][6] = $vals;
+                        } elseif ($splitque[1] == 7 && !empty($vals)) {
+                            $qnstemp['AAA'][7] = $vals;
+                        } elseif ($splitque[1] == 8 && !empty($vals)) {
+                            $qnstemp['AAA'][8] = $vals;
+                        } elseif ($splitque[1] == 9 && !empty($vals)) {
+                            $qnstemp['AAA'][9] = $vals;
+                        } elseif ($splitque[1] == 10 && !empty($vals)) {
+                            $qnstemp['AAA'][10] = $vals;
                         }
                     }
+
+
+                } else {
+                    if( isset($splitque[1]) && $splitque[1] <> 6 ) {
+                        $anstemp[$splitque[0] . "_" . $splitque[1]] = $vals;
+                    }
+
                 }
+              }
+            }
 
                 // unset($anstemp['ops_7']);
-                // echo "<pre>";
-                // print_r($qnstemp);
-                // echo " ================================<br><br>";
-                // print_r($anstemp);
-                // exit;
-                $imginfo_json = json_encode($imgInfoArray, true);
+                //echo "<pre>";
+                //print_r($qnstemp);
+                //echo "<br><br>================================<br><br>";
+                //print_r($anstemp);
+                //exit;
+
+                // $imginfo_json = json_encode($imgInfoArray, true);
+                $imginfo_json = "";
                 $que_json = json_encode($qnstemp, true);
                 $ans_json = json_encode($anstemp, true);
 
@@ -326,12 +351,10 @@ class QuestionController extends Controller
                     );
                 } catch (\Throwable $e) {
                     print_r($e->getMessage());
-                    return View::make('pages.masters.question.index')->with('message', "Question Title already exists - Try different video name !!!");
+                    return "Error !!!";
                 }
 
-            return redirect()->route('question.index')->with('message', "New Question Created Successfully !!!");
-
-        }
+        return "Success";
 
     }
 
@@ -411,7 +434,7 @@ class QuestionController extends Controller
 
         $romanLetters = array (1 => "I", 2 => "II", 3 => "III", 4 => "IV", 5 => "V", 6 => "VI", 7 => "VII", 8 => "VIII", 9 => "IX", 10 => "X", 11 => "XI", 12 => "XII", 13 => "XIII", 14 => "XIV", 15 => "XV");
 
-        $result2 = DB::select("select temp_questions, image_qns_ans from question_master_qns_ans WHERE is_active = 1 AND qn_master_temp_id=$id");
+        $result2 = DB::select("select temp_questions, temp_answers, image_qns_ans from question_master_qns_ans WHERE is_active = 1 AND qn_master_temp_id=$id");
 
         // print_r($result2);
         // exit;
@@ -419,6 +442,7 @@ class QuestionController extends Controller
             if(!empty($result2))
             {
                 $res = json_decode($result2[0]->temp_questions, true);
+                $tempans = json_decode($result2[0]->temp_answers, true);
                 $imgQue = json_decode($result2[0]->image_qns_ans, true);
 
                 // echo "<pre>";
@@ -428,10 +452,15 @@ class QuestionController extends Controller
                 $temp = "";
                     foreach ($res as $key => $qns) {
                         // echo $key . " <<===== <br>";
-                    //   if(str_contains($key, "_")) {
+                        if($key == "AAA") {
+                            $reord6 = $qns;
+                            continue;
+                        }
+                        //   if(str_contains($key, "_")) {
                         $qtype = explode("_", $key);
+                        // echo $qtype[0] . " <<===== <br>";
                         if ($qtype[0] != $temp) {
-                            if(str_contains($qtype[0], "ReOrd") || str_contains($qtype[0], "left") || str_contains($qtype[0], "right")) {
+                            if(str_contains($qtype[0], "ReOrd") || str_contains($qtype[0], "left") || str_contains($qtype[0], "right") || str_contains($qtype[0], "AAA")) {
                                 continue;
                             } else {
                                 $qry6 = "select title from question_master_title WHERE is_active = 1 AND id=$qtype[0]";
@@ -472,13 +501,6 @@ class QuestionController extends Controller
                         if (isset($type7[7])) {
                             $Qns[$qtype[0]][$qtype[1]][7] = $type7[7];
                         }
-                    } elseif ($qtype[0] == 6) {
-                        // echo $qns;
-                        // exit;
-                        $Qns[6]['qns'] = $res['6_1'];
-                        $Qns[6]['ReOrds'] = $res['ReOrd6'];
-
-
                     } elseif ($qtype[0] == 10) {
 
                         // echo "<pre>";
@@ -498,12 +520,17 @@ class QuestionController extends Controller
 
                     } else {
 
-                            $Qns[$qtype[0]][$qtype[1]] = $qns;
+                        $Qns[$qtype[0]][$qtype[1]] = $qns;
                     }
 
                 }
 
-                return View::make('pages.masters.question.show', $data)->with('qnMasTitle', $qnTit)->with('romLet', $romanLetters)->with('qns2', $Qns);
+                // echo "<pre>";
+                // print_r($Qns);
+                // print_r($reord6);
+                // exit;
+
+                return View::make('pages.masters.question.show', $data)->with('qnMasTitle', $qnTit)->with('romLet', $romanLetters)->with('qns2', $Qns)->with('reord6', $reord6);
 
             }
 

@@ -114,11 +114,7 @@
                                     <div class="col">
                                         <label>No. of Questions</label>
                                         <div id="noqns">
-                                            @if($id3 == 6)
-                                                <input class="typeahead" disabled readonly value="1" type="number" name="noqns[{{$id3}}]" id="qntemplate{{$id3}}noqns" placeholder="No. Qns.">
-                                            @else
-                                                <input class="typeahead" disabled type="number" name="noqns[{{$id3}}]" id="qntemplate{{$id3}}noqns" placeholder="No. Qns.">
-                                            @endif
+                                            <input class="typeahead" disabled type="number" name="noqns[{{$id3}}]" id="qntemplate{{$id3}}noqns" placeholder="No. Qns.">
                                         </div>
                                     </div>
                                     <div class="col">

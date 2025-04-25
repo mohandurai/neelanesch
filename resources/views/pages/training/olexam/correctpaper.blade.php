@@ -71,7 +71,7 @@
                         @php($count++)
 
                         <label>
-                            <h5>{{$romlet[$count]}}. {{$qh}}</h5>
+                            <label style="color:yellow;"><h5>{{$romlet[$count]}}. {{$qh}}</h5></label>
                         </label>
 
                         @foreach($qns[$kk] as $qq => $question)
@@ -81,50 +81,68 @@
 
                         <div class="form-group">
 
-                                <table width="80%" cellspacing="5" cellpadding="5" border="1">
-                                    <tr align="center" style="background-color:yellow;color:black;">
-                                        <td width="50%">Column A</td>
-                                        <td width="80%">Column B</td>
-                                    </tr>
-                                    <tr>
-                                        <td width="30%">
-                                            <table cellspacing="10" cellpadding="10" border="1" width="100%">
-                                                @foreach($question['A'] as $aa => $cols)
-                                                    <tr><td>{{ $aa+1 }})</td> <td>{{ $cols }}</td></tr>
-                                                @endforeach
-                                            </table>
+                            <table width="80%" cellspacing="5" cellpadding="5" border="1">
+                                <tr align="center" style="background-color:yellow;color:black;">
+                                    <td width="50%">Column A</td>
+                                    <td width="80%">Column B</td>
+                                </tr>
+                                <tr>
+                                    <td width="30%">
+                                        <table cellspacing="10" cellpadding="10" border="1" width="100%">
+                                            @foreach($question as $aa => $cols)
+                                                <tr><td>{{ $aa+1 }})</td> <td>{{ $cols[0] }}</td></tr>
+                                            @endforeach
+                                        </table>
 
-                                        </td>
-                                        <td width="70%">
-                                            <table id="table2" cellspacing="10" cellpadding="10" border="1" width="100%">
+                                    </td>
+                                    <td width="70%">
+                                        <table id="table22" cellspacing="10" cellpadding="10" border="1" width="100%">
+                                            @foreach($question as $bb => $cols)
+                                            <tr>
+                                                <td width="10%">{{ $alpha[$bb+1] }}</td>
+                                                <td width="50%">{{ $cols[1] }}</td>
 
-                                                @php($ans3_1 = explode(",",$stud_ans["3_1"]))
-                                                @php( array_slice($ans3_1, 0, -1) )
-                                                @foreach($ans3_1 as $ii => $rrr)
-                                                <tr>
-                                                <td>
-                                                    {{ $question['B'][$numbr[$rrr]] }}
-                                                </td>
-                                                </tr>
-                                                @endforeach
+                                            </tr>
+                                            @endforeach
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
 
-                                            </table>
-                                        </td>
-                                    </tr>
-                                </table>
                                 <br>
 
                                 <div style="background-color:green; margin-left:15px;">&nbsp;&nbsp;&nbsp;&nbsp;
 
-                                    @if($stud_ans["3_1"] == $act_ans["3_1"])
-                                        @php($markval = $eachmark[3])
-                                    @else
-                                        @php($markval = 0)
-                                    @endif
+                                <div style="background-color:grey; margin-left:15px;">&nbsp;&nbsp;&nbsp;&nbsp;
+                                    <label class="form-check-label">
+                                        Student Answer : {{$stud_ans["3_0"]}}
+                                    </label>
+                                </div>
+
+                                <div style="background-color:blue; margin-left:15px;">&nbsp;&nbsp;&nbsp;&nbsp;
+                                    <label class="form-check-label">
+                                        Actual Answer : {{$act_ans["3_0"]}}
+                                    </label>
+                                </div>
+
+                                    @php($stans = explode(",",$stud_ans["3_0"]))
+                                    @php($actans = explode(",",$act_ans["3_0"]))
+
+                                    @php($totcnt=0)
+                                    @foreach($stans as $ppp => $vals)
+                                        @if($vals == $actans[$ppp])
+                                            @php($totcnt++)
+                                        @endif
+                                    @endforeach
+
+                                    @php($markval = $eachmark[3] * $totcnt)
+
                                     <label class="form-check-label">Correct Marks by Teacher :
                                         <input type="number" name="mark_{{$kk}}_{{$qq}}" id="mark_{{$kk}}_{{$qq}}" placeholder="Add Marks ..." value="{{$markval}}">
                                     </label>
                                 </div>
+
+
 
                         </div>
 
@@ -183,7 +201,7 @@
 
                             <div style="background-color:green; margin-left:15px;">&nbsp;&nbsp;&nbsp;&nbsp;
                                 @if($stud_ans[$arr2] == $act_ans[$arr2])
-                                @php($markval = $eachmark[4])
+                                @php($markval = $eachmark[5])
                                 @else
                                 @php($markval = 0)
                                 @endif
@@ -196,59 +214,64 @@
 
                         @elseif($kk == 6)
 
-                         <div class="form-group">
+                        <div class="form-group">
+                                Q. No-{{$qq}}) &nbsp;&nbsp; <label class="form-check-label"> {{$question}} </label>
 
-                            @if($qq == 'qns')
-                                <div class="form-text form-check-inline" style="margin-left:30px;">
-                                    {{$question}}
-                                </div>
-                            @else
-                                <div class="form-text form-check-inline" style="margin-left:30px;">
-                                    <table id="table2" cellspacing="10" cellpadding="10" border="1" width="50%">
-                                        @foreach($qns[6]['ReOrds'] as $sss)
-                                        <tr>
-                                        <td>
-                                            {{ $sss }}
-                                        </td>
-                                        </tr>
-                                        @endforeach
-                                    </table>
-                                </div>
-                                <br><br>
+                                @php( $ord6 = explode("~~~~~",$reord6[$qq]) )
+                                @php( array_pop($ord6) )
+
+                                <table id="table6{{$qq}}" cellspacing="5" cellpadding="5" border="1" width="50%">
+                                    @foreach($ord6 as $qqq => $ords)
+                                    <tr>
+                                        <td width="10%">{{ $qqq+1 }}</td>
+                                        <td width="50%">{{ $ords }}</td>
+                                    </tr>
+                                    @endforeach
+                                </table>
+
+                                <br>
+
                                 <div style="background-color:grey; margin-left:15px;">&nbsp;&nbsp;&nbsp;&nbsp;
                                     <label class="form-check-label">
-                                        Student Answer : {{$stud_ans["6_1"]}}
+                                        @php($arr2 = $kk . "_" . $qq)
+                                        Student Answer : {{$stud_ans[$arr2]}}
                                     </label>
                                 </div>
 
                                 <div style="background-color:blue; margin-left:15px;">&nbsp;&nbsp;&nbsp;&nbsp;
                                     @php($arr2 = $kk . "_" . $qq)
                                     <label class="form-check-label">
-                                        Actual Answer : {{$act_ans["6_1"]}}
+                                        Actual Answer : {{$act_ans[$arr2]}}
                                     </label>
                                 </div>
 
                                 <div style="background-color:green; margin-left:15px;">&nbsp;&nbsp;&nbsp;&nbsp;
-                                    @if($stud_ans["6_1"] == $act_ans["6_1"])
-                                    @php($markval = $eachmark[4])
-                                    @else
-                                    @php($markval = 0)
-                                    @endif
+
+                                    @php($stans6 = explode(",",$stud_ans[$arr2]))
+                                    @php($actans6 = explode(",",$act_ans[$arr2]))
+
+                                    @php($totcnt6=0)
+                                    @foreach($stans6 as $pp => $val6)
+                                        @if($val6 == $actans6[$pp])
+                                            @php($totcnt6++)
+                                        @endif
+                                    @endforeach
+
+                                    @php($markval = 1 * $totcnt6)
+
                                     <label class="form-check-label">Correct Marks by Teacher :
                                         <input type="number" name="mark_{{$kk}}_{{$qq}}" id="mark_{{$kk}}_{{$qq}}" placeholder="Add Marks ..." value="{{$markval}}">
                                     </label>
 
                                 </div>
 
-                            @endif
-
                          </div>
 
                         @elseif($kk == 7)
-                        <br>
+
                         <div class="form-group">
 
-                            Q. No-{{$qq}}. <textarea class="text_box_note">{{$question[0]}}</textarea>
+                            Q. No-{{$qq}}. <textarea rows="10" cols="50" class="text_box_note">{{$question[0]}}</textarea>
 
                             <div class="table-responsive">
                                 <table width="100%">

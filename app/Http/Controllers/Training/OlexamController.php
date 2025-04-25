@@ -93,14 +93,22 @@ class OlexamController extends Controller
         $res = json_decode($result2[0]->temp_questions, true);
         $imgQue = json_decode($result2[0]->image_qns_ans, true);
 
-
+        // echo "<pre>";
+        // print_r($res);
+        // echo "</pre>";
+        // exit;
 
 
         $temp = "";
         foreach ($res as $key => $qns) {
+            if($key == "AAA") {
+                $reord6 = $qns;
+                continue;
+            } else { $reord6 = ""; }
+
             $qtype = explode("_", $key);
             if ($qtype[0] != $temp) {
-                if(str_contains($qtype[0], "ReOrd6") || str_contains($qtype[0], "left") || str_contains($qtype[0], "right") ) {
+                if(str_contains($qtype[0], "ReOrd6") || str_contains($qtype[0], "left") || str_contains($qtype[0], "right")  || str_contains($qtype[0], "AAA")) {
                     continue;
                 } else {
                     $qry6 = "select title from question_master_title WHERE is_active = 1 AND id=$qtype[0]";
@@ -140,12 +148,6 @@ class OlexamController extends Controller
                 if (isset($type7[7])) {
                     $Qns[$qtype[0]][$qtype[1]][7] = $type7[7];
                 }
-            } elseif ($qtype[0] == 6) {
-                // echo $qns;
-                // exit;
-                $Qns[6]['qns'] = $res['ReOrd6'];
-                // $Qns[6]['ReOrds'] = $res['ReOrd'];
-
             } elseif ($qtype[0] == 10) {
 
                 // echo "<pre>";
@@ -170,18 +172,19 @@ class OlexamController extends Controller
 
         $romanLetters = array(1 => "I", 2 => "II", 3 => "III", 4 => "IV", 5 => "V", 6 => "VI", 7 => "VII", 8 => "VIII", 9 => "IX", 10 => "X", 11 => "XI", 12 => "XII", 13 => "XIII", 14 => "XIV", 15 => "XV", 16 => "XVI", 17 => "XVII", 18 => "XVIII", 19 => "XIX", 20 => "XX");
 
-        // echo "<pre>";
+        //echo "<pre>";
         // print_r($QnsTitle);
-        // print_r($Qns);
+        //print_r($Qns);
+        //print_r($reord6);
         // print_r($imgQue);
-        // echo "</pre>";
-        // exit;
+        //echo "</pre>";
+        //exit;
 
         $examDurationMinutes = (int)$examDur; // Set the exam duration to 5 minutes
         $startTime = now(); // Current time
         $endTime = $startTime->copy()->addMinutes($examDurationMinutes); // Calculate end time
 
-        return view('pages.training.olexam.attendexam')->with('qntit', $QnsTitle)->with('qns', $Qns)->with('romlet', $romanLetters)->with('examtitle', $examtitle)->with('stud_id', $stud_id)->with('test_id', $id)->with('qnstempid', $qnmastid)->with('imgQuens', $imgQue)->with('endTime', $endTime);
+        return view('pages.training.olexam.attendexam')->with('qntit', $QnsTitle)->with('qns', $Qns)->with('romlet', $romanLetters)->with('examtitle', $examtitle)->with('stud_id', $stud_id)->with('test_id', $id)->with('qnstempid', $qnmastid)->with('imgQuens', $imgQue)->with('endTime', $endTime)->with('reord6', $reord6);
     }
 
 
@@ -260,11 +263,18 @@ class OlexamController extends Controller
 
         $stud_answer = json_decode($res4[0]->answer, true);
 
+        //echo "<pre>";
+        //print_r($stud_answer);
+        //echo " ================================ <br>";
+        // print_r($act_answer);
+        //exit;
+
         $res5 = DB::select("select title, question_template from question_master_template WHERE is_active = 1 AND id=$qntempid");
         $marks_each = json_decode($res5[0]->question_template, true);
         $examtitle2 = $res5[0]->title;
         foreach ($marks_each as $mm => $vals) {
             $emark[$mm] = $vals[1];
+            $noqtns[$mm] = $vals[0];
         }
 
 
@@ -272,17 +282,18 @@ class OlexamController extends Controller
         $qtns = json_decode($result2[0]->temp_questions, true);
         $act_answer = json_decode($result2[0]->temp_answers, true);
 
-        // echo "<pre>";
-        // print_r($qtns);
-        // echo " ================================ <br>";
-        // print_r($act_answer);
-        // exit;
 
         $temp = 0;
         foreach ($qtns as $key => $qns) {
+
+            if($key == "AAA") {
+                $reord6 = $qns;
+                continue;
+            } else { $reord6 = ""; }
+
             $qtype = explode("_", $key);
             if ($qtype[0] != $temp) {
-                if(str_contains($qtype[0], "ReOrd") || str_contains($qtype[0], "left") || str_contains($qtype[0], "right")) {
+                if(str_contains($qtype[0], "ReOrd") || str_contains($qtype[0], "left") || str_contains($qtype[0], "right") || str_contains($qtype[0], "AAA")) {
                     continue;
                 } else {
                     $qry6 = "select title from question_master_title WHERE is_active = 1 AND id=$qtype[0]";
@@ -320,13 +331,6 @@ class OlexamController extends Controller
                 if (isset($type7[7])) {
                     $Qns[$qtype[0]][$qtype[1]][7] = $type7[7];
                 }
-            } elseif ($qtype[0] == 6) {
-                // echo $qns;
-                // exit;
-                $Qns[6]['qns'] = $qtns['6_1'];
-                $Qns[6]['ReOrds'] = $qtns['ReOrd6'];
-
-
             } elseif ($qtype[0] == 10) {
                 // echo "<pre>";
                 // print_r($qns);
@@ -340,6 +344,9 @@ class OlexamController extends Controller
                 $Qns[10]['qns'] = $Q10;
 
 
+            } elseif ($qtype[0] == 3) {
+                $Qns[3]['qns'][] = $qns;
+
             } else {
                 $Qns[$qtype[0]][$qtype[1]] = $qns;
             }
@@ -347,21 +354,21 @@ class OlexamController extends Controller
 
         $romanLetters = array(1 => "I", 2 => "II", 3 => "III", 4 => "IV", 5 => "V", 6 => "VI", 7 => "VII", 8 => "VIII", 9 => "IX", 10 => "X", 11 => "XI", 12 => "XII", 13 => "XIII", 14 => "XIV", 15 => "XV", 16 => "XVI", 17 => "XVII", 18 => "XVIII", 19 => "XIX", 20 => "XX");
 
-        // echo "<pre>";
+        //echo "<pre>";
         // print_r($QnsTitle);
-        // print_r($Qns);
+        //print_r($Qns);
         // echo "<br><br>";
         // print_r($stud_answer);
         // echo "<br><br>";
-        // print_r($act_answer);
+        //print_r($act_answer);
         // echo "<br><br>";
         // print_r($emark);
-        // echo "</pre>";
-        // exit;
+        //echo "</pre>";
+        //exit;
 
         // return redirect()->route('olexam.correct')->with('message', "Saving answers Successfully !!!");
 
-        return view('pages.training.olexam.correctpaper')->with('qntit', $QnsTitle)->with('qns', $Qns)->with('romlet', $romanLetters)->with('examtitle2', $examtitle2)->with('stud_id', $stud_id)->with('stud_ans', $stud_answer)->with('act_ans', $act_answer)->with('qn_template_id', $qntempid)->with('allocTestId', $allc_id)->with('eachmark', $emark);
+        return view('pages.training.olexam.correctpaper')->with('qntit', $QnsTitle)->with('qns', $Qns)->with('romlet', $romanLetters)->with('examtitle2', $examtitle2)->with('stud_id', $stud_id)->with('stud_ans', $stud_answer)->with('act_ans', $act_answer)->with('qn_template_id', $qntempid)->with('allocTestId', $allc_id)->with('eachmark', $emark)->with('eachmark', $emark)->with('noqtns', $noqtns)->with('reord6', $reord6);
     }
 
     public function view($id)

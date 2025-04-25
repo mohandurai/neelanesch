@@ -26,6 +26,7 @@
     //echo "<pre>";
     //print_r($qns);
     //echo "</pre>";
+    //echo "This page from Blade TEmplate........";
     //exit;
 @endphp
 
@@ -56,6 +57,7 @@
 
             @php($count=0)
             @foreach($qntit as $kk => $qh)
+
             <div class="card-body">
 
                 <form id="theForm" action="{{ url('olexam/saveexam') }}" method="post">
@@ -90,11 +92,13 @@
 
                                     </td>
                                     <td width="70%">
-                                        <table id="table2" cellspacing="5" cellpadding="5" border="1" width="100%">
+                                        <table id="table22" cellspacing="5" cellpadding="5" border="1" width="100%">
                                             @foreach($question as $bb => $cols)
-                                            <tr><td width="10%">{{ $alpha[$bb+1] }}</td><td>{{ $cols[1] }}</td>
-                                                <td><button class="btn up">▲</button></td>
-                                                <td><button class="btn down">▼</button></td>
+                                            <tr>
+                                                <td width="10%">{{ $alpha[$bb+1] }}</td>
+                                                <td width="50%">{{ $cols[1] }}</td>
+                                                <td width="10%"><button class="btn up">▲</button></td>
+                                                <td width="10%"><button class="btn down">▼</button></td>
                                             </tr>
                                             @endforeach
                                         </table>
@@ -104,7 +108,7 @@
                             <br>
                             <button type="submit" id="match-apply" class="btn btn-primary">Apply Matching</button>
                             <br><br>
-                            <input type="text" name="3_1" style="background-color:#silver;" class="form-control" id="ans-qns3" readonly>
+                            <input type="text" name="3_0" style="background-color:#silver;" class="form-control" id="ans-qns3" readonly>
                             <br>
 
                         </div>
@@ -138,23 +142,31 @@
 
 
                         @elseif($kk == 6)
-                        <div class="form-group">
 
-                                <table id="table3" cellspacing="5" cellpadding="5" border="1" width="50%">
-                                    @foreach($question as $ss1 => $ss2)
-                                    <tr><td width="10%">{{ $ss1 }}</td><td>{{ $ss2 }}</td>
-                                        <td><button class="btn up">▲</button></td>
-                                        <td><button class="btn down">▼</button></td>
-                                    </tr>
-                                    @endforeach
-                                </table>
+                            <div class="form-group">
+                                Q. No-{{$qq}}) &nbsp;&nbsp; <label class="form-check-label"> {{$question}} </label>
+                            </div>
 
-                               <br>
-                               <button type="submit" id="ReOrd-apply" class="btn btn-primary">Apply Re-Ordering</button>
-                                <br><br>
-                                <input type="text" name="6_1" style="background-color:#silver;" class="form-control" id="ans-qns6" readonly>
+                            @php( $ord6 = explode("~~~~~",$reord6[$qq]) )
+                            @php( array_pop($ord6) )
 
-                        </div>
+                            <table id="table6{{$qq}}" cellspacing="5" cellpadding="5" border="1" width="50%">
+                                @foreach($ord6 as $qqq => $ords)
+                                <tr>
+                                    <td width="10%">{{ $qqq+1 }}</td>
+                                    <td width="50%">{{ $ords }}</td>
+                                    <td width="10%"><button class="btn up">▲</button></td>
+                                    <td width="10%"><button class="btn down">▼</button></td>
+                                </tr>
+                                @endforeach
+                            </table>
+
+                            <br>
+                            <button type="button" alt="{{$qq}}" class="ReOrd-apply btn btn-primary">Apply Re-Ordering</button>
+                            <br><br>
+                            <input type="text" name="6_{{$qq}}" style="background-color:#silver;" class="form-control" id="ansqns{{$qq}}" readonly>
+                            <br><br>
+
 
 
                         @elseif($kk == 7)
@@ -294,7 +306,7 @@
 
                             Q. No-{{$qq}}. &nbsp;&nbsp; <label class="form-check-label"> {{$question}} </label>
                             <input type="text" name="{{$kk}}_{{$qq}}" style="background-color:#silver;" class="form-control" id="{{$kk}}_{{$qq}}" value="" placeholder="Type Answer for Qn. {{$qq}}">
-                            <br><br>
+                            <br>
 
                         </div>
                         @endif
@@ -320,10 +332,6 @@
     <script src="https://cdn.jsdelivr.net/npm/summernote@0.9.0/dist/summernote.min.js"></script>
 @endpush
 
-
-@push('custom-scripts')
-<script src="{{ asset('assets/js/data-table.js') }}"></script>
-@endpush
 
 @push('custom-scripts')
 <script>
@@ -412,29 +420,36 @@
 
 
 
-        $('#ReOrd-apply').click(function(){
-            // alert("UUUUUUUUUUUUUU");
+        $('.ReOrd-apply').click(function(){
+
+            var altVal = $(this).attr('alt');
+            // alert("UUUUUUUUUUUUUU   " + altVal);
+            // return false;
+
             var ans4 = "";
-            $("#table3 tr").each(function(i) {
+            var value5 = "";
+            $("#table6"+altVal+" tr").each(function(i) {
                 // find the first td in the row
-                var value = $(this).find("td:first").text();
+                var value5 = $(this).find("td:first").text();
                 // display the value in console
-                ans4 = ans4 + ',' + value;
+                ans4 = ans4 + ',' + value5;
             });
             // alert(ans4.substring(1));
-            $('#ans-qns6').val(ans4.substring(1));
-            return false;
+            $("#ansqns"+altVal).val(ans4.substring(1));
+
         });
 
 
         $('#match-apply').click(function(){
             // alert("UUUUUUUUUUUUUU");
             var ans3 = "";
-            $("#table2 tr").each(function(i) {
+            var value6 = "";
+            $("#table22 tr").each(function(i) {
                 // find the first td in the row
-                var value = $(this).find("td:first").text();
+                var value6 = $(this).find("td:first").text();
                 // display the value in console
-                ans3 = ans3 + ',' + value;
+                // alert("UUUUUUUUUUUUUU   "+value6);
+                ans3 = ans3 + ',' + value6;
             });
             // alert(ans3.substring(1));
             $('#ans-qns3').val(ans3.substring(1));

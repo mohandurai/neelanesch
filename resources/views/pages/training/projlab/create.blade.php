@@ -49,6 +49,20 @@
                 </select>
             </div>
 
+            <div class="form-group">
+                <label for="subject">Subject</label>
+                <select class="form-control" id="subject_id" name="subject_id">
+                    <option value="0" selected>Select Subject</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="chapter_id">Chapter Title</label>
+                <select class="form-control" id="chapter_id" name="chapter_id">
+                    <option value="0" selected>Select Chapter/Multiple</option>
+                </select>
+            </div>
+
 
             <div class="form-group">
                 <label` for="exampleFormControlSelect1">Activity Title</label>
@@ -98,6 +112,8 @@
 
 $(document).ready(function() {
     $("#class_id option[value=0]").prop('selected', true);
+    $("#subject_id option[value=0]").prop('selected', true);
+    $("#chapter_id option[value=0]").prop('selected', true);
 });
 
     function confirmation()
@@ -109,6 +125,51 @@ $(document).ready(function() {
                 return false;
             }
     }
+
+    $('#class_id').change(function() {
+
+        $('#subject_id').html('');
+        $("#subject_id option[value=0]").prop('selected', true);
+
+            var clsid = $(this).val();
+
+            $.ajax({
+                type: 'GET',
+                url: "{{ url('/getcontentsubject') }}/" + clsid,
+                // complete: function() {
+                //     $('#psdatasourcSpinner').hide();
+                // },
+                success: function(data2) {
+                    console.log(data2);
+                    $('#subject_id').append(data2);
+                    // $(".table-responsive").html(data);
+                }
+            });
+
+    });
+
+    $('#subject_id').change(function() {
+            // alert("TTTTTTTTTTTT"); return false;
+            // $('#chapter_id').html('');
+            // $("#chapter_id option[value=0]").prop('selected', true);
+
+            var subid = $(this).val();
+            var clsid = $("#class_id").val();
+
+            $.ajax({
+                type: 'GET',
+                url: "{{ url('/getcontentchapt') }}/" + subid + "~~~" + clsid,
+                // complete: function() {
+                //     $('#psdatasourcSpinner').hide();
+                // },
+                success: function(data2) {
+                    console.log(data2);
+                    $('#chapter_id').append(data2);
+                    // $(".table-responsive").html(data);
+                }
+            });
+
+    });
 
 
 </script>

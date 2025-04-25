@@ -19,7 +19,7 @@ class ProjlabController extends Controller
     //
     public function index()
     {
-        $data['projlab'] = DB::select("select id, title, describe_activity, class_id, assign_to, attachment FROM project_lab_activity ORDER BY id DESC");
+        $data['projlab'] = DB::select("select id, title, describe_activity, class_id, subject_id, chapter_id, assign_to, attachment FROM project_lab_activity ORDER BY id DESC");
         // print_r($projlab);
         // exit;
 
@@ -96,6 +96,8 @@ class ProjlabController extends Controller
                         'attachment' => $imageName,
                         'class_id' => $request->class_id,
                         'sec_id' => $request->sec_id,
+                        'subject_id' => $request->subject_id,
+                        'chapter_id' => $request->chapter_id,
                         'assign_to' => $request->assign_to,
                         'max_marks' => $request->max_marks,
                         'created_date' => Carbon::now(),

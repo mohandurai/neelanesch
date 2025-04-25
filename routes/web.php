@@ -33,6 +33,7 @@ use App\Http\Controllers\Training\OlexamController;
 use App\Http\Controllers\Training\ProjlabController;
 use App\Http\Controllers\Training\QuestionbankController;
 use App\Http\Controllers\Student\StudentController;
+use App\Http\Controllers\Student\StaffController;
 use App\Http\Controllers\Student\TermController;
 use App\Http\Controllers\Student\ClassController;
 use App\Http\Controllers\Auth\RbacController;
@@ -128,6 +129,15 @@ Route::middleware('auth')->group(function() {
     Route::get('/student/{id}/destroy', [StudentController::class, 'destroy'])->name('student.destroy');
     Route::post('/student/bulkimport', [StudentController::class, 'bulkimport'])->name('student.bulkimport');
 
+    Route::get('/staff/index', [StaffController::class, 'index'])->name('staff.index');
+    Route::get('/staff/create', [StaffController::class, 'create'])->name('staff.create');
+    Route::post('/staff/store', [StaffController::class, 'store'])->name('staff.store');
+    Route::get('/staff/{id}/edit', [StaffController::class, 'edit'])->name('staff.edit');
+    Route::post('/staff/update', [StaffController::class, 'update'])->name('staff.update');
+    Route::get('/staff/{id}/show', [StaffController::class, 'show'])->name('staff.show');
+    Route::get('/staff/{id}/destroy', [StaffController::class, 'destroy'])->name('staff.destroy');
+    Route::post('/staff/bulkimport', [StaffController::class, 'bulkimport'])->name('staff.bulkimport');
+
     Route::get('/term/index', [TermController::class, 'index'])->name('term.index');
     Route::get('/term/create', [TermController::class, 'create'])->name('term.create');
     Route::post('/term/store', [TermController::class, 'store'])->name('term.store');
@@ -195,6 +205,7 @@ Route::middleware('auth')->group(function() {
     Route::get('/question/{id}/destroy', [QuestionController::class, 'destroy'])->name('question.destroy');
     Route::get('/question/{id}/generate', [QuestionController::class, 'generate'])->name('question.generate');
     Route::get('/question/{id}/generatedit', [QuestionController::class, 'generatedit'])->name('question.generatedit');
+    Route::get('/checkexists/{id}', [QuestionController::class, 'checkexists'])->name('question.checkexists');
 
 
     Route::get('/role/index', [RolesController::class, 'index'])->name('role.index');
@@ -270,10 +281,9 @@ Route::middleware('auth')->group(function() {
     Route::get('/homework2list', [HomeworkController::class, 'homework2list'])->name('homework2list');
     Route::get('/homeworkevalnlist', [HomeworkController::class, 'homeworkevalnlist'])->name('homeworkevalnlist');
     Route::get('/termlist', [TermController::class, 'termlist'])->name('termlist');
-
+    Route::get('/stafflist', [StaffController::class, 'stafflist'])->name('stafflist');
 
     Route::get('get-video/{video}', [TermController::class, 'getVideo'])->name('getVideo');
-
 
 });
 
@@ -363,91 +373,6 @@ Route::group(['prefix' => 'masters'], function(){
     // Route::get('rolemaster', function () { return view('pages.masters.rolemaster'); });
 });
 
-/*
-Route::group(['prefix' => 'email'], function(){
-    Route::get('inbox', function () { return view('pages.email.inbox'); });
-    Route::get('read', function () { return view('pages.email.read'); });
-    Route::get('compose', function () { return view('pages.email.compose'); });
-});
-
-Route::group(['prefix' => 'email'], function(){
-    Route::get('inbox', function () { return view('pages.email.inbox'); });
-    Route::get('read', function () { return view('pages.email.read'); });
-    Route::get('compose', function () { return view('pages.email.compose'); });
-});
-
-Route::group(['prefix' => 'apps'], function(){
-    Route::get('chat', function () { return view('pages.apps.chat'); });
-    Route::get('calendar', function () { return view('pages.apps.calendar'); });
-});
-
-Route::group(['prefix' => 'ui-components'], function(){
-    Route::get('alerts', function () { return view('pages.ui-components.alerts'); });
-    Route::get('badges', function () { return view('pages.ui-components.badges'); });
-    Route::get('breadcrumbs', function () { return view('pages.ui-components.breadcrumbs'); });
-    Route::get('buttons', function () { return view('pages.ui-components.buttons'); });
-    Route::get('button-group', function () { return view('pages.ui-components.button-group'); });
-    Route::get('cards', function () { return view('pages.ui-components.cards'); });
-    Route::get('carousel', function () { return view('pages.ui-components.carousel'); });
-    Route::get('collapse', function () { return view('pages.ui-components.collapse'); });
-    Route::get('dropdowns', function () { return view('pages.ui-components.dropdowns'); });
-    Route::get('list-group', function () { return view('pages.ui-components.list-group'); });
-    Route::get('media-object', function () { return view('pages.ui-components.media-object'); });
-    Route::get('modal', function () { return view('pages.ui-components.modal'); });
-    Route::get('navs', function () { return view('pages.ui-components.navs'); });
-    Route::get('navbar', function () { return view('pages.ui-components.navbar'); });
-    Route::get('pagination', function () { return view('pages.ui-components.pagination'); });
-    Route::get('popovers', function () { return view('pages.ui-components.popovers'); });
-    Route::get('progress', function () { return view('pages.ui-components.progress'); });
-    Route::get('scrollbar', function () { return view('pages.ui-components.scrollbar'); });
-    Route::get('scrollspy', function () { return view('pages.ui-components.scrollspy'); });
-    Route::get('spinners', function () { return view('pages.ui-components.spinners'); });
-    Route::get('tabs', function () { return view('pages.ui-components.tabs'); });
-    Route::get('tooltips', function () { return view('pages.ui-components.tooltips'); });
-});
-
-Route::group(['prefix' => 'advanced-ui'], function(){
-    Route::get('cropper', function () { return view('pages.advanced-ui.cropper'); });
-    Route::get('owl-carousel', function () { return view('pages.advanced-ui.owl-carousel'); });
-    Route::get('sweet-alert', function () { return view('pages.advanced-ui.sweet-alert'); });
-});
-
-Route::group(['prefix' => 'forms'], function(){
-    Route::get('basic-elements', function () { return view('pages.forms.basic-elements'); });
-    Route::get('advanced-elements', function () { return view('pages.forms.advanced-elements'); });
-    Route::get('editors', function () { return view('pages.forms.editors'); });
-    Route::get('wizard', function () { return view('pages.forms.wizard'); });
-});
-
-Route::group(['prefix' => 'charts'], function(){
-    Route::get('apex', function () { return view('pages.charts.apex'); });
-    Route::get('chartjs', function () { return view('pages.charts.chartjs'); });
-    Route::get('flot', function () { return view('pages.charts.flot'); });
-    Route::get('morrisjs', function () { return view('pages.charts.morrisjs'); });
-    Route::get('peity', function () { return view('pages.charts.peity'); });
-    Route::get('sparkline', function () { return view('pages.charts.sparkline'); });
-});
-
-Route::group(['prefix' => 'tables'], function(){
-    Route::get('basic-tables', function () { return view('pages.tables.basic-tables'); });
-    Route::get('data-table', function () { return view('pages.tables.data-table'); });
-});
-
-Route::group(['prefix' => 'icons'], function(){
-    Route::get('feather-icons', function () { return view('pages.icons.feather-icons'); });
-    Route::get('flag-icons', function () { return view('pages.icons.flag-icons'); });
-    Route::get('mdi-icons', function () { return view('pages.icons.mdi-icons'); });
-});
-
-Route::group(['prefix' => 'general'], function(){
-    Route::get('blank-page', function () { return view('pages.general.blank-page'); });
-    Route::get('faq', function () { return view('pages.general.faq'); });
-    Route::get('invoice', function () { return view('pages.general.invoice'); });
-    Route::get('profile', function () { return view('pages.general.profile'); });
-    Route::get('pricing', function () { return view('pages.general.pricing'); });
-    Route::get('timeline', function () { return view('pages.general.timeline'); });
-});
-*/
 
 Route::group(['prefix' => 'auth'], function(){
     Route::get('login', function () { return view('pages.auth.login'); });

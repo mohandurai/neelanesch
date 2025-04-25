@@ -38,8 +38,11 @@
 </nav>
 
 <div class="row">
+
     <div class="col-md-12 grid-margin stretch-card">
+
         <div class="card">
+
             <h4>Fill up the Questions with Answer Key</h4>
 
             @php($count=0)
@@ -47,19 +50,20 @@
             @foreach($qhead as $kk => $qh)
             <div class="card-body">
 
-                <form name="form2" action="{{ url('question/storeqns') }}" method="post" enctype="multipart/form-data">
+                <!-- <form id="form-wrapper" name="form2" action="{{ url('question/storeqns') }}" method="post"> -->
+                <form id="dynamicForm" name="form2">
                     @csrf
 
                     <div class="form-group">
 
-                        <input type="hidden" name="qn_temp_id" value="{{ request('id') }}">
+                        <input type="hidden" id="qn_temp_id" name="qn_temp_id" alt="{{ $qntempl }}" value="{{ request('id') }}">
+
 
                         @php($count++)
 
                         <label style="color:yellow;">
                             <h5>{{$romlet[$count]}}. {{$qh}}</h5>
                         </label>
-
 
                         @for($qq=1; $qq <= $qncnt[$kk]; $qq++)
 
@@ -99,7 +103,7 @@
                                 @if($qncnt[$kk] == $qq)
                                     </table>
                                 <br>
-                                    <div class="form-text form-check-inline">Answer Key : <input type="text" name="{{$kk}}_{{$qq}}" style="background-color:#silver;" class="form-control" id="{{$kk}}_{{$qq}}" placeholder="Type Answer for Matching columns - Ex. 1-A, 2-B ..... etc">
+                                    <div class="form-text form-check-inline">Answer Key : <input type="text" name="3_0" style="background-color:#silver;" class="form-control" id="3_0" placeholder="Type Answer for Matching columns - Ex. 1-A, 2-B ..... etc">
                                         <br>
                                     </div>
                                 @endif
@@ -110,7 +114,6 @@
 
                     <div class="form-group">
                         {{ $qq }}) &nbsp;&nbsp;&nbsp;
-                        @php($aaa = $kk . "_" . $qq)
                         <input type="text" class="form-control" name="que_{{$kk}}_{{$qq}}" id="que_{{$kk}}_{{$qq}}" value="" placeholder="Enter Question No. {{$qq}}">
                     </div>
                     <div class="form-group">
@@ -132,7 +135,6 @@
 
                     <div class="form-group">
                         <label> {{ $qq }}) &nbsp;&nbsp;&nbsp; </label>
-                        @php($aaa = $kk . "_" . $qq)
                         <textarea id="summernote5{{$qq}}" value="" name="que_{{$kk}}_{{$qq}}"><br></textarea>
                         <input type="text" name="{{$kk}}_{{$qq}}" class="form-control" id="{{$kk}}_{{$qq}}" value="" placeholder="Type Answer for Qn. {{$qq}}">
                     </div>
@@ -141,37 +143,22 @@
                     @elseif($kk == 6)
 
                     <div class="form-group">
-
-                        @php($aaa = $kk . "_" . $qq)
-                        <input type="text" class="form-control" name="que_6_1" id="que_{{$kk}}_{{$qq}}" value="" placeholder="Enter Question No. {{$qq}}"><br>
+                        {{ $qq }}) &nbsp;&nbsp;&nbsp;
+                        <input type="text" class="form-control" name="que_{{$kk}}_{{$qq}}" id="que_{{$kk}}_{{$qq}}" value="" placeholder="Enter Question No. {{$qq}}"><br>
                         <div id="row" class="form-check">
                         </div>
 
-                        <div id="newinput"></div>
-                        <button id="rowAdder" type="button" class="btn btn-dark">
+                        <div id="newinput-{{$qq}}">
+                        </div>
+
+                        <button alt="{{$qq}}" type="button" class="btn btn-dark rowAdder">
                             <span class="bi bi-plus-square-dotted">
                             </span>ADD
                         </button>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        <input type="button" id="apply-rows" value="Apply Rows">
+                        <!-- &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <input type="button" alt="{{$qq}}" class="apply-rows" value="Apply Order"> -->
 
                         <br><br>
-
-                        <input type="hidden" id="key6-1" name="ReOrd_6-1">
-                        <input type="hidden" id="key6-2" name="ReOrd_6-2">
-                        <input type="hidden" id="key6-3" name="ReOrd_6-3">
-                        <input type="hidden" id="key6-4" name="ReOrd_6-4">
-                        <input type="hidden" id="key6-5" name="ReOrd_6-5">
-                        <input type="hidden" id="key6-6" name="ReOrd_6-6">
-                        <input type="hidden" id="key6-7" name="ReOrd_6-7">
-                        <input type="hidden" id="key6-8" name="ReOrd_6-8">
-                        <input type="hidden" id="key6-9" name="ReOrd_6-9">
-                        <input type="hidden" id="key6-10" name="ReOrd_6-10">
-                        <input type="hidden" id="key6-11" name="ReOrd_6-11">
-                        <input type="hidden" id="key6-12" name="ReOrd_6-12">
-                        <input type="hidden" id="key6-13" name="ReOrd_6-13">
-                        <input type="hidden" id="key6-14" name="ReOrd_6-14">
-                        <input type="hidden" id="key6-15" name="ReOrd_6-15">
 
                         <div class="form-text form-check-inline">Answer Key :
                             <input type="text" placeholder="Answer by 1, 2, 3 " value="" class="form-control" name="{{$kk}}_{{$qq}}" id="{{$kk}}_{{$qq}}">
@@ -184,7 +171,6 @@
 
                     <br>{{ $qq }}) &nbsp;&nbsp;&nbsp;
 
-                    @php($aaa = $kk . "_" . $qq)
                     <textarea class="form-control" id="summernote7{{$qq}}" name="que_{{$kk}}_{{$qq}}"><br></textarea>
 
                     <input type="file" name="mcqimg7_{{$qq}}[0]" placeholder="Attach Image if need...." class="form-control" accept=".gif,.jpg,.png,.ppt,.pptx,.jpeg,.bmp,.tiff">
@@ -250,8 +236,6 @@
 
                         <div class="form-textarea form-check-inline" style="white-space: nowrap;">
                             <label for="exampleFormControlTextarea1">Add Jumbled Word</label> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                            @php($aaa = $kk . "_" . $qq . "-left")
-                            @php($bbb = $kk . "_" . $qq)
                             <input class="form-control" value=" " name="que_{{$kk}}_{{$qq}}-left" id="que_{{$kk}}_{{$qq}}-left"></input>
 
                         </div>
@@ -280,9 +264,6 @@
                             <input type="text" class="form-control" name="que_{{$kk}}_{{$qq}}-right" id="que_{{$kk}}_{{$qq}}-right" value="" placeholder="Enter Question of RHS">
                         </div>
 
-                        @php($aaa = $kk . "_" . $qq . "-left")
-                        @php($bbb = $kk . "_" . $qq . "-right")
-
                         <div class="form-text form-check-inline" style="margin-left:30px;">
                             <label class="form-check-label">Answer for LHS Words</label> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                             <textarea class="form-control" name="{{$kk}}_{{$qq}}-left" id="{{$kk}}_{{$qq}}-left" rows="5" cols="30"></textarea>
@@ -301,10 +282,8 @@
                     @else
                     <div class="form-group">
                         <label> {{ $qq }}) &nbsp;&nbsp;&nbsp; </label>
-                        @php($aaa = $kk . "_" . $qq)
                         <input type="text" class="form-control" name="que_{{$kk}}_{{$qq}}" id="que_{{$kk}}_{{$qq}}" value="" placeholder="Enter Question No. {{$qq}}">
                         <br>
-                        @php($aaa = $kk . "_" . $qq)
                         <input type="text" name="{{$kk}}_{{$qq}}" class="form-control" id="{{$kk}}_{{$qq}}" value="" placeholder="Type Answer for Qn. {{$qq}}">
                     </div>
                     @endif
@@ -319,7 +298,9 @@
 
         <input style="margin-bottom:20px;" type=button value="Back" onClick="javascript:history.go(-1);">
         <br>
-        <button type="submit" class="btn btn-primary">Save All Questions</button>
+        <!-- <button type="submit" class="btn btn-primary">Save All Questions</button> -->
+        <button type="submit" class="btn btn-primary id="submitForm">Submit</button>
+
     </div>
 
     </form>
@@ -395,40 +376,142 @@
         $("#subject_id option[value=0]").prop('selected', true);
         $("#chapter_id option[value=0]").prop('selected', true);
         $("#mode_test option[value=0]").prop('selected', true);
+
+
+
+        var jj = 0;
+        var aa = 1;
+        $(document).on("click", ".rowAdder", function() {
+            var altValue = $(this).attr('alt');
+            if(aa == altValue) {
+                jj++;
+            } else {
+                jj=1;
+            }
+            // alert(altValue+"ZZZZZZZZZZZZZZZ");
+            // return false;
+            newRowAdd = '<div id="row" class="form-check"><span class="form-check-inline"><input type="text" id="ReOrd6_'+ altValue + '_' + jj + '" size="800" class="form-control" placeholder="Enter Sentence ..."><a class="btn btn-danger" id="DeleteRow"><i class="fas fa-trash"></i></a></span></div>';
+
+            // $("#zzzzz").append(newRowAdd);
+            $('#newinput-'+altValue).append(newRowAdd);
+            // form2.appendChild(newRowAdd);
+            // $('#form-wrapper').append(appendHTML);
+            aa = altValue;
+
+        });
+
+
+        // Form submission
+        $('#dynamicForm').submit(function(e) {
+            e.preventDefault();
+
+            var qnid = $("#qn_temp_id").attr('alt');
+
+            key6_1text = ""; key61 = "";
+            key6_2text = ""; key62 = "";
+            key6_3text = ""; key63 = "";
+            key6_4text = ""; key64 = "";
+            key6_5text = ""; key65 = "";
+
+            $('*[id*=ReOrd6_1]:visible').each(function() {
+                key6_1text = $(this).val();
+                key61 += key6_1text + "~~~~~";
+            });
+            // alert(key61);
+            $('*[id*=ReOrd6_2]:visible').each(function() {
+                key6_2text = $(this).val();
+                key62 += key6_2text + "~~~~~";
+            });
+            // alert(key62);
+            $('*[id*=ReOrd6_3]:visible').each(function() {
+                key6_3text = $(this).val();
+                key63 += key6_3text + "~~~~~";
+            });
+            // alert(key63);
+            $('*[id*=ReOrd6_4]:visible').each(function() {
+                key6_4text = $(this).val();
+                key64 += key6_4text + "~~~~~";
+            });
+            // alert(key64);
+            $('*[id*=ReOrd6_5]:visible').each(function() {
+                key6_5text = $(this).val();
+                key65 += key6_5text + "~~~~~";
+            });
+            // alert(key65);
+
+            data6 = "&key6_1=" + key61 + "&key6_2=" + key62 + "&key6_3=" + key63 + "&key6_4=" + key64 + "&key6_5=" + key65;
+
+            var datastring = $("#dynamicForm").serialize()+data6;
+            // console.log(datastring);
+            // alert(datastring);
+            // return false;
+
+                $.ajax({
+                    type:"POST",
+                    url: "{{ url('question/storeqns') }}",
+                    async: false,
+                    data: datastring,
+                    success: function(response){
+                        // console.log(response);
+                        // return false;
+                    }
+                });
+
+                // return false;
+
+                window.location.href = "{{ url('question/index') }}";
+
+        });
+
     });
 
 
-    var jj = 0;
-    $(document).on("click", "#rowAdder", function() {
-        jj++;
-        newRowAdd = '<div id="row" class="form-check"><span class="form-check-inline"><input type="text" name="ReOrd-' + jj + '" size="800" id="ReOrd-' + jj + '" class="form-control" id="{{$kk}}_{{$qq}}" value="" placeholder="Enter Sentence ..."><a class="btn btn-danger" id="DeleteRow"><i class="fas fa-trash"></i></a></span></div>';
+    // var jj = 0;
+    // var aa = 1;
+    // $(document).on("click", ".rowAdder", function() {
+    //     var altValue = $(this).attr('alt');
+    //     if(aa == altValue) {
+    //         jj++;
+    //     } else {
+    //         jj=1;
+    //     }
+    //     // alert(altValue+"ZZZZZZZZZZZZZZZ");
+    //     // return false;
+    //     newRowAdd = '<div id="row" class="form-check"><span class="form-check-inline"><input type="text" name="ReOrd_6_'+ altValue + '_' + jj + '" size="800" class="form-control" value="" placeholder="Enter Sentence ..."><a class="btn btn-danger" id="DeleteRow"><i class="fas fa-trash"></i></a></span></div>';
 
-        $('#newinput').append(newRowAdd);
-        // form2.appendChild(newRowAdd);
+    //     // $("#zzzzz").append(newRowAdd);
+    //     $('#newinput-'+altValue).append(newRowAdd);
+    //     // form2.appendChild(newRowAdd);
+    //     $('#form-wrapper').append(appendHTML);
+    //     aa = altValue;
 
-    })
+    // })
 
-    $("body").on("click", "#DeleteRow", function() {
+    $(document).on("click", "#DeleteRow", function() {
         $(this).parents("#row").remove();
     })
 
-    $("body").on("click", "#apply-rows", function() {
-
-        var kk = 0;
+    $(document).on("click", ".apply-rows", function() {
+        var altValue = $(this).attr('alt');
         var key6text = "";
-        $('*[id*=ReOrd-]:visible').each(function() {
-            kk++;
-            key6text = ($(this).val());
-            // alert(key6text);
-            $("#key6-" + kk).val(key6text);
+        var key7text = "";
+
+        alert(altValue);
+
+        $('*[id*=ReOrd_6_'+altValue+']:visible').each(function() {
+            key6text = $(this).val();
+            key7text += key6text + "~~~~~";
         });
-        return false;
+        alert(key7text);
+        str6 = '<input type="text" id="key6_'+altValue+'" name="ReOrd6_'+altValue+'">';
+        $("#zzzzz").append(str6);
+        // return false;
     })
 
 
     $("input[type='radio']#mcqtype9a").change(function() {
         var mcqtype = $("#mcqtype9a:checked").val();
-        alert(mcqtype);
+        // alert(mcqtype);
         if (mcqtype == 1) {
             $('.mcatype9text').show();
             $('.mcatype9img').hide();
@@ -504,5 +587,6 @@
         });
 
     });
+
 </script>
 @endpush

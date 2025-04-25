@@ -13,14 +13,14 @@
             <tr>
                 <td>
                     <h4>
-                        Student Master &nbsp;&nbsp;&nbsp;&nbsp;<a class="btn btn-primary" href="{{ url('student/create') }}" role="button">Create New Student</a>
+                        Staff Master &nbsp;&nbsp;&nbsp;&nbsp;<a class="btn btn-primary" href="{{ url('staff/create') }}" role="button">Create New Student</a>
                     </h4>
                 </td>
                 <td width="5%"></td>
                 <td>
-                    <a class="btn btn-primary" id="bulk-import" role="button">Bulk Import Students</a>&nbsp;&nbsp;&nbsp;&nbsp;
+                    <a class="btn btn-primary" id="bulk-import" role="button">Bulk Import staff</a>&nbsp;&nbsp;&nbsp;&nbsp;
                 </td>
-                <td><a targe="_blank" href="../bulk_student_import_template.csv">Download Students Template</a></td>
+                <td><a targe="_blank" href="../bulk_staff_import_template.csv">Download Staff Template</a></td>
             </tr>
         </table>
 
@@ -37,10 +37,10 @@
 
         <div id="show-bulk-import" style="display:none;" class="alert alert-warning alert-dismissible fade show" role="alert">
             <h3>Bulk Import</h3>
-            <form id="bulk-import" action="{{ url('student/bulkimport') }}" method="post" enctype="multipart/form-data">
+            <form id="bulk-import" action="{{ url('staff/bulkimport') }}" method="post" enctype="multipart/form-data">
             @csrf
                 <div class="form-group">
-                    <label for="bulk-import">Browse File to Import</label>
+                    <label for="bulk-import">Brwose File to Import</label>
                     <input type="file" name="csvfile" class="form-control" id="csvfile" accept=".csv">
                 </div>
                 <div class="form-group" style="text-align: center;">
@@ -54,13 +54,11 @@
             <thead>
                 <tr>
                     <th>ID</th>
-                    <th>First Name</th>
-                    <th>Last Name</th>
-                    <th>Gender</th>
+                    <th>Name</th>
                     <th>Email</th>
-                    <th>Contact Info</th>
-                    <th>Class</th>
-                    <th>Section</th>
+                    <th>Gender</th>
+                    <th>Department</th>
+                    <th>Role</th>
                     <th>Actions</th>
                 </tr>
             </thead>
@@ -107,22 +105,20 @@
             processing: true,
             serverSide : true,
             responsive: true,
-           ajax: "{{ url('studentlist') }}",
+           ajax: "{{ url('stafflist') }}",
            lengthMenu: [ [7, 10, 25, 50, -1], [7, 10, 25, 50, 'All'] ],
            columns: [
-                    { data: 'user_id', name: 'user_id' },
-                    { data: 'first_name', name: 'first_name'},
-                    { data: 'last_name', name: 'last_name' },
+                    { data: 'id', name: 'id' },
+                    { data: 'name', name: 'name'},
+                    { data: 'email', name: 'email' },
                     { data: 'gender', name: 'gender', "render": function (data, type, row) {
                             if (row.gender == 1)
                                 return "Male"
                             else
                                 return "Female"
                         }},
-                    { data: 'email', name: 'email' },
-                    { data: 'mobile', name: 'mobile' },
-                    { data: 'class_id', name: 'class_id' },
-                    { data: 'Section', name: 'Section' },
+                    { data: 'department', name: 'department' },
+                    { data: 'role', name: 'role' },
                     { data: 'action', name : 'action', orderable : false, searchable: false}
                  ]
 

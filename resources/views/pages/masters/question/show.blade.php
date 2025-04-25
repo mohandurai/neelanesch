@@ -27,9 +27,10 @@
     //echo "<pre>";
     //print_r($qnMasTitle);
     //print_r($qns2);
+    //print_r($reord6);
     //print_r($question);
     //print_r($qns2[10]);
-    //echo "</pre>";
+    //echo "</pre>AAAAAAAAAAAAA";
     //exit;
 @endphp
 
@@ -184,22 +185,19 @@
                     <br>
                 </div>
 
-
             @elseif($kk == 6)
 
-                @if($qq == "qns")
-                    Que. &nbsp;&nbsp; <label class="form-check-label"> {{$quest['qns']}} </label>
-                @endif
-
-                @if($qq == "ReOrds")
-                    @foreach($quest['ReOrds'] as $reord)
-
-                    <div class="form-text form-check" style="margin-left:100px;">
-                        <p style="white-space: pre-wrap">{{ $reord }}</p>
+                    <div class="form-group">
+                        Q. No-{{$qq}}) &nbsp;&nbsp; <label class="form-check-label"> {{$question}} </label>
                     </div>
 
+                    @php( $ord6 = explode("~~~~~",$reord6[$qq]) )
+                    @php( array_pop($ord6) )
+                    @foreach($ord6 as $qqq => $ords)
+                    <div class="form-group">
+                        {{$qqq+1}}) &nbsp;&nbsp;&nbsp; <label class="form-check-label"> {{$ords}} </label>
+                    </div>
                     @endforeach
-                @endif
 
 
               @elseif($kk == 7)
@@ -304,7 +302,7 @@
             @else
 
             <div class="form-group">
-                Q. No-{{$qq}}. &nbsp;&nbsp; <label class="form-check-label"> {{$question}} </label>
+                Q. No-{{$qq}}) &nbsp;&nbsp; <label class="form-check-label"> {{$question}} </label>
             </div>
 
             @endif
