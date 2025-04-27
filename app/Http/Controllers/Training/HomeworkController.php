@@ -86,6 +86,8 @@ class HomeworkController extends Controller
                         'attachment' => $imageName,
                         'class_id' => $request->class_id,
                         'sec_id' => $request->sec_id,
+                        'subject_id' => $request->subject_id,
+                        'chapter_id' => $request->chapter_id,
                         'assign_to' => $request->assign_to,
                         'max_marks' => $request->max_marks,
                         'created_date' => Carbon::now(),

@@ -34,6 +34,19 @@ class StaffController extends Controller
     }
 
 
+    // routes functions
+    /**
+     * Show the form for creating a new post.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+        return view('pages.student.staff.create');
+    }
+
+
+
     /**
      * Store a newly created resource in storage. Success warning
      *
@@ -47,67 +60,74 @@ class StaffController extends Controller
 
         $request->validate([
             'first_name' => 'required',
-            'class_id' => 'required',
-            'Section' => 'required',
-            'gender' => 'required',
-            'dob' => 'required',
-            'email' => 'required',
+            'email' => 'required'
         ]);
 
-        $chekEmail = sizeof(DB::table('students')->where('email', '=', $request->email)->get());
+        $chekEmail = sizeof(DB::table('users')->where('email', '=', $request->email)->get());
 
         if($chekEmail > 0 ) {
-            return redirect()->route('student.index')->with('message', 'Email already exists in the system. Please try different email.');
+            return redirect()->route('staff.index')->with('message', 'Email already exists in the system. Please try different email.');
         }
         // exit;
 
         if ($request->require_login == "1") {
 
-            $lastInsertedId = DB::table('users')->insertGetId([
-                'name' => $request->first_name,
-                'email' => $request->email,
-                'password' => Hash::make("Pass@123"),
-            ]);
+            try {
+                DB::table('users')->insert(
+                    array(
+                       'name' => $request->first_name . " " . $request->last_name,
+                            'email' => $request->email,
+                            'password' => Hash::make("Pass@123"),
+                            'contact_info'   => $request->contact_info,
+                            'gender'   => $request->gender,
+                            'department'   => $request->department,
+                            'role'   => $request->role,
+                            'status'   => 1,
+                            'created_at'   => Carbon::now(),
+                            'updated_at'   => Carbon::now(),
+                            'category'   => 2
+                    )
+                );
+            } catch (\Throwable $e) {
+                print_r($e->getMessage());
+                return View::make('pages.student.staff.index')->with('message', "Staff Title already exists - Try different video name !!!");
+            }
+
         } else {
-            $lastInsertedId = null;
+
+            try {
+                DB::table('users')->insert(
+                    array(
+                       'name' => $request->first_name . " " . $request->last_name,
+                            'email' => $request->email,
+                            'password' => Hash::make("Pass@123"),
+                            'contact_info'   => $request->contact_info,
+                            'gender'   => $request->gender,
+                            'department'   => $request->department,
+                            'role'   => $request->role,
+                            'status'   => 0,
+                            'created_at'   => Carbon::now(),
+                            'updated_at'   => Carbon::now(),
+                            'category'   => 2
+                    )
+                );
+            } catch (\Throwable $e) {
+                print_r($e->getMessage());
+                return View::make('pages.student.staff.index')->with('message', "Staff Title already exists - Try different video name !!!");
+            }
+
         }
 
-        // echo $lastInsertedId . " Yesssssssssssssss";
-        // exit;
 
         if ($request->file()) {
-            $fileName = "Class" . $request->class_id . "_" . $request->first_name . "_" . $request->file->getClientOriginalName();
-            $filePath = $request->file('photo_image')->storeAs('images/students', $fileName, 'public');
+            $fileName = $request->id . "_" . $request->first_name . "_" . $request->file->getClientOriginalName();
+            $filePath = $request->file('photo_image')->storeAs('images/staff', $fileName, 'public');
         } else {
             $fileName = "";
         }
 
 
-        try {
-            DB::table('students')->insert(
-                array(
-                    'first_name'  =>   $request->first_name,
-                    'user_id'  =>   $lastInsertedId,
-                    'last_name'   =>   $request->last_name,
-                    'email'   => $request->email,
-                    'mobile'   => $request->mobile,
-                    'class_id'   => $request->class_id,
-                    'Section'   => $request->Section,
-                    'gender'   => $request->gender,
-                    'dob'   => $request->dob,
-                    'upload_pps_image_info'   => $fileName,
-                    'school_id'   => 1,
-                    'created_date'   => Carbon::now(),
-                    'updated_date'   => Carbon::now(),
-                    'is_deleted'   => 0
-                )
-            );
-        } catch (\Throwable $e) {
-            print_r($e->getMessage());
-            return View::make('pages.student.student.index')->with('message', "Student Title already exists - Try different video name !!!");
-        }
-
-        return redirect()->route('student.index')->with('message', "New Student Created Successfully !!!");
+        return redirect()->route('staff.index')->with('message', "New Staff Created Successfully !!!");
     }
 
 
@@ -244,17 +264,6 @@ class StaffController extends Controller
     }
 
 
-    // routes functions
-    /**
-     * Show the form for creating a new post.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        $data['classlist'] = DB::table('student_class')->select('id', 'class')->where('school_id', '=', 1)->where('is_deleted', '=', '0')->get();
-        return view('pages.student.student.create', $data);
-    }
 
 
     /**

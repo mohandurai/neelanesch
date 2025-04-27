@@ -13,7 +13,7 @@
             <tr>
                 <td>
                     <h4>
-                        Staff Master &nbsp;&nbsp;&nbsp;&nbsp;<a class="btn btn-primary" href="{{ url('staff/create') }}" role="button">Create New Student</a>
+                        Staff Master &nbsp;&nbsp;&nbsp;&nbsp;<a class="btn btn-primary" href="{{ url('staff/create') }}" role="button">Create New Staff</a>
                     </h4>
                 </td>
                 <td width="5%"></td>

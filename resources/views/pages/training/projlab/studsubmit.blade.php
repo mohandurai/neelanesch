@@ -43,6 +43,12 @@
                     <td>Class</td><td>:</td><td>{{$projLabAct->class_id}}</td>
                 </tr>
                 <tr>
+                    <td>Subject</td><td>:</td><td>{{$projLabAct->subject_id}}</td>
+                </tr>
+                <tr>
+                    <td>Chapter</td><td>:</td><td>{{$projLabAct->chapter_id}}</td>
+                </tr>
+                <tr>
                     <td>Attachment</td><td>:</td>
                     <td>
                     @php($showimg = "storage/project_activity/class_".$projLabAct->class_id."/".$projLabAct->attachment)

@@ -7,8 +7,8 @@
 @section('content')
 <nav class="page-breadcrumb">
   <ol class="breadcrumb">
-    <li class="breadcrumb-item"><a href="{{ url('student/index') }}">Students Record</a></li>
-    <li class="breadcrumb-item active" aria-current="page">Students Master</li>
+    <li class="breadcrumb-item"><a href="{{ url('student/index') }}">Staff Record</a></li>
+    <li class="breadcrumb-item active" aria-current="page">Staff Master</li>
   </ol>
 </nav>
 
@@ -16,10 +16,10 @@
   <div class="col-md-12 grid-margin stretch-card">
     <div class="card">
       <div class="card-body">
-        <h4 style="margin-bottom:10px;">Create New Student</h4>
+        <h4 style="margin-bottom:10px;">Create New Staff</h4>
 
         <div class="table-responsive">
-        <form id="submitForm3" action="{{ url('student/store') }}" method="post">
+        <form id="submitForm3" action="{{ url('staff/store') }}" method="post">
             @csrf
             <div class="form-group">
             <label for="title">First Name</label>
@@ -42,35 +42,8 @@
             </div>
 
             <div class="form-group">
-            <label for="title">Class</label>
-                <select class="form-control" id="class_id" name="class_id" required>
-                    <option selected value="0">Select Class</option>
-                    @foreach($classlist as $clist)
-                        <option value="{{$clist->id}}">{{$clist->class}}</option>
-                    @endforeach
-                </select>
-            </div>
-
-            <div class="form-group">
-                <label for="title">Select Section</label>
-                <select class="form-control" id="Section" name="Section" required>
-                    <option value="0" selected>Select Section</option>
-                    <option value="1">A</option>
-                    <option value="2">B</option>
-                    <option value="3">C</option>
-                    <option value="4">D</option>
-                    <option value="5">E</option>
-                    <option value="6">F</option>
-                    <option value="7">G</option>
-                    <option value="8">H</option>
-                    <option value="9">I</option>
-                    <option value="10">J</option>
-                </select>
-            </div>
-
-            <div class="form-group">
-                <label` for="exampleFormControlSelect1">Select Gender</label>
-                <select class="form-control" id="gender" name="gender" required>
+                <label` for="exampleFormControlSelect1">Select Geder</label>
+                <select class="form-control" id="gender" name="gender">
                 <option value="0" selected>Select Gender</option>
                 <option value="1">Male</option>
                 <option value="2">Female</option>
@@ -79,9 +52,32 @@
             </div>
 
             <div class="form-group">
-            <label for="title">Date of Birth</label>
-            <input type="date" class="form-control" id="dob" name="dob" required>
+                <label` for="exampleFormControlSelect1">Select Department</label>
+                <select class="form-control" id="department" name="department">
+                    <option value="0" selected>Select Department</option>
+                    <option value="1">Teaching</option>
+                    <option value="2">Lab Support</option>
+                    <option value="3">Accounts</option>
+                    <option value="4">Support Activity</option>
+                    <option value="5">Security</option>
+                    <option value="6">Office Staff</option>
+                </select>
             </div>
+
+            <div class="form-group">
+                <label` for="exampleFormControlSelect1">Select Role</label>
+                <select class="form-control" id="role" name="role">
+                    <option value="0" selected>Select Role</option>
+                    <option value="1">Teacher</option>
+                    <option value="2">Head Master</option>
+                    <option value="3">Accountant</option>
+                    <option value="4">Clert</option>
+                    <option value="5">Lab Assistant</option>
+                    <option value="6">Cashier</option>
+                    <option value="7">Office Assistant</option>
+                </select>
+            </div>
+
 
             <div class="form-group">
             <label for="title">Attach PP Size Photo</label>
@@ -91,14 +87,15 @@
             <div class="form-group">
                 <label` for="exampleFormControlSelect1">Require Login</label>
                 <select class="form-control" id="require_login" name="require_login">
-                <option value="0" selected>No</option>
-                <option value="1">Yes</option>
+                    <option value="0" selected>None</option>
+                    <option value="1">Yes</option>
+                    <option value="2" selected>No</option>
                 </select>
             </div>
 
        </div>
       </div>
-      <button type="submit" class="btn btn-primary">Create Student</button>
+      <button type="submit" class="btn btn-primary">Create Staff</button>
       </form>
       <input style="margin-top:20px;" type="button" value="Back" onClick="javascript:history.go(-1);">
     </div>

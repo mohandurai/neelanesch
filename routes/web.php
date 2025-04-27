@@ -43,7 +43,8 @@ use App\Http\Controllers\AssetController;
 use App\Http\Controllers\ConfigController;
 use App\Http\Controllers\Master\QnbankController;
 
-use App\Http\Controllers\PdfController;
+use App\Http\Controllers\PdfmakeController;
+
 // use App\Http\Controllers\RazorpayPaymentController;
 
 Route::get('/', function () {
@@ -59,6 +60,8 @@ Route::get('auth/login', function () {
     return view('pages.auth.login');
 });
 
+Route::get('/document', [PdfmakeController::class, 'generatePdf'])->name('document');
+
 // Auth::routes();
 
 Route::middleware('auth')->group(function() {
@@ -69,8 +72,6 @@ Route::middleware('auth')->group(function() {
 
     Route::get('/config', [ConfigController::class, 'config'])->name('config');
     Route::post('/config/update', [ConfigController::class, 'update'])->name('update');
-
-    Route::get('/view-pdf/{filename}', [PdfController::class, 'viewPdf'])->name('view.pdf');
 
     Route::get('/qnbank/index', [QnbankController::class, 'index'])->name('qnbank.index');
     Route::post('/qnbank/store', [QnbankController::class, 'store'])->name('qnbank.store');
@@ -112,7 +113,6 @@ Route::middleware('auth')->group(function() {
     Route::get('/gradereport/report', [GradereportController::class, 'report'])->name('reports.report');
     Route::get('/getStudents/{id}', [OlexamController::class, 'getStudents'])->name('getStudents');
     Route::get('/getAllocExams/{id}', [OlexamController::class, 'getAllocExams'])->name('getAllocExams');
-    Route::get('/gradereport/report', [GradereportController::class, 'report'])->name('reports.report');
     Route::get('/getAllprojLab/{id}', [ProjlabController::class, 'getAllprojLab'])->name('getAllprojLab');
 
     Route::get('/getStudents2/{id}', [ProjlabController::class, 'getStudents2'])->name('getStudents2');
@@ -184,6 +184,7 @@ Route::middleware('auth')->group(function() {
     Route::get('/olexam/{id}/correctpaper', [OlexamController::class, 'correctpaper'])->name('olexam.correctpaper');
     Route::get('/olexam/{id}/view', [OlexamController::class, 'view'])->name('olexam.view');
     Route::post('/olexam/printreport', [OlexamController::class, 'printreport'])->name('olexam.printreport');
+    Route::post('/olexam/printpdf', [OlexamController::class, 'printpdf'])->name('olexam.printpdf');
 
     Route::get('/olexam/correct', [OlexamController::class, 'correct'])->name('olexam.correct');
     Route::post('/olexam/savecorrected', [OlexamController::class, 'savecorrected'])->name('olexam.savecorrected');

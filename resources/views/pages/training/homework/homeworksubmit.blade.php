@@ -43,6 +43,12 @@
                     <td>Class</td><td>:</td><td>{{$homework->class_id}}</td>
                 </tr>
                 <tr>
+                    <td>Subject</td><td>:</td><td>{{$homework->subject_id}}</td>
+                </tr>
+                <tr>
+                    <td>Chapter</td><td>:</td><td>{{$homework->chapter_id}}</td>
+                </tr>
+                <tr>
                     <td>Attachment</td><td>:</td>
                     <td>
                         @php($showimg = "storage/homework/class_".$homework->class_id."/".$homework->attachment)

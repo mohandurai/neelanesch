@@ -27,6 +27,9 @@
 
 @section('content')
 
+<form action="{{ url('olexam/printpdf') }}" method="post">
+@csrf
+
 <div class="row">
     <div class="col-md-12 grid-margin stretch-card">
         <div class="card">
@@ -97,7 +100,10 @@
                         <input type="button" value="Back" onClick="javascript:history.go(-1);">
                     </td>
                     <td width="30%" align="center">
+                        <input type="hidden" name="qntemplateid" value="{{ $tmplid }}">
+                        <input type="hidden" name="class_id" value="{{ $stud_data[0][4] }}">
                         <button type="submit" class="btn btn-primary">Export PDF</button>
+                        </form
                     </td>
                     <td width="30%" align="center">
                         <button type="submit" class="btn btn-primary">Report Send Parent</button>
