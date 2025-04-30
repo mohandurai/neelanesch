@@ -17,8 +17,8 @@
 
 <nav class="page-breadcrumb">
   <ol class="breadcrumb">
-    <li class="breadcrumb-item"><a href="{{ url('/config') }}">School Setup Configuration</a></li>
-    <li class="breadcrumb-item active" aria-current="page"><a href="{{ url('/config') }}">School Setup Configuration</a></li>
+    <li class="breadcrumb-item"><a href="{{ url('/configs') }}">School Setup Configuration</a></li>
+    <li class="breadcrumb-item active" aria-current="page"><a href="{{ url('/configs') }}">School Setup Configuration</a></li>
   </ol>
 </nav>
 
@@ -32,7 +32,7 @@
                 <p class="alert {{ Session::get('alert-class', 'alert-success') }}">{{ Session::get('message') }}</p>
             @endif
 
-        <form action="{{ url('config/update') }}" method="post" enctype="multipart/form-data">
+        <form action="{{ url('configs/update') }}" method="post" enctype="multipart/form-data">
             @csrf
 
         <div class="form-group">
@@ -89,10 +89,12 @@
 
                 <tr>
                 <td>Status</td><td>:</td>
-                <select class="form-control" id="status" name="status">
-                    <option value="1" selected>Active</option>
-                    <option value="0">InActive</option>
-                </select>
+                <td>
+                    <select class="form-control" id="status" name="status">
+                        <option value="1" selected>Active</option>
+                        <option value="0">InActive</option>
+                    </select>
+                </td>
             </div>
 
           </table>
@@ -102,7 +104,6 @@
        </div>
        <br>
                 <button type="submit" class="btn btn-primary">Save Configuration</button>
-           </form>
 
            <br><br>
            <input style="margin-top:20px;" type="button" value="Back" onClick="javascript:history.go(-1);">
@@ -110,13 +111,6 @@
     </div>
   </div>
 </div>
+</form>
+
 @endsection
-
-@push('plugin-scripts')
-  <script src="{{ asset('assets/plugins/datatables-net/jquery.dataTables.js') }}"></script>
-  <script src="{{ asset('assets/plugins/datatables-net-bs4/dataTables.bootstrap4.js') }}"></script>
-@endpush
-
-@push('custom-scripts')
-  <script src="{{ asset('assets/js/data-table.js') }}"></script>
-@endpush

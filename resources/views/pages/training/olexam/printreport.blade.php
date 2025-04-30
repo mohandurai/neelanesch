@@ -71,7 +71,7 @@
                 <tr align="center">
                     <th align="center">S-No.</th>
                     <th align="center">Roll No.</th>
-                    <th align="center">Name</th>
+                    <th align="center">Student Name</th>
                     <th align="center">Marks Scored</th>
                     <th align="center">Total Marks</th>
                     <th align="center">Percentage (%)</th>
@@ -103,7 +103,6 @@
                         <input type="hidden" name="qntemplateid" value="{{ $tmplid }}">
                         <input type="hidden" name="class_id" value="{{ $stud_data[0][4] }}">
                         <button type="submit" class="btn btn-primary">Export PDF</button>
-                        </form
                     </td>
                     <td width="30%" align="center">
                         <button type="submit" class="btn btn-primary">Report Send Parent</button>
@@ -112,9 +111,9 @@
             </table>
 
         </div>
-
     </div>
 </div>
+</form>
 
 @endsection
 

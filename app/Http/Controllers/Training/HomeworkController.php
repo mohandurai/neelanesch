@@ -10,6 +10,8 @@ use File;
 use DataTables;
 use Carbon\Carbon;
 
+use Barryvdh\DomPDF\Facade\Pdf;
+
 class HomeworkController extends Controller
 {
     //
@@ -388,9 +390,11 @@ class HomeworkController extends Controller
         // echo "</pre>";
         // exit;
 
+        $hwid = $request->hw_id;
+
         if(!isset($request->student_id))
         {
-            $sql6 = "select C.user_id as roleid, CONCAT(C.first_name, ' ', C.last_name) as stname, C.class_id, C.Section, D.mark_scored, D.max_marks, D.title FROM students C, homework D WHERE D.is_active = 1 AND D.id = $request->hw_id AND D.class_id=$request->class_id AND C.Section = '" . $request->sec_id . "' AND (D.assign_to=C.user_id OR D.student_id=C.user_id)";
+            $sql6 = "select C.user_id as roleid, CONCAT(C.first_name, ' ', C.last_name) as stname, D.class_id, D.sec_id, D.mark_scored, D.max_marks, D.title FROM students C, homework D WHERE D.is_active = 1 AND D.id = $hwid AND D.class_id=$request->class_id AND C.Section = '" . $request->sec_id . "' AND (D.assign_to=C.user_id OR D.student_id=C.user_id)";
             // echo $sql6; exit;
             $prep3 = DB::select($sql6);
             if(!empty($prep3)) {
@@ -402,14 +406,14 @@ class HomeworkController extends Controller
                     $info3[$kk][2] = $data2->mark_scored;
                     $info3[$kk][3] = $data2->max_marks;
                     $info3[$kk][4] = $data2->class_id;
-                    $info3[$kk][5] = $data2->Section;
+                    $info3[$kk][5] = $data2->sec_id;
                 }
             } else {
                 $info3 = [];
                 $examtitle = "";
             }
         } else {
-            $sql6 = "select C.user_id as roleid, CONCAT(C.first_name, ' ', C.last_name) as stname, C.class_id, C.Section, D.mark_scored, D.max_marks, D.title FROM students C, homework D WHERE D.is_active = 1 AND D.id = $request->hw_id AND D.class_id=$request->class_id AND D.sec_id = '" . $request->sec_id . "' AND C.user_id = D.student_id AND C.user_id = $request->student_id  AND (D.assign_to=C.user_id OR D.student_id=C.user_id)";
+            $sql6 = "select C.user_id as roleid, CONCAT(C.first_name, ' ', C.last_name) as stname, D.class_id, D.sec_id, D.mark_scored, D.max_marks, D.title FROM students C, homework D WHERE D.is_active = 1 AND D.id = $hwid AND D.class_id=$request->class_id AND D.sec_id = '" . $request->sec_id . "' AND C.user_id = D.student_id AND C.user_id = $request->student_id  AND (D.assign_to=C.user_id OR D.student_id=C.user_id)";
 
             $prep3 = DB::select($sql6);
             if(!empty($prep3)) {
@@ -433,7 +437,81 @@ class HomeworkController extends Controller
         // echo "</pre>";
         // exit;
 
-        return view('pages.training.homework.printreport',$setupInfo)->with('stud_data',$info3)->with('examtitle',$examtitle);
+        return view('pages.training.homework.printreport',$setupInfo)->with('stud_data',$info3)->with('examtitle',$examtitle)->with('tmplid',$hwid);
     }
+
+    public function printpdf(Request $request)
+    {
+        $setupInfo['configs'] = DB::table('config_setup')->where('id', 1)->get();
+
+        // echo "<pre>";
+        // print_r($request->all());
+        // echo "</pre>";
+        // exit;
+
+        $tmplid = $request->qntemplateid;
+        $classid = $request->class_id;
+
+        if(!isset($request->student_id))
+        {
+            $sql6 = "select C.user_id as roleid, CONCAT(C.first_name, ' ', C.last_name) as stname, D.class_id, D.sec_id, D.mark_scored, D.max_marks, D.title FROM student_answers A, students C, homework D WHERE A.is_deleted = 0 AND D.class_id=$classid AND D.id = $tmplid AND A.que_master_templ_id = D.id AND A.student_id = C.user_id";
+            // echo $sql6; exit;
+            $prep3 = DB::select($sql6);
+            if(!empty($prep3)) {
+            // exit;
+                foreach ($prep3 as $kk => $data2) {
+                    $examtitle = $data2->title;
+                    $info3[$kk][0] = $data2->roleid;
+                    $info3[$kk][1] = $data2->stname;
+                    $info3[$kk][2] = $data2->mark_scored;
+                    $info3[$kk][3] = $data2->max_marks;
+                    $info3[$kk][4] = $data2->class_id;
+                    $info3[$kk][5] = $data2->sec_id;
+                }
+            } else {
+                $info3 = [];
+                $examtitle = "";
+            }
+        } else {
+            $sql6 = "select C.user_id as roleid, CONCAT(C.first_name, ' ', C.last_name) as stname, D.class_id, D.sec_id, D.mark_scored, D.max_marks, D.title FROM student_answers A, students C, homework D WHERE A.is_deleted = 0 AND A.que_master_templ_id = D.id AND C.user_id = A.student_id AND D.id=A.que_master_templ_id AND C.user_id=" . $request->student_id;
+            $prep3 = DB::select($sql6);
+            if(!empty($prep3)) {
+                foreach ($prep3 as $kk => $data2) {
+                    $examtitle = $data2->title;
+                    $info3[$kk][0] = $data2->roleid;
+                    $info3[$kk][1] = $data2->stname;
+                    $info3[$kk][2] = $data2->mark_scored;
+                    $info3[$kk][3] = $data2->max_marks;
+                    $info3[$kk][4] = $data2->class_id;
+                    $info3[$kk][5] = $data2->sec_id;
+                }
+            } else {
+                $info3 = [];
+                $examtitle = "";
+            }
+        }
+
+        $examtitle = array('examtitle' => $examtitle);
+        $inforec = array('stud_data' => $info3);
+
+        $finalarray = array_merge($inforec, $setupInfo, $examtitle);
+
+        // echo "<pre>";
+        // print_r($finalarray);
+        // echo "</pre>";
+        // exit;
+
+        // $pdf = Pdf::loadView('pages.training.olexam.printpdf');
+        $pdf = Pdf::loadView('pages.training.homework.printpdf',$finalarray);
+
+        // For direct download:
+	    return $pdf->download('document.pdf');
+
+        // echo $sql6 . "<br>";
+        // echo $examtitle . "<br>";
+
+
+        // return $pdf->stream('pages.training.homework.printpdf.pdf');
+	}
 
 }

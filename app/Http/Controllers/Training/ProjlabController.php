@@ -4,15 +4,14 @@ namespace App\Http\Controllers\Training;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Config;
 use DB;
 use File;
 use DataTables;
 use Carbon\Carbon;
+
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class ProjlabController extends Controller
 {
@@ -23,7 +22,7 @@ class ProjlabController extends Controller
         // print_r($projlab);
         // exit;
 
-        $data2 = DB::table('student_class')->select('id','class')->where('school_id', '=', 1)->where( 'is_deleted', '=', '0')->get();
+        $data2 = DB::table('student_class')->select('id','class')->where( 'is_deleted', '=', '0')->get();
         $result = $data2->toArray();
         foreach($result as $arr) {
             $classArr[$arr->id] = $arr->class;
@@ -374,6 +373,22 @@ class ProjlabController extends Controller
         return $options2;
     }
 
+    public function getprojchapt($ids)
+    {
+        $id = explode("~~~", $ids);
+        // echo $id[0] . "   " . $id[1];
+        // exit;
+        $qry6 = "select CC.id as id, CC.title as title from subject_master as AA, content_master as BB, chapters as CC WHERE AA.id=$id[0] AND CC.class_id=$id[1] AND BB.subject_id=$id[0] AND  BB.chapter_id=CC.id AND BB.video_type_id=1 AND AA.is_active = 1 ORDER BY BB.title";
+        // echo $qry6; exit;
+        $subs = DB::select($qry6);
+        $options = "";
+        foreach ($subs as $data2) {
+            $options .= "<option value='" . $data2->id . "'>" . $data2->title . "</option>";
+        }
+        // echo $options; exit;
+        return $options;
+    }
+
     public function getAllprojLab($id)
     {
         $res6 = DB::select("select id, title FROM project_lab_activity WHERE is_active = 1 AND class_id=$id");
@@ -411,9 +426,11 @@ class ProjlabController extends Controller
         // echo "</pre>";
         // exit;
 
+        $projlabid = $request->projlab_id;
+
         if(!isset($request->student_id))
         {
-            $sql6 = "select C.user_id as roleid, CONCAT(C.first_name, ' ', C.last_name) as stname, C.class_id, C.Section, D.mark_scored, D.max_marks, D.title FROM students C, project_lab_activity D WHERE (C.user_id=D.assign_to OR C.user_id=D.student_id) AND D.id = $request->projlab_id AND D.is_active = 1 AND C.Section = '". $request->sec_id . "'";
+            $sql6 = "select C.user_id as roleid, CONCAT(C.first_name, ' ', C.last_name) as stname, D.class_id, C.Section, D.mark_scored, D.max_marks, D.title FROM students C, project_lab_activity D WHERE (C.user_id=D.assign_to OR C.user_id=D.student_id) AND D.id = $projlabid AND D.is_active = 1 AND C.Section = '". $request->sec_id . "'";
 
             $prep3 = DB::select($sql6);
             if(!empty($prep3)) {
@@ -432,7 +449,7 @@ class ProjlabController extends Controller
                 $examtitle = "";
             }
         } else {
-            $sql6 = "select C.user_id as roleid, CONCAT(C.first_name, ' ', C.last_name) as stname, C.class_id, C.Section, D.mark_scored, D.max_marks, D.title FROM students C, project_lab_activity D WHERE (C.user_id=D.assign_to OR C.user_id=D.student_id) AND D.is_active = 1 AND D.id = $request->projlab_id AND C.user_id=D.student_id AND D.student_id = " . $request->student_id;
+            $sql6 = "select C.user_id as roleid, CONCAT(C.first_name, ' ', C.last_name) as stname, D.class_id, C.Section, D.mark_scored, D.max_marks, D.title FROM students C, project_lab_activity D WHERE (C.user_id=D.assign_to OR C.user_id=D.student_id) AND D.is_active = 1 AND D.id = $projlabid AND C.user_id=D.student_id AND D.student_id = " . $request->student_id;
             $prep3 = DB::select($sql6);
             if(!empty($prep3)) {
                 foreach ($prep3 as $kk => $data2) {
@@ -456,7 +473,79 @@ class ProjlabController extends Controller
         // echo "</pre>";
         // exit;
 
-        return view('pages.training.projlab.printreport',$setupInfo)->with('stud_data',$info3)->with('examtitle',$examtitle);
+        return view('pages.training.projlab.printreport',$setupInfo)->with('stud_data',$info3)->with('examtitle',$examtitle)->with('tmplid',$projlabid);
     }
+
+
+    public function printpdf(Request $request)
+    {
+        $setupInfo['configs'] = DB::table('config_setup')->where('id', 1)->get();
+
+        // echo "<pre>";
+        // print_r($request->all());
+        // echo "</pre>";
+        // exit;
+
+        $tmplid = $request->qntemplateid;
+        $classid = $request->class_id;
+
+        if(!isset($request->student_id))
+        {
+            $sql6 = "select C.user_id as roleid, CONCAT(C.first_name, ' ', C.last_name) as stname, D.class_id, C.Section, D.mark_scored, D.max_marks, D.title FROM student_answers A, students C, project_lab_activity D WHERE A.is_deleted = 0 AND D.class_id=$classid AND A.que_master_templ_id = $tmplid AND A.que_master_templ_id = D.id AND A.student_id = C.user_id";
+            // echo $sql6; exit;
+            $prep3 = DB::select($sql6);
+            if(!empty($prep3)) {
+            // exit;
+                foreach ($prep3 as $kk => $data2) {
+                    $examtitle = $data2->title;
+                    $info3[$kk][0] = $data2->roleid;
+                    $info3[$kk][1] = $data2->stname;
+                    $info3[$kk][2] = $data2->mark_scored;
+                    $info3[$kk][3] = $data2->max_marks;
+                    $info3[$kk][4] = $data2->class_id;
+                    $info3[$kk][5] = $data2->Section;
+                }
+            } else {
+                $info3 = [];
+                $examtitle = "";
+            }
+        } else {
+            $sql6 = "select C.user_id as roleid, CONCAT(C.first_name, ' ', C.last_name) as stname, D.class_id, C.Section, D.mark_scored, D.max_marks, D.title FROM student_answers A, students C, project_lab_activity D WHERE A.is_deleted = 0 AND A.que_master_templ_id = D.id AND C.user_id = A.student_id AND D.id=A.que_master_templ_id AND C.user_id=" . $request->student_id;
+            $prep3 = DB::select($sql6);
+            if(!empty($prep3)) {
+                foreach ($prep3 as $kk => $data2) {
+                    $examtitle = $data2->title;
+                    $info3[$kk][0] = $data2->roleid;
+                    $info3[$kk][1] = $data2->stname;
+                    $info3[$kk][2] = $data2->mark_scored;
+                    $info3[$kk][3] = $data2->max_marks;
+                    $info3[$kk][4] = $data2->class_id;
+                    $info3[$kk][5] = $data2->Section;
+                }
+            } else {
+                $info3 = [];
+                $examtitle = "";
+            }
+        }
+
+        $examtitle = array('examtitle' => $examtitle);
+        $inforec = array('stud_data' => $info3);
+
+        $finalarray = array_merge($inforec, $setupInfo, $examtitle);
+
+        // echo "<pre>";
+        // print_r($finalarray);
+        // echo "</pre>";
+        // exit;
+
+        // $pdf = Pdf::loadView('pages.training.olexam.printpdf');
+        $pdf = Pdf::loadView('pages.training.projlab.printpdf',$finalarray);
+
+        // echo $sql6 . "<br>";
+        // echo $examtitle . "<br>";
+
+
+        return $pdf->stream('pages.training.projlab.printpdf.pdf');
+	}
 
 }

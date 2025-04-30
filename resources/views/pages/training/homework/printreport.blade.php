@@ -23,9 +23,14 @@
     //exit;
 @endphp
 
+@php($sections = array(1=>"A",2=>"B",3=>"C",4=>"D",5=>"E",6=>"F",7=>"G",8=>"H",9=>"I",10=>"J"))
+
 @php($logourl = 'storage/images/' . $configs[0]->logo_url)
 
 @section('content')
+
+<form action="{{ url('homework/printpdf') }}" method="post">
+@csrf
 
 <div class="row">
     <div class="col-md-12 grid-margin stretch-card">
@@ -58,7 +63,7 @@
                     <p>Info. not available !!!</p>
                 @endif
                 </td>
-            <td style="text-align: right;">Home Work Name : &nbsp;&nbsp;</td>
+            <td style="text-align: right;">Home Work Title : &nbsp;&nbsp;</td>
                 <td style="text-align: left;">{{$examtitle}}</td>
             </tr>
         </table>
@@ -96,7 +101,9 @@
                         <input type="button" value="Back" onClick="javascript:history.go(-1);">
                     </td>
                     <td width="30%" align="center">
-                        <button type="button" class="btn btn-primary">Export PDF</button>
+                        <input type="hidden" name="qntemplateid" value="{{ $tmplid }}">
+                        <input type="hidden" name="class_id" value="{{ $stud_data[0][4] }}">
+                        <button type="submit" class="btn btn-primary">Export PDF</button>
                     </td>
                     <td width="30%" align="center">
                         <button type="button" class="btn btn-primary">SMS Report Parent</button>
@@ -108,6 +115,7 @@
 
     </div>
 </div>
+</form>
 
 @endsection
 

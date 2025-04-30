@@ -28,7 +28,19 @@
     width: 12px;
     height: 12px;
     }
-  </style>
+  .modal-header {
+        background-color: #f8f9fa;
+        border-bottom: 1px solid #e9ecef;
+        padding: 1rem 1.5rem;
+    }
+    .modal-body {
+        border-bottom: 1px solid #e9ecef;
+    }
+   .modal-title, .close {
+        color:black;
+    }
+</style>
+
   @stack('style')
 </head>
 <body data-base-url="{{url('/')}}">

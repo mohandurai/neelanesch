@@ -9,6 +9,9 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Hash;
 Use Exception;
 
+use DB;
+use Carbon\Carbon;
+
 use App\User;
 
 class UserController extends Controller
@@ -90,16 +93,31 @@ class UserController extends Controller
         }
     }
 
-    // public function logout()
-    // {
-    //     Session::flush();
-    //     Auth::logout();
-    //     // return redirect('pages.auth.login');
-    //     // Session::flush();
-    //     // Auth::logout();
+    public function updateprofile(Request $request)
+    {
 
-    //     return Redirect::to('/auth/login');
-    // }
+        // echo "<pre>";
+        // return $request->username;
+        // exit;
+
+        try {
+            DB::table('users')->where('id', $request->user_id)->update(
+                [
+                    'name' => $request->username,
+                    'email' => $request->emailid,
+                    'password' => Hash::make($request->password1),
+                    'updated_at'=> Carbon::now()
+                ]
+            );
+        }
+        catch (\Throwable $e) {
+            print_r($e->getMessage());
+            return View::make('pages.student.staff.index')->with('message', "Some errrrrrrrrr already exists - Try different Project Acvitity name !!!");
+        }
+
+        return redirect()->route('staff.index')->with('message', "User Profile updated Successfully !!!");
+
+    }
 
 
 }

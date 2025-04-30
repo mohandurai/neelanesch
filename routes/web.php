@@ -70,8 +70,11 @@ Route::middleware('auth')->group(function() {
         return view('dashboard');
     });
 
-    Route::get('/config', [ConfigController::class, 'config'])->name('config');
-    Route::post('/config/update', [ConfigController::class, 'update'])->name('update');
+
+    Route::post('/updateprofile', [UserController::class, 'updateprofile'])->name('updateprofile');
+
+    Route::get('/configs', [ConfigController::class, 'configs'])->name('configs');
+    Route::post('/configs/update', [ConfigController::class, 'update'])->name('update');
 
     Route::get('/qnbank/index', [QnbankController::class, 'index'])->name('qnbank.index');
     Route::post('/qnbank/store', [QnbankController::class, 'store'])->name('qnbank.store');
@@ -109,6 +112,7 @@ Route::middleware('auth')->group(function() {
     Route::get('/getAllHw/{id}', [HomeworkController::class, 'getAllHw'])->name('getAllHw');
 
     Route::post('/homework/printreport', [HomeworkController::class, 'printreport'])->name('homework.printreport');
+    Route::post('/homework/printpdf', [HomeworkController::class, 'printpdf'])->name('homework.printpdf');
 
     Route::get('/gradereport/report', [GradereportController::class, 'report'])->name('reports.report');
     Route::get('/getStudents/{id}', [OlexamController::class, 'getStudents'])->name('getStudents');
@@ -175,6 +179,7 @@ Route::middleware('auth')->group(function() {
     Route::get('/projlab/{id}/projsubmituser', [ProjlabController::class, 'projsubmituser'])->name('projsubmituser');
 
     Route::post('/projlab/printreport', [ProjlabController::class, 'printreport'])->name('projlab.printreport');
+    Route::post('/projlab/printpdf', [ProjlabController::class, 'printpdf'])->name('projlab.printpdf');
 
 
     Route::get('/olexam/index', [OlexamController::class, 'index'])->name('olexam.index');

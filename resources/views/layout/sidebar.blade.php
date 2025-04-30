@@ -229,10 +229,7 @@
                             <a href="{{ url('/homework/index') }}" class="nav-link">Home Work </a>
                         </li>
                         <li class="nav-item">
-                            <a href="#" class="nav-link">List of Students</a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="#" class="nav-link">Fee Collection</a>
+                            <a href="#" id="fee-collection" class="nav-link">Fee Collection</a>
                         </li>
                     </ul>
                 </div>
@@ -251,10 +248,10 @@
                 <div class="collapse" id="forum">
                     <ul class="nav sub-menu">
                         <li class="nav-item">
-                            <a href="#" class="nav-link">General Comments</a>
+                            <a href="#" id="general-comments" class="nav-link">General Comments</a>
                         </li>
                         <li class="nav-item">
-                            <a href="#" class="nav-link">Discussions</a>
+                            <a href="#" id="discussions" class="nav-link">Discussions</a>
                         </li>
                     </ul>
                 </div>
@@ -276,16 +273,16 @@
                             <a href="{{ url('/asset/index') }}" class="nav-link">Asset Management</a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ url('/config') }}" class="nav-link">Config Setting</a>
+                            <a href="{{ url('/configs') }}" class="nav-link">Config Setting</a>
                         </li>
                         <li class="nav-item">
                             <a href="{{ url('/rbac/index') }}" class="nav-link">RBAC Setting</a>
                         </li>
                         <li class="nav-item">
-                            <a href="#" class="nav-link">Role Master</a>
+                            <a href="#" id="role-master" class="nav-link">Role Master</a>
                         </li>
                         <li class="nav-item">
-                            <a href="#" class="nav-link">Global Config</a>
+                            <a href="#" id="global-config" class="nav-link">Global Config</a>
                         </li>
                     </ul>
                 </div>
@@ -320,11 +317,10 @@
 @push('custom-scripts')
 <script>
     $(document).ready(function() {
-        // $(".link-arrow").click(function() {
-            // $(this).collapse('toggle');
-            // alert("Settings page was loaded");
-            // return false;
-        // });
+        $("#general-comments, #discussions, #global-config, #role-master, #discussions, #general-comments, #fee-collection").click(function() {
+            alert("This Page is under construction......");
+            return false;
+        });
         // $(".nav nav-item li.trigger-collapse a").click(function(event) {
         //   $(".nav-item").collapse('hide');
         // });

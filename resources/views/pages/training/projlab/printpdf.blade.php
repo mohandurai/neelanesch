@@ -33,8 +33,8 @@
 
         <table class="table2" cellspacing="3" cellpadding="3">
             <tr>
-            <td style="font-size:12;">ONLINE EXAMINATION &nbsp;&nbsp;</td>
-            <td>Exam Name : &nbsp;&nbsp;</td>
+            <td style="font-size:12;">Project Lab/Activity &nbsp;&nbsp;</td>
+            <td>Project Name : &nbsp;&nbsp;</td>
                 <td style="text-align: left;">{{$examtitle}}</td>
             </tr>
             <tr>

@@ -190,12 +190,12 @@
       </li>
       <li class="nav-item dropdown nav-profile">
         <a class="nav-link dropdown-toggle" href="#" id="profileDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          <img src="{{ url('/assets/images/user.jpg') }}" width="10" height="30" alt="profile">
+          <img src="{{ url('/assets/images/users/register.png') }}" width="10" height="30" alt="profile">
         </a>
         <div class="dropdown-menu" aria-labelledby="profileDropdown">
           <div class="dropdown-header d-flex flex-column align-items-center">
             <div class="figure mb-3">
-              <img src="{{ url('/assets/images/user.jpg') }}" width="30" height="50" alt="">
+              <img src="{{ url('/assets/images/users/register.png') }}" width="30" height="50" alt="">
             </div>
             <div class="info text-center">
               <p class="name font-weight-bold mb-0">{{auth()->user()->name}}</p>
@@ -211,8 +211,8 @@
                 </a>
               </li>
               <li class="nav-item">
-                <a href="javascript:;" class="nav-link">
-                  <i data-feather="edit"></i>
+              <a class="nav-link" data-toggle="modal" id="mediumButton2" data-target="#mediumModal" data-attr="{{auth()->user()->id}}/attendexam" alt="{{auth()->user()->id}}" title="Click to edit profile">
+                <i data-feather="edit"></i>
                   <span>Edit Profile</span>
                 </a>
               </li>
@@ -235,3 +235,107 @@
     </ul>
   </div>
 </nav>
+
+
+
+
+<!-- Before start Exam Student Fill necessary info  -->
+<div class="modal fade" id="mediumModal" tabindex="-1" role="dialog" aria-labelledby="mediumModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+        <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modelHeading">Edit Users Profile</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+                <div class="modal-body">
+                  <form id="exam-register-form">
+                  @csrf
+
+                        <div class="form-group">
+                            <label for="name" class="col-sm-2 control-label">Change&nbsp;Password</label>
+                            <div class="col-sm-12">
+                                <label for="name" class="col-sm-2 control-label">Enter&nbsp;new&nbsp;Password</label>
+                                <input type="text" class="form-control" id="password1" name="password1" placeholder="Enter New Password ...... " value="" maxlength="50" required>
+                                <label for="name" class="col-sm-2 control-label">ReType&nbsp;new&nbsp;Password</label>
+                                <input type="text" class="form-control" id="password2" name="password2" placeholder="Retype New Password ...... " value="" maxlength="50" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="name" class="col-sm-2 control-label">Edit&nbsp;Name</label>
+                            <div class="col-sm-12">
+                                <input type="text" class="form-control" id="username" name="username" placeholder="Enter New Name .... " value="{{auth()->user()->name}}" maxlength="50" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="name" class="col-sm-2 control-label">Edit&nbsp;Email</label>
+                            <div class="col-sm-12">
+                                <input type="text" class="form-control" id="emailid" name="emailid" placeholder="Enter New Email Id ...." value="{{auth()->user()->email}}" maxlength="50" required="">
+                            </div>
+                        </div>
+
+                            <input type="hidden" name="user_id" value="{{auth()->user()->id}}">
+
+                        <div class="col-sm-offset-2 col-sm-10">
+                            <button type="submit" class="btn btn-primary" id="submitbtn" value="create">Confirm Update</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+<!-- Ends Before start Exam Student Fill necessary info  -->
+
+@push('custom-scripts')
+<script>
+
+$.ajaxSetup({
+    headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    }
+});
+
+// Submit button
+$(document).on('click', '#submitbtn', function(e) {
+    e.preventDefault();
+
+    var form6 = $('#exam-register-form').serializeArray();
+    // alert(form6[5].value);
+    console.log(form6);
+    // return false;
+
+    if(form6[1].value == form6[2].value) {
+        alert("Password Matched");
+        // return false;
+
+        $.ajax({
+            url: "{{ url('/updateprofile') }}", // Replace with your API endpoint URL
+            type: "POST",
+            data: form6,
+            // contentType: "application/json", // Type of data you're sending (e.g., JSON)
+            success: function(response) {
+                // Handle the successful response from the server
+                console.log("Success:", response);
+                alert("Profile Updated Successfully .....");
+            },
+            error: function(error) {
+                // Handle errors during the request
+                console.error("Error:", error);
+            }
+
+        });
+
+    } else {
+        alert("Password Not Matched");
+        return false;
+    }
+
+});
+
+</script>
+@endpush
