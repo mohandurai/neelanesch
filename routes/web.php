@@ -108,7 +108,7 @@ Route::middleware('auth')->group(function() {
     Route::get('/getStudents3/{id}', [HomeworkController::class, 'getStudents3'])->name('getStudents3');
     Route::get('/homework/{id}/evaluate', [HomeworkController::class, 'evaluate'])->name('homework.evaluate');
     Route::post('/homework/evaluatefinish', [HomeworkController::class, 'evaluatefinish'])->name('homework.evaluatefinish');
-    Route::get('/homework/{id}/homeworksubmituser', [HomeworkController::class, 'homeworksubmituser'])->name('homeworksubmituser');
+    Route::post('/homework/homeworksubmituser', [HomeworkController::class, 'homeworksubmituser'])->name('homeworksubmituser');
     Route::get('/getAllHw/{id}', [HomeworkController::class, 'getAllHw'])->name('getAllHw');
 
     Route::post('/homework/printreport', [HomeworkController::class, 'printreport'])->name('homework.printreport');
@@ -176,7 +176,8 @@ Route::middleware('auth')->group(function() {
     // Route::get('/projlab/eval', [ProjlabController::class, 'eval'])->name('projlab.eval');
     Route::get('/projlab/{id}/evaluate', [ProjlabController::class, 'evaluate'])->name('projlab.evaluate');
     Route::post('/projlab/evaluatefinish', [ProjlabController::class, 'evaluatefinish'])->name('projlab.evaluatefinish');
-    Route::get('/projlab/{id}/projsubmituser', [ProjlabController::class, 'projsubmituser'])->name('projsubmituser');
+    // Route::get('/projlab/{id}/projsubmituser', [ProjlabController::class, 'projsubmituser'])->name('projsubmituser');
+    Route::post('/projlab/projsubmituser', [ProjlabController::class, 'projsubmituser'])->name('projsubmituser');
 
     Route::post('/projlab/printreport', [ProjlabController::class, 'printreport'])->name('projlab.printreport');
     Route::post('/projlab/printpdf', [ProjlabController::class, 'printpdf'])->name('projlab.printpdf');
@@ -184,7 +185,7 @@ Route::middleware('auth')->group(function() {
 
     Route::get('/olexam/index', [OlexamController::class, 'index'])->name('olexam.index');
     Route::post('/olexam/store', [OlexamController::class, 'store'])->name('olexam.store');
-    Route::get('/olexam/{id}/attendexam', [OlexamController::class, 'attendexam'])->name('olexam.attendexam');
+    Route::post('/olexam/attendexam', [OlexamController::class, 'attendexam'])->name('olexam.attendexam');
     Route::post('/olexam/saveexam', [OlexamController::class, 'saveexam'])->name('olexam.saveexam');
     Route::get('/olexam/{id}/correctpaper', [OlexamController::class, 'correctpaper'])->name('olexam.correctpaper');
     Route::get('/olexam/{id}/view', [OlexamController::class, 'view'])->name('olexam.view');
@@ -198,6 +199,7 @@ Route::middleware('auth')->group(function() {
     Route::get('/alloctest/index', [AlloctestController::class, 'index'])->name('alloctest.index');
     Route::get('/alloctest/create', [AlloctestController::class, 'create'])->name('alloctest.create');
     Route::post('/alloctest/store', [AlloctestController::class, 'store'])->name('alloctest.store');
+    Route::post('/alloctest/update', [AlloctestController::class, 'update'])->name('alloctest.update');
     Route::get('/alloctest/{id}/show', [AlloctestController::class, 'show'])->name('alloctest.show');
     Route::get('/alloctest/{id}/edit', [AlloctestController::class, 'edit'])->name('alloctest.edit');
 

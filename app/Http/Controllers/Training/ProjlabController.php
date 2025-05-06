@@ -123,13 +123,26 @@ class ProjlabController extends Controller
         public function studprojindex()
         {
             $stud_id = auth()->user()->id;
+
+            if($stud_id == 1) {
+                $data['fullname'] = "Admin" . " " . "Central";
+                $data['class'] = "NA";
+                $data['sec'] = "-";
+            } else {
+                $qry3 = "select first_name, last_name, class_id, Section FROM students WHERE is_deleted = 0 AND user_id=".$stud_id;
+                $loginfo = DB::select($qry3);
+                $data['fullname'] = $loginfo[0]->first_name . " " . $loginfo[0]->last_name;
+                $data['class'] = $loginfo[0]->class_id;
+                $data['sec'] = $loginfo[0]->Section;
+            }
+
             // echo $stud_id;
             // exit;
-            $data3 = DB::table('students')->select('class_id','Section')->where( 'user_id', '=', $stud_id)->get();
+            $data3 = DB::table('students')->select('class_id','Section')->where('user_id', '=', $stud_id)->get();
             $clsid = $data3[0]->class_id;
             $secid = $data3[0]->Section;
 
-            $stuQry = "select id, title, class_id, sec_id, student_id, status FROM project_lab_activity WHERE (class_id=$clsid) AND (sec_id = '$secid' OR sec_id = 'Z') ORDER BY sec_id, id DESC";
+            $stuQry = "select id, title, class_id, sec_id, student_id, status FROM project_lab_activity WHERE class_id=$clsid AND (sec_id = '$secid' OR sec_id = '0') ORDER BY sec_id, id DESC";
             // print_r($stuQry);
             // exit;
 
@@ -148,9 +161,9 @@ class ProjlabController extends Controller
             $secid = $data3[0]->Section;
 
             if($stud_id == 1) {
-                $projlab6 = DB::select("select id, title, class_id, sec_id, student_id, status FROM project_lab_activity ORDER BY class_id, id DESC");
+                $projlab6 = DB::select("select id, title, class_id, sec_id, evaluator_status, mark_scored, max_marks, status FROM project_lab_activity ORDER BY class_id, id DESC");
             } else {
-                $projlab6 = DB::select("select id, title, class_id, sec_id, student_id, status FROM project_lab_activity WHERE (class_id=$clsid) AND (sec_id = '$secid' OR sec_id = 'Z') ORDER BY id DESC");
+                $projlab6 = DB::select("select id, title, class_id, sec_id, evaluator_status, mark_scored, max_marks, status FROM project_lab_activity WHERE (class_id=$clsid) AND (sec_id = '$secid' OR sec_id = '0') ORDER BY id DESC");
             }
 
             // echo $projlab2;
@@ -159,7 +172,7 @@ class ProjlabController extends Controller
             return datatables()->of($projlab6)
             ->addColumn('action',function($selected){
                 return
-                '<div class="col-lg-12 margin-tb"><div class="pull-right"> <a class="btn btn-success text-light" data-toggle="modal" id="mediumButton2" data-target="#mediumModal" data-attr="'. $selected->id . '/studsubmit" title="Submit Activity"  alt="'. $selected->id . '" title="Click to Start Project Submit .....">Submit</i></a>&nbsp;&nbsp;&nbsp;&nbsp;<a class="btn btn-warning" title="Detailed View Record" href="'.$selected->id.'/studview">Show</i></a>';
+                '<div class="col-lg-12 margin-tb"><div class="pull-right"> <a class="btn btn-success text-light" data-toggle="modal" id="mediumButton3" data-target="#mediumModal" data-attr="'. $selected->id . '/studsubmit" title="Submit Activity"  alt="'. $selected->id . '" title="Click to Start Project Submit .....">Submit</i></a>&nbsp;&nbsp;&nbsp;&nbsp;<a class="btn btn-warning" title="Detailed View Record" href="'.$selected->id.'/studview">Show</i></a>';
             })->toJson();
         }
 
@@ -172,12 +185,15 @@ class ProjlabController extends Controller
 
         }
 
-        public function projsubmituser($id)
+        public function projsubmituser(Request $request)
         {
 
             $stud_id = auth()->user()->id;
             // $class_id = DB::table('students')->select('class_id')->where('user_id', $stud_id)->get();
             // $clsid = $class_id[0]->class_id;
+
+            $id = $request->exam_id;
+            $roleid = $request->rollno;
 
             $data['projLabAct'] = DB::table('project_lab_activity')->where('id', $id)->get()->first();
 
@@ -430,7 +446,7 @@ class ProjlabController extends Controller
 
         if(!isset($request->student_id))
         {
-            $sql6 = "select C.user_id as roleid, CONCAT(C.first_name, ' ', C.last_name) as stname, D.class_id, C.Section, D.mark_scored, D.max_marks, D.title FROM students C, project_lab_activity D WHERE (C.user_id=D.assign_to OR C.user_id=D.student_id) AND D.id = $projlabid AND D.is_active = 1 AND C.Section = '". $request->sec_id . "'";
+            $sql6 = "select C.user_id as roleid, CONCAT(C.first_name, ' ', C.last_name) as stname, D.class_id, C.Section, D.mark_scored, D.max_marks, D.title FROM students C, project_lab_activity D WHERE (C.user_id=D.assign_to OR C.user_id=D.student_id) AND D.id = $projlabid AND D.is_active = 1 AND (C.Section = '". $request->sec_id . "' OR D.sec_id = '0') AND D.student_id=C.user_id";
 
             $prep3 = DB::select($sql6);
             if(!empty($prep3)) {

@@ -39,8 +39,9 @@
                 <tr>
                     <th>ID</th>
                     <th>Test Title</th>
-                    <th>Que. Template ID</th>
                     <th>Subject</th>
+                    <th>Start Date</th>
+                    <th>End Date</th>
                     <th>Class</th>
                     <th>Section</th>
                     <th>Actions</th>
@@ -110,34 +111,35 @@
            columns: [
                     { data: 'id', name: 'id' },
                     { data: 'test_title', name: 'test_title'},
-                    { data: 'qn_master_templ_id', name: 'qn_master_templ_id' },
                     { data: 'subject', name: 'subject' },
+                    { data: 'start_date', name: 'start_date' },
+                    { data: 'end_date', name: 'end_date' },
                     { data: 'class_id', name: 'class_id' },
                     { data: 'sec_id', name: 'sec_id' },
                     { data: 'action', name : 'action', orderable : true, searchable: true}
                  ],
-                 initComplete: function () {
-                    this.api()
-                        .columns()
-                        .every(function () {
-                            var column = this;
-                            var select = $('<select><option value=""></option></select>')
-                                .appendTo($(column.footer()).empty())
-                                .on('change', function () {
-                                    var val = $.fn.dataTable.util.escapeRegex($(this).val());
+                //  initComplete: function () {
+                //     this.api()
+                //         .columns()
+                //         .every(function () {
+                //             var column = this;
+                //             var select = $('<select><option value=""></option></select>')
+                //                 .appendTo($(column.footer()).empty())
+                //                 .on('change', function () {
+                //                     var val = $.fn.dataTable.util.escapeRegex($(this).val());
 
-                                    column.search(val ? '^' + val + '$' : '', true, false).draw();
-                                });
+                //                     column.search(val ? '^' + val + '$' : '', true, false).draw();
+                //                 });
 
-                            column
-                                .data()
-                                .unique()
-                                .sort()
-                                .each(function (d) {
-                                    select.append('<option value="' + d + '">' + d + '</option>');
-                                });
-                        });
-                },
+                //             column
+                //                 .data()
+                //                 .unique()
+                //                 .sort()
+                //                 .each(function (d) {
+                //                     select.append('<option value="' + d + '">' + d + '</option>');
+                //                 });
+                //         });
+                // },
 
         });
     });

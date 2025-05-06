@@ -35,7 +35,7 @@
             <div class="form-group">
                 <label for="title">Select Section</label>
                 <select class="form-control" id="sec_id" name="sec_id">
-                    <option value="Z" selected>ALL</option>
+                    <option value="0" selected>ALL</option>
                     <option value="A">A</option>
                     <option value="B">B</option>
                     <option value="C">C</option>

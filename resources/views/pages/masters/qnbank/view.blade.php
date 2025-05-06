@@ -70,7 +70,7 @@
         @foreach($classlist as $clist)
 	    @if ($loop->first)
         <div class="tab-pane fade show active" id="v-{{strtolower(str_replace(' ', '', $clist->class))}}" role="tabpanel" aria-labelledby="v-{{strtolower(str_replace(' ', '', $clist->class))}}-tab">
-            <h4 class="mb-1">{{$clist->class}} - Class</h4>
+            <h4 class="mb-1">{{$clist->class}} - List of Question Banks</h4>
             @foreach($qnbanks[$clist->id] as $chap)
                 </br>
                     <a alt="storage/quebank/{{$chap->file_path}}" id="get-heading" class="btn btn-primary geturl" data-toggle="modal">{{$chap->title}}</a>
@@ -95,7 +95,7 @@
 </div>
 
 
-<div class="bs-example">
+<!-- <div class="bs-example">
     <div id="myModal" class="modal fade">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -111,7 +111,7 @@
             </div>
         </div>
     </div>
-</div>
+</div> -->
 
 
 </div>
@@ -138,15 +138,17 @@
 
         $("#v-tab").click(function()
         {
-            // alert("Yesssssssssssss");
-            $("myModal2").clear();
+            //alert("Yesssssssssssss");
+            // $(".tab-content").clear();
+            $("#myModal2").hide();
         });
 
         $(".geturl").click(function()
         {
+            $("#myModal2").show();
             var altvalue = $(this).attr("alt");
             var a1_text = $(this).text();
-            alert("Settings page was loaded .... " + altvalue);
+            // alert("Settings page was loaded .... " + altvalue);
             // return false;
             //    $('#myModal2').show();
             if(altvalue == '') {

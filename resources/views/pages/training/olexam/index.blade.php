@@ -27,8 +27,9 @@
 
 @php
 	//echo "<pre>";
-	//print_r($clssArr);
+	//echo $fullname;
 	//echo "</pre>";
+    //exit;
 @endphp
 
 <!-- Before start Exam Student Fill necessary info  -->
@@ -44,39 +45,40 @@
                 </div>
 
                 <div class="modal-body">
-                  <form id="exam-register-form">
+                  <form id="exam-register-form" name="exam-register-form" class="form-horizontal" method="POST" action="{{ url('olexam/attendexam') }}">
                   @csrf
                     <input type="hidden" name="exam_id" id="exam_id">
+                    <input type="hidden" name="studid" id="exam_id">
 
                         <div class="form-group">
                             <label for="name" class="col-sm-2 control-label">Roll :</label>
                             <div class="col-sm-12">
-                                <input type="text" class="form-control" id="rollno" name="rollno" placeholder="Enter Roll No." value="" maxlength="50" required="">
+                                <input type="text" class="form-control" id="rollno" name="rollno" placeholder="Enter Roll No."  maxlength="20" required="">
                             </div>
                         </div>
 
                         <div class="form-group">
-                            <label for="name" class="col-sm-2 control-label">Name :</label>
+                            <label for="name" class="col-sm-2 control-label">Full&nbsp;Name&nbsp;:</label>
                             <div class="col-sm-12">
-                                <input type="text" class="form-control" id="stud_name" name="stud_name" placeholder="Enter Name ...." value="" maxlength="50" required="">
+                                <input type="text" class="form-control" id="stud_name" name="stud_name" value="{{$fullname}}" maxlength="50" readonly required="">
                             </div>
                         </div>
 
                         <div class="form-group">
                             <label for="name" class="col-sm-2 control-label">Class :</label>
                             <div class="col-sm-12">
-                                <input type="text" class="form-control" id="class_id" name="class_id" placeholder="Enter Class ...." value="" maxlength="50" required="">
+                                <input type="text" class="form-control" id="class_id" name="class_id"  value="{{$class}}" maxlength="50" readonly required="">
                             </div>
                         </div>
 
                         <div class="form-group">
                             <label for="name" class="col-sm-2 control-label">Section :</label>
                             <div class="col-sm-12">
-                                <input type="text" class="form-control" id="Section" name="Section" placeholder="Enter Section ... " value="NA" maxlength="50" required="">
+                                <input type="text" class="form-control" readonly id="Section" name="Section" value="{{$sec}}" required="">
                             </div>
                         </div>
 
-                        <div class="form-group">
+                        <!-- <div class="form-group">
                             <label for="name" class="col-sm-2 control-label">Term :</label>
                             <div class="col-sm-12">
                                 <input type="text" class="form-control" id="term" name="term" placeholder="Term Name ..." value="" maxlength="50" required="">
@@ -88,10 +90,12 @@
                             <div class="col-sm-12">
                                 <textarea id="subject_id" name="subject_id" required="" placeholder="Enter Subject Name ....." class="form-control"></textarea>
                             </div>
-                        </div>
+                        </div> -->
+
                         <div class="col-sm-offset-2 col-sm-10">
-                            <button type="submit" class="btn btn-primary" id="submitbtn" value="create">Begin Exam</button>
+                            <button type="submit" class="btn btn-primary" value="create">Begin Exam</button>
                         </div>
+
                     </form>
                 </div>
             </div>
@@ -105,7 +109,7 @@
       <div class="card-body">
       <h4> Student Online Exam </h4>
 
-      @if(Session::has('message'))
+    @if(Session::has('message'))
         </br>
         <div class="alert alert-warning alert-dismissible fade show" role="alert">
         <strong>{{ Session::get('message') }}</strong>
@@ -168,77 +172,77 @@ $(document).on('click', '#mediumButton2', function(e) {
 });
 
 // Submit button
-$(document).on('click', '#submitbtn', function(e) {
-    e.preventDefault();
-    var form6 = $('#exam-register-form').serializeArray();
-    $.each(form6, function(i, field){
+// $(document).on('click', '#submitbtn', function(e) {
+//     e.preventDefault();
+//     var form6 = $('#exam-register-form').serializeArray();
+//     $.each(form6, function(i, field){
 
-        if(field.name === "exam_id") {
-            // alert("ZZZZZZZZZZZZZZZZ");
-            // return false;
-            window.location= "{{ url('olexam/')}}/"+field.value+"/attendexam";
+//         if(field.name === "exam_id") {
+//             // alert("ZZZZZZZZZZZZZZZZ");
+//             // return false;
+//             window.location= "{{ url('olexam/')}}/"+field.value+"/attendexam";
+//         }
+//     });
+
+// });
+
+
+$(document).ready(function() {
+    // alert("Settings page was loaded");
+    // return false;
+    var table6 = $('#tracker_datatable').DataTable({
+        language: {
+            "processing" : "<img src={{ asset('/assets/images/loading-14.gif') }}>"
+        },
+        order: [[ 5, 'desc' ], [ 1, 'asc' ]],
+        // dom: '<"top"<"left-col"B><"center-col"l><"right-col"f>>rtip',
+        // dom : "Bflrtip",
+        // dom: '<"top"i>flrtp<"clear">',
+        dom: '<"top"f><"bottom"rtlp><"clear">',
+        // dom: '<"title"<"filter"f>>ltip',
+        buttons : [
+            'copy', 'csv', 'excel', 'pdf', 'print'
+        ],
+        stateSave: true,
+        processing: true,
+        serverSide : true,
+        responsive: true,
+        ajax: "{{ url('examslist') }}",
+    //    pageLength: 5,
+        lengthMenu: [ [7, 10, 25, 50, -1], [7, 10, 25, 50, 'All'] ],
+        columns: [
+                { data: 'id', name: 'id' },
+                { data: 'test_title', name: 'test_title'},
+                { data: 'qn_master_templ_id', name: 'qn_master_templ_id' },
+                { data: 'class_id', name: 'class_id' },
+                { data: 'sec_id', name: 'sec_id' },
+                { data: 'start_date', name: 'start_date' },
+                { data: 'end_date', name: 'end_date' },
+                { data: 'duration', name: 'duration' },
+                { data: 'action', name : 'action', orderable : true, searchable: true}
+                ]
+
+    });
+
+    $('#clear-filter').click(function() {
+        table6.search('').columns().search('').draw();
+        $('.filter-input-integer').val('');
+        $('.filter-input').val('');
+    });
+
+
+    $('.filter-input').keypress(function (e) {
+        var key = e.which;
+        if(key == 13)  // the enter key code
+        {
+            alert($(this).val());
+            //var svalue = $(this).val();
+            table6.column( $(this).data('column') ).search( $(this).val() ).draw();
         }
+
     });
 
 });
-
-
-    $(document).ready(function() {
-        // alert("Settings page was loaded");
-        // return false;
-        var table6 = $('#tracker_datatable').DataTable({
-            language: {
-               "processing" : "<img src={{ asset('/assets/images/loading-14.gif') }}>"
-            },
-            order: [[ 5, 'desc' ], [ 1, 'asc' ]],
-            // dom: '<"top"<"left-col"B><"center-col"l><"right-col"f>>rtip',
-            // dom : "Bflrtip",
-            // dom: '<"top"i>flrtp<"clear">',
-            dom: '<"top"f><"bottom"rtlp><"clear">',
-            // dom: '<"title"<"filter"f>>ltip',
-            buttons : [
-                'copy', 'csv', 'excel', 'pdf', 'print'
-            ],
-            stateSave: true,
-            processing: true,
-            serverSide : true,
-            responsive: true,
-           ajax: "{{ url('examslist') }}",
-        //    pageLength: 5,
-           lengthMenu: [ [7, 10, 25, 50, -1], [7, 10, 25, 50, 'All'] ],
-           columns: [
-                    { data: 'id', name: 'id' },
-                    { data: 'test_title', name: 'test_title'},
-                    { data: 'qn_master_templ_id', name: 'qn_master_templ_id' },
-                    { data: 'class_id', name: 'class_id' },
-                    { data: 'sec_id', name: 'sec_id' },
-                    { data: 'start_date', name: 'start_date' },
-                    { data: 'end_date', name: 'end_date' },
-                    { data: 'duration', name: 'duration' },
-                    { data: 'action', name : 'action', orderable : true, searchable: true}
-                 ]
-
-        });
-
-        $('#clear-filter').click(function() {
-            table6.search('').columns().search('').draw();
-            $('.filter-input-integer').val('');
-            $('.filter-input').val('');
-        });
-
-
-        $('.filter-input').keypress(function (e) {
-            var key = e.which;
-            if(key == 13)  // the enter key code
-            {
-                alert($(this).val());
-                //var svalue = $(this).val();
-                table6.column( $(this).data('column') ).search( $(this).val() ).draw();
-            }
-
-        });
-
-     });
 
 </script>
 @endpush

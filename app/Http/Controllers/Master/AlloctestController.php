@@ -20,7 +20,7 @@ class AlloctestController extends Controller
 
     public function alloctestlist()
     {
-        $allocListQry = "SELECT AA.id, AA.test_title, AA.qn_master_templ_id, BB.title as subject, AA.class_id, AA.sec_id FROM `allocate_test` AA, `subject_master` BB WHERE BB.id = AA.subject ORDER BY id DESC;";
+        $allocListQry = "SELECT AA.id, AA.test_title, AA.start_date, AA.end_date, BB.title as subject, AA.class_id, AA.sec_id FROM `allocate_test` AA, `subject_master` BB WHERE BB.id = AA.subject ORDER BY id DESC;";
         $res3 = DB::select($allocListQry);
         return datatables()->of($res3)
             ->addColumn('action', function ($selected) {
@@ -68,9 +68,10 @@ class AlloctestController extends Controller
         // 'duration' => 'required',
         // ]);
 
-        $res3 = DB::select("select class_id, subject_id FROM question_master_template WHERE is_active = 1 AND id=$request->qn_master_templ_id");
+        $res3 = DB::select("select class_id, subject_id, chapter_id FROM question_master_template WHERE is_active = 1 AND id=$request->qn_master_templ_id");
         $clid = $res3[0]->class_id;
         $subid = $res3[0]->subject_id;
+        $chapid = $res3[0]->chapter_id;
 
         try {
             DB::table('allocate_test')->insert(
@@ -85,6 +86,7 @@ class AlloctestController extends Controller
                     'class_id' => $clid,
                     'sec_id' => $request->sec_id,
                     'subject' => $subid,
+                    'chapter' => $chapid,
                     'assign_to' => $request->assign_to,
                     'mode_of_test' => $request->mode_test,
                     'created_date' => Carbon::now(),
@@ -141,5 +143,43 @@ class AlloctestController extends Controller
 
             return View('pages.masters.alloctest.edit', $data)->with('subjs', $subjs)->with('chapts', $chapts)->with('clslst', $clslst)->with('videos', $videos);
         }
+
+
+          /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request)
+    {
+        // echo "<pre>";
+        // print_r($request->all());
+        // exit;
+
+        try {
+            DB::table('allocate_test')->where('id',$request->id)->update(
+                [
+                    'qn_master_templ_id' => $request->qn_master_templ_id,
+                    'duration' => $request->duration,
+                    'year' => $request->year,
+                    'terms' => $request->term,
+                    'start_date' => $request->start_date,
+                    'end_date' => $request->end_date,
+                    'mode_of_test' => $request->mode_test,
+                    'updated_date' => Carbon::now(),
+                    'is_active' => 1
+                ]
+            );
+        } catch (\Throwable $e) {
+            print_r($e->getMessage());
+            return View::make('pages.masters.alloctest.index')->with('message', "Allocation Exam already exists - Try different video name !!!");
+        }
+
+        return redirect()->route('alloctest.index')->with('message', 'Allocation exam updated successfully.');
+
+    }
+
 
 }

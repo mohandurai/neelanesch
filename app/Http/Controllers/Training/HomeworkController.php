@@ -115,7 +115,21 @@ class HomeworkController extends Controller
      */
     public function homeworkindex()
     {
-        return View::make('pages.training.homework.homeworkindex');
+        $stud_id = auth()->user()->id;
+
+        if($stud_id == 1) {
+            $data['fullname'] = "Admin" . " " . "Central";
+            $data['class'] = "NA";
+            $data['sec'] = "-";
+        } else {
+            $qry3 = "select first_name, last_name, class_id, Section FROM students WHERE is_deleted = 0 AND user_id=".$stud_id;
+            $loginfo = DB::select($qry3);
+            $data['fullname'] = $loginfo[0]->first_name . " " . $loginfo[0]->last_name;
+            $data['class'] = $loginfo[0]->class_id;
+            $data['sec'] = $loginfo[0]->Section;
+        }
+
+        return View::make('pages.training.homework.homeworkindex', $data);
     }
 
     public function homework2list()
@@ -138,7 +152,7 @@ class HomeworkController extends Controller
         return datatables()->of($hwquery)
         ->addColumn('action',function($selected){
             return
-            '<a class="btn btn-success text-light" data-toggle="modal" id="mediumButton2" data-target="#mediumModal" data-attr="' . $selected->id . '/homeworksubmit" title="Submit Activity" alt="'. $selected->id . '" title="Click to Start Home Work Submit .....">Submit</i></a>&nbsp;&nbsp;&nbsp;&nbsp;<a class="btn btn-warning" title="Detailed View Record" href="'.$selected->id.'/homeworkview">Show</i></a>';
+            '<a class="btn btn-success text-light" data-toggle="modal" id="mediumButton4" data-target="#mediumModal" data-attr="' . $selected->id . '/homeworksubmit" title="Submit Activity" alt="'. $selected->id . '" title="Click to Start Home Work Submit .....">Submit</i></a>&nbsp;&nbsp;&nbsp;&nbsp;<a class="btn btn-warning" title="Detailed View Record" href="'.$selected->id.'/homeworkview">Show</i></a>';
         })->toJson();
     }
 
@@ -151,12 +165,16 @@ class HomeworkController extends Controller
 
     }
 
-    public function homeworksubmituser($id)
+    public function homeworksubmituser(Request $request)
     {
 
         $stud_id = auth()->user()->id;
         // $class_id = DB::table('students')->select('class_id')->where('user_id', $stud_id)->get();
         // $clsid = $class_id[0]->class_id;
+
+        $id = $request->exam_id;
+        $roleid = $request->rollno;
+
         $data['homework'] = DB::table('homework')->where('id', $id)->get()->first();
 
         // echo "<pre>";
@@ -307,8 +325,14 @@ class HomeworkController extends Controller
     public function evaluate($id)
     {
         $data['projLabEval'] = DB::table('homework')->where('id', $id)->first();
-        // print_r($data);
+        // echo "<pre>";
+        // $filetype = $data['projLabEval']->attachment;
+        // $infoPath = pathinfo($filetype);
+        // $ftype = $infoPath['extension'];
+
+        // echo $ftype;
         // exit;
+
         return View::make('pages.training.homework.evaluate', $data);
     }
 
@@ -394,7 +418,7 @@ class HomeworkController extends Controller
 
         if(!isset($request->student_id))
         {
-            $sql6 = "select C.user_id as roleid, CONCAT(C.first_name, ' ', C.last_name) as stname, D.class_id, D.sec_id, D.mark_scored, D.max_marks, D.title FROM students C, homework D WHERE D.is_active = 1 AND D.id = $hwid AND D.class_id=$request->class_id AND C.Section = '" . $request->sec_id . "' AND (D.assign_to=C.user_id OR D.student_id=C.user_id)";
+            $sql6 = "select C.exam_roll_no as roleid, CONCAT(C.first_name, ' ', C.last_name) as stname, D.class_id, D.sec_id, D.mark_scored, D.max_marks, D.title FROM students C, homework D WHERE D.is_active = 1 AND D.id = $hwid AND D.class_id=$request->class_id AND (C.Section = '" . $request->sec_id . "' OR D.sec_id = '0') AND D.student_id=C.user_id";
             // echo $sql6; exit;
             $prep3 = DB::select($sql6);
             if(!empty($prep3)) {

@@ -15,8 +15,8 @@
 
 <nav class="page-breadcrumb">
   <ol class="breadcrumb">
-    <li class="breadcrumb-item"><a href="{{ url('student/index') }}">Students Master</a></li>
-    <li class="breadcrumb-item active" aria-current="page"><a href="#">Students Record</a></li>
+    <li class="breadcrumb-item"><a href="{{ url('staff/index') }}">Staff Master</a></li>
+    <li class="breadcrumb-item active" aria-current="page"><a href="#">Staff Record</a></li>
   </ol>
 </nav>
 
@@ -25,7 +25,7 @@
     <div class="card">
       <div class="card-body">
         <h4 style="margin-bottom:10px;">
-        Students Master &nbsp;&nbsp;&nbsp;&nbsp;<a class="btn btn-primary" href="{{ url('/student')}}/{{$studinfo->id}}/edit" role="button">Edit Student {{$studinfo->id}} - {{$studinfo->first_name}}</a>
+        Staff Master &nbsp;&nbsp;&nbsp;&nbsp;<a class="btn btn-primary" href="{{ url('/staff')}}/{{$studinfo->id}}/edit" role="button">Edit Student {{$studinfo->id}} - {{$studinfo->first_name}}</a>
             @if(Session::has('message'))
                 <p class="alert {{ Session::get('alert-class', 'alert-success') }}">{{ Session::get('message') }}</p>
             @endif

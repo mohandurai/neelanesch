@@ -165,7 +165,7 @@ class StaffController extends Controller
             // echo "<pre>";
             // print_r($row);
             // exit;
-            $chekEmail = sizeof(DB::table('students')->where('email', '=', $row[2])->get());
+            $chekEmail = sizeof(DB::table('users')->where('email', '=', $row[2])->get());
             if($chekEmail > 0 ) {
                 echo $row[2] . '<<<<==== This email id already exists students master record. Please try different emailid. Student Name ' . $row[0] . ' ' . $row[1] . '<br>';
             } else {
@@ -183,29 +183,6 @@ class StaffController extends Controller
                 // echo $insUId . " Yesssssssssssssss";
                 // exit;
 
-                try {
-                    DB::table('students')->insert(
-                        array(
-                            'first_name'  =>   $row[0],
-                            'last_name'   =>   $row[1],
-                            'user_id'  =>   $lastInsertedId,
-                            'email'   => $row[2],
-                            'mobile'   => $row[3],
-                            'class_id'   => $row[4],
-                            'Section'   => $row[5],
-                            'gender'   => $row[6],
-                            'dob'   => $row[7],
-                            'upload_pps_image_info' => "",
-                            'school_id'   => 1,
-                            'created_date'   => Carbon::now(),
-                            'updated_date'   => Carbon::now(),
-                            'is_deleted'   => 0
-                        )
-                    );
-                } catch (\Throwable $e) {
-                    print_r($e->getMessage());
-                    echo "<br>";
-                }
             }
         }
 

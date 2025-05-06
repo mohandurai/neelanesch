@@ -66,6 +66,7 @@
                     <input type="hidden" name="test_id" value="{{ $test_id }}">
                     <input type="hidden" name="student_id" value="{{ $stud_id }}">
                     <input type="hidden" name="qnstempid" value="{{ $qnstempid }}">
+                    <input type="hidden" name="rollid" value="{{ $rollid }}">
 
 
                        @php($count++)
@@ -175,9 +176,8 @@
 
                         <div class="form-group">
 
-                            Q. No-{{$qq}}. &nbsp;&nbsp;
+                            Q. No-{{$qq}}. <textarea class="multipl_choice">{{$question[0]}}</textarea>
 
-                            <textarea class="multipl_choice">{{$question[0]}}</textarea>
                             @if(isset($imgQuens[$tt][0]))
                             <img src="{{ url('storage/images/'.$tt .'/'. $imgQuens[$tt][0]) }}" height="150em" width="200em" alt="" title="" />
                             @endif
@@ -399,21 +399,18 @@
     $('#summernote710').summernote();
 
         $('.text_box_note').summernote({
-            height: 30,
-            toolbar: [
-                ['help', ['help']]
-            ],
+            height: 10,
+            toolbar: false,
         });
 
         $(".note-codable").hide();
         $('.text_box_note').next().find(".note-editable").attr("contenteditable", false);
 
         $('.multipl_choice').summernote({
-            height: 30,
-            toolbar: [
-                ['help', ['help']]
-            ],
+            height: 10,
+            toolbar: false,
         });
+
         $(".note-codable").hide();
         $('.multipl_choice').next().find(".note-editable").attr("contenteditable", false);
 

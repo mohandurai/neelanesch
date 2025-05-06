@@ -8,6 +8,8 @@
 </head>
 <body>
 
+<button class="btn btn-primary pull-right mr-10" onclick="downloadAsIMG();" ><i class="fas fa-download" ></i>IMAGE</button>
+
 
 @php($logourl = 'storage/images/' . $configs[0]->logo_url)
 

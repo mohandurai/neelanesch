@@ -81,6 +81,13 @@
             </div>
 
             <div class="form-group">
+                <label for="chapter_id">Chapter Title</label>
+                <select class="form-control" id="chapter_id" name="chapter_id">
+                    <option value="0" selected>Select Chapter</option>
+                </select>
+            </div>
+
+            <div class="form-group">
                 <label for="title">Select Question Master</label>
                 <select class="form-control" id="qn_master_templ_id" name="qn_master_templ_id">
                     <option value="0" selected disabled>Select Title</option>
@@ -183,6 +190,29 @@ $('#class_id').change(function() {
                 // $(".table-responsive").html(data);
             }
         });
+
+    });
+
+    $('#subject_id').change(function() {
+            // alert("TTTTTTTTTTTT"); return false;
+            // $('#chapter_id').html('');
+            // $("#chapter_id option[value=0]").prop('selected', true);
+
+            var subid = $(this).val();
+            var clsid = $("#class_id").val();
+
+            $.ajax({
+                type: 'GET',
+                url: "{{ url('/getcontentchapt') }}/" + subid + "~~~" + clsid,
+                // complete: function() {
+                //     $('#psdatasourcSpinner').hide();
+                // },
+                success: function(data2) {
+                    console.log(data2);
+                    $('#chapter_id').append(data2);
+                    // $(".table-responsive").html(data);
+                }
+            });
 
     });
 

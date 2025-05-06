@@ -190,12 +190,12 @@
       </li>
       <li class="nav-item dropdown nav-profile">
         <a class="nav-link dropdown-toggle" href="#" id="profileDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          <img src="{{ url('/assets/images/users/register.png') }}" width="10" height="30" alt="profile">
+          <img src="{{ url('/assets/images/users/user.jpg') }}" width="10" height="30" alt="profile">
         </a>
         <div class="dropdown-menu" aria-labelledby="profileDropdown">
           <div class="dropdown-header d-flex flex-column align-items-center">
             <div class="figure mb-3">
-              <img src="{{ url('/assets/images/users/register.png') }}" width="30" height="50" alt="">
+              <img src="{{ url('/assets/images/users/user.jpg') }}" width="30" height="50" alt="">
             </div>
             <div class="info text-center">
               <p class="name font-weight-bold mb-0">{{auth()->user()->name}}</p>
@@ -211,7 +211,7 @@
                 </a>
               </li>
               <li class="nav-item">
-              <a class="nav-link" data-toggle="modal" id="mediumButton2" data-target="#mediumModal" data-attr="{{auth()->user()->id}}/attendexam" alt="{{auth()->user()->id}}" title="Click to edit profile">
+              <a class="nav-link" data-toggle="modal" data-target="#mediumModal3" data-attr="{{auth()->user()->id}}/attendexam" alt="{{auth()->user()->id}}" title="Click to edit profile">
                 <i data-feather="edit"></i>
                   <span>Edit Profile</span>
                 </a>
@@ -240,14 +240,14 @@
 
 
 <!-- Before start Exam Student Fill necessary info  -->
-<div class="modal fade" id="mediumModal" tabindex="-1" role="dialog" aria-labelledby="mediumModalLabel"
+<div class="modal fade" id="mediumModal3" tabindex="-1" role="dialog" aria-labelledby="mediumModal3Label"
         aria-hidden="true">
         <div class="modal-dialog" role="document">
         <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="modelHeading">Edit Users Profile</h5>
+                    <h5 class="modal-title" id="modelHeading" style="color:white;">Edit Users Profile</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
+                        <span aria-hidden="true" style="color:white;">&times;</span>
                     </button>
                 </div>
 

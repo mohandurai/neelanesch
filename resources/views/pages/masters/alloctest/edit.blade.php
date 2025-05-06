@@ -5,10 +5,10 @@
 @endpush
 
 @php
-    echo "<pre>";
-    print_r($allocte);
-    echo "</pre>";
-    exit;
+    //echo "<pre>";
+    //print_r($allocte);
+    //echo "</pre>";
+    //exit;
 @endphp
 
 @section('content')
@@ -31,88 +31,100 @@
         </h4>
 
         <div class="table-responsive">
-        <form action="{{ url('allocate') }}/update" method="post">
+        <form action="{{ url('alloctest') }}/update" method="post">
         @csrf
         <table id="dataTableExample" class="table">
             @if(!empty($allocte))
                 <tr>
                     <td>ID</td><td>:</td>
                     <td>
-                    <input type="hidden" class="form-control" name="id"
-                    value="{{$allocte->id}}">
+                    <input type="hidden" class="form-control" name="id" value="{{$allocte->id}}">
                          {{$allocte->id}}
                     </td>
                 </tr>
                 <tr>
                     <td>Class ID</td><td>:</td>
                     <td>
-                        <select class="form-control" name="class_id">
-                            <option value="0">Select Class</option>
-                            @foreach($clslst as $kk => $clist)
-                                <option value="{{$kk}}" {{ $allocte->class_id == $kk ? 'selected' : '' }}>{{$clist}}</option>
-                            @endforeach
-                        </select>
+                        {{ $allocte->class_id }}
                     </td>
                 </tr>
                 <tr>
                     <td>Subject</td><td>:</td>
                     <td>
-                        <select class="form-control" name="subject_id">
-                            <option value="0">Select Subject</option>
-                            @foreach($subjs as $kk2 => $sub)
-                                <option value="{{$kk2}}" {{ $allocte->subject_id == $kk2 ? 'selected' : '' }}>{{$sub}}</option>
-                            @endforeach
-                        </select>
+                        {{ $allocte->subject }}
                     </td>
                 </tr>
 
                 <tr>
                     <td>Chapter</td><td>:</td>
                     <td>
-                        <select class="form-control" name="chapter_id">
-                            <option value="0">Select Chapter</option>
-                            @foreach($chapts as $kk3 => $chap)
-                                <option value="{{$kk3}}" {{ $allocte->chapter_id == $kk3 ? 'selected' : '' }}>{{$chap}}</option>
-                            @endforeach
-                        </select>
+                        {{ $allocte->chapter }}
                     </td>
                 </tr>
 
                 <tr>
                     <td>Title</td><td>:</td>
                     <td>
-                        <input type="text" class="form-control" id="test_title" name="test_title" value="{{$allocte->test_title}}" required>
+                        {{$allocte->test_title}}
                     </td>
                 </tr>
 
                 <tr>
                     <td>Question Master ID</td><td>:</td>
                     <td>
-                         <input type="text" class="form-control" id="qn_master_templ_id" name="qn_master_templ_id" value="{{$allocte->qn_master_templ_id}}" required>
+                         <input type="text" class="form-control" id="qn_master_templ_id" name="qn_master_templ_id" value="{{$allocte->qn_master_templ_id}}" readonly required>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>Duration in Minutes</td><td>:</td>
+                    <td>
+                         <input type="text" class="form-control" id="duration" name="duration" value="{{$allocte->duration}}" readonly required>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>Year</td><td>:</td>
+                    <td>
+                         <input type="text" class="form-control" id="year" name="year" value="{{$allocte->year}}" readonly required>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>Term</td><td>:</td>
+                    <td>
+                         <input type="text" class="form-control" id="term" name="term" value="{{$allocte->terms}}" readonly required>
                     </td>
                 </tr>
 
 
                 <tr>
-                    <td>Type</td><td>:</td>
+                    <td>Start Date</td><td>:</td>
                     <td>
-                        <input type="text" class="form-control" id="type" name="type" value="{{$allocte->type}}" required>
+                         <input type="datetime-local" class="form-control" id="start_date" name="start_date" value="{{$allocte->start_date}}" required>
                     </td>
                 </tr>
+
+
                 <tr>
-                    <td>File Path</td><td>:</td>
+                    <td>End Date</td><td>:</td>
                     <td>
-                        <input type="text" class="form-control" id="file_path" name="file_path"
-                    value="{{$allocte->file_path}}" required>
+                         <input type="datetime-local" class="form-control" id="end_date" name="end_date" value="{{$allocte->end_date}}" required>
                     </td>
                 </tr>
+
+
                 <tr>
-                    <td>School ID</td><td>:</td>
+                    <td>Exam Status</td><td>:</td>
                     <td>
-                        <input type="text" class="form-control" id="school_id" name="school_id"
-                    value="{{$allocte->school_id}}" required>
+                        <select class="form-control" id="mode_test" name="mode_test">
+                            <option value="0">Select Exam Mode</option>
+                            <option value="1" selected>Active</option>
+                            <option value="2">InActive</option>
+                        </select>
                     </td>
                 </tr>
+
                 <tr>
                     <td colspan=3><button type="submit" class="btn btn-primary">Update Record</button>
                     </td>

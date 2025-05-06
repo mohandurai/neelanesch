@@ -17,19 +17,36 @@ class OlexamController extends Controller
     //
     public function index()
     {
-        return view('pages.training.olexam.index');
+        $login_id = Auth::user()->id;
+
+        // echo $login_id;
+        // exit;
+
+        if($login_id == 1) {
+            $data['fullname'] = "Admin" . " " . "Central";
+            $data['class'] = "NA";
+            $data['sec'] = "-";
+        } else {
+            $qry3 = "select first_name, last_name, class_id, Section FROM students WHERE is_deleted = 0 AND user_id=".$login_id;
+            $loginfo = DB::select($qry3);
+            $data['fullname'] = $loginfo[0]->first_name . " " . $loginfo[0]->last_name;
+            $data['class'] = $loginfo[0]->class_id;
+            $data['sec'] = $loginfo[0]->Section;
+        }
+
+        return view('pages.training.olexam.index', $data);
     }
 
     public function examslist()
     {
-        $login_id = Auth::user();
-
-        $uid = $login_id->id;
-
-        $qry3 = "select class_id, Section FROM students WHERE is_deleted = 0 AND user_id=".$uid;
-
-        // echo $qry3;
-        // exit;
+        $uid = Auth::user()->id;
+        // echo $uid;
+        if($uid == 1) {
+            $qry3 = "select class_id, Section FROM students WHERE is_deleted = 0 AND user_id=".$uid;
+        } else {
+            $qry3 = "select class_id, Section FROM students WHERE is_deleted = 0";
+        }
+        // $qry3 = "select class_id, Section FROM students WHERE is_deleted = 0 AND user_id=".$uid;
 
         $loginfo = DB::select($qry3);
         // echo "<pre>";
@@ -48,10 +65,19 @@ class OlexamController extends Controller
         // echo $clsid . " MMMMMMMMMM   " . $secn . " MMMMMMMMMM   " . $uid;
         // exit;
 
+        // Store datetime in variable today
+        $today = date("Y-m-d H:i:s");
+
+        // if ($today) {
+        //     echo $today;
+        // } else {
+        //     echo "can't display time";
+        // }
+
         if($uid == 1) {
             $qry6 = "select id, test_title, qn_master_templ_id, class_id, sec_id, start_date, end_date, duration FROM allocate_test ORDER BY id DESC";
         } else {
-            $qry6 = "select id, test_title, qn_master_templ_id, class_id, sec_id, start_date, end_date, duration FROM allocate_test WHERE is_active = 1 AND class_id=$clsid AND sec_id='". $secn . "'";
+            $qry6 = "select id, test_title, qn_master_templ_id, class_id, sec_id, start_date, end_date, duration FROM allocate_test WHERE is_active = 1 AND class_id = $clsid AND sec_id='". $secn . "' AND start_date <= '$today' AND end_date >= '$today' ORDER BY id DESC";
         }
 
         // echo $qry6;
@@ -67,12 +93,20 @@ class OlexamController extends Controller
 
     }
 
-    public function attendexam($id)
+    public function attendexam(Request $request)
     {
+
+        // echo "<pre>";
+        // print_r($request->all());
+        // echo "</pre>";
+        // exit;
+
+        $examid = $request->exam_id;
+        $roleid = $request->rollno;
 
         $stud_id = auth()->user()->id;
         // $test_id = $id;
-        $result3 = DB::select("select test_title, qn_master_templ_id, duration FROM allocate_test WHERE is_active = 1 AND id=$id");
+        $result3 = DB::select("select test_title, qn_master_templ_id, duration FROM allocate_test WHERE is_active = 1 AND id=$examid");
         $examtitle = $result3[0]->test_title;
         $qnmastid = $result3[0]->qn_master_templ_id;
         $examDur = $result3[0]->duration;
@@ -186,7 +220,7 @@ class OlexamController extends Controller
         $startTime = now(); // Current time
         $endTime = $startTime->copy()->addMinutes($examDurationMinutes); // Calculate end time
 
-        return view('pages.training.olexam.attendexam')->with('qntit', $QnsTitle)->with('qns', $Qns)->with('romlet', $romanLetters)->with('examtitle', $examtitle)->with('stud_id', $stud_id)->with('test_id', $id)->with('qnstempid', $qnmastid)->with('imgQuens', $imgQue)->with('endTime', $endTime)->with('reord6', $reord6);
+        return view('pages.training.olexam.attendexam')->with('qntit', $QnsTitle)->with('qns', $Qns)->with('romlet', $romanLetters)->with('examtitle', $examtitle)->with('stud_id', $stud_id)->with('rollid', $roleid)->with('test_id', $examid)->with('qnstempid', $qnmastid)->with('imgQuens', $imgQue)->with('endTime', $endTime)->with('reord6', $reord6);
     }
 
 
@@ -196,6 +230,7 @@ class OlexamController extends Controller
         $stud_id = $request->student_id;
         $qnstemp_id = $request->qnstempid;
         $test_id = $request->test_id;
+        $rollid = $request->rollid;
 
         $answers = $request->all();
 
@@ -207,7 +242,8 @@ class OlexamController extends Controller
         unset($answers['_token']);
         unset($answers['student_id']);
         unset($answers['qnstempid']);
-        unset($answers['test_id']);
+        unset($answers['rollid']);
+
 
         // echo "<pre></pre>";
         // print_r($answers);
@@ -221,6 +257,7 @@ class OlexamController extends Controller
                     'student_id'  =>   $stud_id,
                     'que_master_templ_id'   => $qnstemp_id,
                     'alloc_test_id'   => $test_id,
+                    'exam_roll_no'   => $rollid,
                     'answer'   => $ansjson,
                     'school_id'   => 1,
                     'created_date'   => Carbon::now(),
@@ -532,6 +569,8 @@ class OlexamController extends Controller
         }
         return $options3;
     }
+
+
 
 
     public function printreport(Request $request)

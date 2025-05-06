@@ -18,10 +18,17 @@
     <link href="{{ asset('assets/plugins/datatables-net/dataTables.bootstrap4.css') }}" rel="stylesheet" />
 @endpush
 
+@php
+    //echo "<pre>";
+    //print_r($projLabAct);
+    //echo "</pre>";
+    //exit;
+@endphp
+
 @section('content')
 
 <!-- Before start Exam Student Fill necessary info  -->
-    <div class="modal fade" id="mediumModal" tabindex="-1" role="dialog" aria-labelledby="mediumModalLabel"
+<div class="modal fade" id="mediumModal" tabindex="-1" role="dialog" aria-labelledby="mediumModalLabel"
         aria-hidden="true">
         <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -33,39 +40,39 @@
                 </div>
 
                 <div class="modal-body">
-                  <form id="exam-register-form" >
+                  <form id="exam-register-form" name="exam-register-form" class="form-horizontal" method="POST" action="{{ url('/projlab/projsubmituser/') }}">
                   @csrf
-                    <input type="hidden" name="exam_id" value="" id="exam_id">
+                    <input type="hidden" name="exam_id" id="exam_id">
 
                         <div class="form-group">
                             <label for="name" class="col-sm-2 control-label">Roll :</label>
                             <div class="col-sm-12">
-                                <input type="text" class="form-control" id="rollno" name="rollno" placeholder="Enter Roll No." value="" maxlength="50" required="">
+                                <input type="text" class="form-control" id="rollno" name="rollno" placeholder="Enter Roll No."  maxlength="20" required="">
                             </div>
                         </div>
 
                         <div class="form-group">
-                            <label for="name" class="col-sm-2 control-label">Name :</label>
+                            <label for="name" class="col-sm-2 control-label">Full&nbsp;Name&nbsp;:</label>
                             <div class="col-sm-12">
-                                <input type="text" class="form-control" id="stud_name" name="stud_name" placeholder="Enter Name ...." value="" maxlength="50" required="">
+                                <input type="text" class="form-control" id="stud_name" name="stud_name" value="{{$fullname}}" maxlength="50" readonly required="">
                             </div>
                         </div>
 
                         <div class="form-group">
                             <label for="name" class="col-sm-2 control-label">Class :</label>
                             <div class="col-sm-12">
-                                <input type="text" class="form-control" id="class_id" name="class_id" placeholder="Enter Class ...." value="" maxlength="50" required="">
+                                <input type="text" class="form-control" id="class_id" name="class_id"  value="{{$class}}" maxlength="50" readonly required="">
                             </div>
                         </div>
 
                         <div class="form-group">
                             <label for="name" class="col-sm-2 control-label">Section :</label>
                             <div class="col-sm-12">
-                                <input type="text" class="form-control" id="Section" name="Section" placeholder="Enter Section ... " value="NA" maxlength="50" required="">
+                                <input type="text" class="form-control" readonly id="Section" name="Section" value="{{$sec}}" required="">
                             </div>
                         </div>
 
-                        <div class="form-group">
+                        <!-- <div class="form-group">
                             <label for="name" class="col-sm-2 control-label">Term :</label>
                             <div class="col-sm-12">
                                 <input type="text" class="form-control" id="term" name="term" placeholder="Term Name ..." value="" maxlength="50" required="">
@@ -77,16 +84,19 @@
                             <div class="col-sm-12">
                                 <textarea id="subject_id" name="subject_id" required="" placeholder="Enter Subject Name ....." class="form-control"></textarea>
                             </div>
-                        </div>
+                        </div> -->
+
                         <div class="col-sm-offset-2 col-sm-10">
-                            <button type="submit" class="btn btn-primary" id="submitbtn" value="create">Begin Project</button>
+                            <button type="submit" class="btn btn-primary" value="create">Begin Exam</button>
                         </div>
+
                     </form>
                 </div>
             </div>
         </div>
     </div>
 <!-- Ends Before start Exam Student Fill necessary info  -->
+
 
 <nav class="page-breadcrumb">
   <ol class="breadcrumb">
@@ -113,19 +123,23 @@
 
         <div class="table-responsive">
         <table id="tracker_datatable" class="table">
-            <thead>
+        <thead>
                 <tr>
                     <th>ID</th>
-                    <th>Class</th>
                     <th>Title</th>
+                    <th>Class</th>
                     <th>Section</th>
-                    <th>Student ID</th>
+                    <th>Evaluator Comments</th>
+                    <th>Marks Scored</th>
+                    <th>Max. Marks</th>
                     <th>Status</th>
                     <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
+                    <td></td>
+                    <td></td>
                     <td></td>
                     <td></td>
                     <td></td>
@@ -163,7 +177,7 @@
     }
 
 
-$(document).on('click', '#mediumButton2', function(e) {
+$(document).on('click', '#mediumButton3', function(e) {
     var alloc_id = $(this).attr("alt");
     // alert("AAAAA   " + alloc_id);
     // return false;
@@ -171,19 +185,19 @@ $(document).on('click', '#mediumButton2', function(e) {
 });
 
     // Submit button
-$(document).on('click', '#submitbtn', function(e) {
-    e.preventDefault();
-    var form6 = $('#exam-register-form').serializeArray();
-    $.each(form6, function(i, field){
+// $(document).on('click', '#submitbtn', function(e) {
+//     e.preventDefault();
+//     var form6 = $('#exam-register-form').serializeArray();
+//     $.each(form6, function(i, field){
 
-        if(field.name === "exam_id") {
-            // alert("ZZZZZZZZZZZZZZZZ   " + field.name + " AAAAAAA " + field.value);
-            // return false;
-            window.location= "{{ url('projlab/')}}/"+field.value+"/projsubmituser";
-        }
-    });
+//         if(field.name === "exam_id") {
+//             // alert("ZZZZZZZZZZZZZZZZ   " + field.name + " AAAAAAA " + field.value);
+//             // return false;
+//             window.location= "{{ url('projlab/')}}/"+field.value+"/projsubmituser";
+//         }
+//     });
 
-});
+// });
 
     $(document).ready(function() {
         // alert("Settings page was loaded");
@@ -208,19 +222,20 @@ $(document).on('click', '#submitbtn', function(e) {
         //    pageLength: 5,
            lengthMenu: [ [7, 10, 25, 50, -1], [7, 10, 25, 50, 'All'] ],
            columns: [
-                { data: 'id', name: 'id' },
-                { data: 'class_id', name: 'class_id' },
+            { data: 'id', name: 'id' },
                 { data: 'title', name: 'title'},
-                { data: 'sec_id', name: 'sec_id'},
-                // { data: 'assign_to', render: function(data, type, row, meta) {
-                //         if(row.assign_to == 0) {
-                //             return "All";
-                //         } else {
-                //             return row.assign_to;
-                //         }
-                //     }
-                // },
-                { data: 'student_id', name: 'student_id'},
+                { data: 'class_id', name: 'class_id' },
+                { data: 'sec_id', render: function(data, type, row, meta) {
+                        if(row.sec_id == '0') {
+                            return "ALL";
+                        } else {
+                            return row.sec_id;
+                        }
+                    }
+                },
+                { data: 'evaluator_status', name: 'evaluator_status' },
+                { data: 'mark_scored', name: 'mark_scored' },
+                { data: 'max_marks', name: 'max_marks' },
                 { data: 'status', name: 'status'},
                 { data: 'action', name : 'action', orderable : true, searchable: true}
             ]
