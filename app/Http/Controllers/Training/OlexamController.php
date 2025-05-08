@@ -26,6 +26,7 @@ class OlexamController extends Controller
             $data['fullname'] = "Admin" . " " . "Central";
             $data['class'] = "NA";
             $data['sec'] = "-";
+            $data['roleid'] = 1;
         } else {
             $qry3 = "select first_name, last_name, class_id, Section, id FROM students WHERE is_deleted = 0 AND user_id=".$login_id;
             $loginfo = DB::select($qry3);
