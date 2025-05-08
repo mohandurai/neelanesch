@@ -129,11 +129,12 @@ class ProjlabController extends Controller
                 $data['class'] = "NA";
                 $data['sec'] = "-";
             } else {
-                $qry3 = "select first_name, last_name, class_id, Section FROM students WHERE is_deleted = 0 AND user_id=".$stud_id;
+                $qry3 = "select first_name, last_name, class_id, Section, id FROM students WHERE is_deleted = 0 AND user_id=".$stud_id;
                 $loginfo = DB::select($qry3);
                 $data['fullname'] = $loginfo[0]->first_name . " " . $loginfo[0]->last_name;
                 $data['class'] = $loginfo[0]->class_id;
                 $data['sec'] = $loginfo[0]->Section;
+                $data['proj_roll_no'] = $loginfo[0]->id;
             }
 
             // echo $stud_id;
@@ -507,7 +508,7 @@ class ProjlabController extends Controller
 
         if(!isset($request->student_id))
         {
-            $sql6 = "select C.user_id as roleid, CONCAT(C.first_name, ' ', C.last_name) as stname, D.class_id, C.Section, D.mark_scored, D.max_marks, D.title FROM student_answers A, students C, project_lab_activity D WHERE A.is_deleted = 0 AND D.class_id=$classid AND A.que_master_templ_id = $tmplid AND A.que_master_templ_id = D.id AND A.student_id = C.user_id";
+            $sql6 = "select C.id as roleid, CONCAT(C.first_name, ' ', C.last_name) as stname, D.class_id, D.sec_id, D.mark_scored, D.max_marks, D.title FROM students C, project_lab_activity D WHERE D.class_id=$classid AND D.id = $tmplid AND D.student_id = C.user_id";
             // echo $sql6; exit;
             $prep3 = DB::select($sql6);
             if(!empty($prep3)) {
@@ -519,7 +520,7 @@ class ProjlabController extends Controller
                     $info3[$kk][2] = $data2->mark_scored;
                     $info3[$kk][3] = $data2->max_marks;
                     $info3[$kk][4] = $data2->class_id;
-                    $info3[$kk][5] = $data2->Section;
+                    $info3[$kk][5] = $data2->sec_id;
                 }
             } else {
                 $info3 = [];
@@ -536,7 +537,7 @@ class ProjlabController extends Controller
                     $info3[$kk][2] = $data2->mark_scored;
                     $info3[$kk][3] = $data2->max_marks;
                     $info3[$kk][4] = $data2->class_id;
-                    $info3[$kk][5] = $data2->Section;
+                    $info3[$kk][5] = $data2->sec_id;
                 }
             } else {
                 $info3 = [];

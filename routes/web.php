@@ -62,6 +62,8 @@ Route::get('auth/login', function () {
 
 Route::get('/document', [PdfmakeController::class, 'generatePdf'])->name('document');
 
+Route::get('/updatepwd/{id}', [UserController::class, 'updatepwd'])->name('updatepwd');
+
 // Auth::routes();
 
 Route::middleware('auth')->group(function() {

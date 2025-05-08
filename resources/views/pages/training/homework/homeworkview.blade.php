@@ -46,14 +46,26 @@
                     <td>Attachment</td><td>:</td>
                     <td>
                         @php($showimg = "storage/homework/class_".$projLabAct->class_id."/".$projLabAct->attachment)
-                        <img src="{{ url($showimg) }}" style="border-radius:0%; width:300px;height:150px;"/>
+                        @php($infoPath = pathinfo($showimg))
+                        @php($ftype = $infoPath['extension'])
+                        @if($ftype == "pdf")
+                            <iframe src="{{ url($showimg) }}" class="embed-responsive-item" width="500" height="200"  allowfullscreen></iframe>
+                        @else
+                            <img src="{{ url($showimg) }}" style="border-radius:0%; width:300px;height:150px;"/>
+                        @endif
                     </td>
                 </tr>
                 <tr>
                     <td>Upload Finished Activity File</td><td>:</td>
                     <td>
                         @php($showimg2 = "storage/homework/class_".$projLabAct->class_id."/".$projLabAct->student_submit_attach)
-                        <img src="{{ url($showimg2) }}" style="border-radius:0%; width:300px;height:150px;"/>
+                        @php($infoPath2 = pathinfo($showimg2))
+                        @php($ftype2 = $infoPath2['extension'])
+                        @if($ftype2 == "pdf")
+                            <iframe src="{{ url($showimg2) }}" class="embed-responsive-item" width="500" height="200"  allowfullscreen></iframe>
+                        @else
+                            <img src="{{ url($showimg2) }}" style="border-radius:0%; width:300px;height:150px;"/>
+                        @endif
                     </td>
                 </tr>
                 <tr>

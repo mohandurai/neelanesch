@@ -47,7 +47,7 @@
                         <div class="form-group">
                             <label for="name" class="col-sm-2 control-label">Roll :</label>
                             <div class="col-sm-12">
-                                <input type="text" class="form-control" id="rollno" name="rollno" placeholder="Enter Roll No."  maxlength="20" required="">
+                                <input type="text" class="form-control" id="proj_roll_no" name="proj_roll_no" placeholder="Enter Roll No." value="{{$proj_roll_no}}" readonly>
                             </div>
                         </div>
 
@@ -87,7 +87,7 @@
                         </div> -->
 
                         <div class="col-sm-offset-2 col-sm-10">
-                            <button type="submit" class="btn btn-primary" value="create">Begin Exam</button>
+                            <button type="submit" class="btn btn-primary" value="create">Begin Project</button>
                         </div>
 
                     </form>

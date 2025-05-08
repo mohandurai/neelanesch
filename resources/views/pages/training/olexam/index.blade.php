@@ -48,12 +48,11 @@
                   <form id="exam-register-form" name="exam-register-form" class="form-horizontal" method="POST" action="{{ url('olexam/attendexam') }}">
                   @csrf
                     <input type="hidden" name="exam_id" id="exam_id">
-                    <input type="hidden" name="studid" id="exam_id">
 
                         <div class="form-group">
                             <label for="name" class="col-sm-2 control-label">Roll :</label>
                             <div class="col-sm-12">
-                                <input type="text" class="form-control" id="rollno" name="rollno" placeholder="Enter Roll No."  maxlength="20" required="">
+                                <input type="text" class="form-control" id="rollno" name="rollno" placeholder="Enter Roll No."  maxlength="20"  value="{{$roleid}}" readonly>
                             </div>
                         </div>
 

@@ -24,7 +24,7 @@
         <div class="modal-dialog" role="document">
         <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="modelHeading">Before Start Homework - Fill up below Details:</h5>
+                    <h5 class="modal-title" id="modelHeading">Before Start Homework - Confirm below Details:</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true" style="color:white;">&times;</span>
                     </button>
@@ -34,12 +34,11 @@
                   <form id="exam-register-form" name="exam-register-form" class="form-horizontal" method="POST" action="{{ url('/homework/homeworksubmituser/') }}">
                   @csrf
                     <input type="hidden" name="exam_id" id="exam_id">
-                    <input type="hidden" name="studid" id="exam_id">
 
                         <div class="form-group">
                             <label for="name" class="col-sm-2 control-label">Roll :</label>
                             <div class="col-sm-12">
-                                <input type="text" class="form-control" id="rollno" name="rollno" placeholder="Enter Roll No."  maxlength="20" required="">
+                                <input type="text" class="form-control" id="hw_roll_no" name="hw_roll_no" placeholder="Enter Roll No." value="{{$hw_roll_no}}" readonly>
                             </div>
                         </div>
 
@@ -79,7 +78,7 @@
                         </div> -->
 
                         <div class="col-sm-offset-2 col-sm-10">
-                            <button type="submit" class="btn btn-primary" value="create">Begin Exam</button>
+                            <button type="submit" class="btn btn-primary" value="create">Begin Home Work</button>
                         </div>
 
                     </form>
@@ -185,19 +184,19 @@ $(document).on('click', '#mediumButton4', function(e) {
 });
 
     // Submit button
-$(document).on('click', '#submitbtn', function(e) {
-    e.preventDefault();
-    var form6 = $('#exam-register-form').serializeArray();
-    $.each(form6, function(i, field){
+// $(document).on('click', '#submitbtn', function(e) {
+//     e.preventDefault();
+//     var form6 = $('#exam-register-form').serializeArray();
+//     $.each(form6, function(i, field){
 
-        if(field.name === "exam_id") {
-            // alert("ZZZZZZZZZZZZZZZZ   " + field.name + " AAAAAAA " + field.value);
-            // return false;
-            window.location= "{{ url('homework/')}}/"+field.value+"/homeworksubmituser";
-        }
-    });
+//         if(field.name === "exam_id") {
+//             // alert("ZZZZZZZZZZZZZZZZ   " + field.name + " AAAAAAA " + field.value);
+//             // return false;
+//             window.location= "{{ url('homework/')}}/"+field.value+"/homeworksubmituser";
+//         }
+//     });
 
-});
+// });
 
     $(document).ready(function() {
         // alert("Settings page was loaded");

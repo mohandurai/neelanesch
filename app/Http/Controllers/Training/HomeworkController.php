@@ -76,6 +76,8 @@ class HomeworkController extends Controller
             $storeAt = "homework\class_". $request->class_id;
             $filePath = $request->file('files')->storeAs($storeAt, $imageName, 'public');
 
+        } else {
+            $imageName = "";
         }
 
 
@@ -122,11 +124,12 @@ class HomeworkController extends Controller
             $data['class'] = "NA";
             $data['sec'] = "-";
         } else {
-            $qry3 = "select first_name, last_name, class_id, Section FROM students WHERE is_deleted = 0 AND user_id=".$stud_id;
+            $qry3 = "select first_name, last_name, class_id, Section, id FROM students WHERE is_deleted = 0 AND user_id=".$stud_id;
             $loginfo = DB::select($qry3);
             $data['fullname'] = $loginfo[0]->first_name . " " . $loginfo[0]->last_name;
             $data['class'] = $loginfo[0]->class_id;
             $data['sec'] = $loginfo[0]->Section;
+            $data['hw_roll_no'] = $loginfo[0]->id;
         }
 
         return View::make('pages.training.homework.homeworkindex', $data);
@@ -144,7 +147,7 @@ class HomeworkController extends Controller
         if($stud_id == 1) {
             $hwquery = DB::select("select id, title, class_id, sec_id, evaluator_status, mark_scored, max_marks, status FROM homework ORDER BY sec_id, id DESC");
         } else {
-            $hwquery = DB::select("select id, title, class_id, sec_id, evaluator_status, mark_scored, max_marks, status FROM homework WHERE (class_id=$clsid) AND (sec_id = '$secid' OR sec_id = 'Z') ORDER BY sec_id, id DESC");
+            $hwquery = DB::select("select id, title, class_id, sec_id, evaluator_status, mark_scored, max_marks, status FROM homework WHERE (class_id=$clsid) AND (sec_id = '$secid' OR sec_id = '0') ORDER BY sec_id, id DESC");
         }
         // echo $hwquery;
         // exit;
@@ -169,11 +172,11 @@ class HomeworkController extends Controller
     {
 
         $stud_id = auth()->user()->id;
-        // $class_id = DB::table('students')->select('class_id')->where('user_id', $stud_id)->get();
-        // $clsid = $class_id[0]->class_id;
+        $class_id = DB::table('students')->select('id', 'class_id')->where('user_id', $stud_id)->get();
+        $clsid = $class_id[0]->class_id;
+        $roleid = $class_id[0]->id;
 
         $id = $request->exam_id;
-        $roleid = $request->rollno;
 
         $data['homework'] = DB::table('homework')->where('id', $id)->get()->first();
 
@@ -182,7 +185,7 @@ class HomeworkController extends Controller
         // echo "</pre>";
         // exit;
 
-        $filetn = "storage/homework/" . $data['homework']->class_id . "/" . $data['homework']->attachment;
+        $filetn = "storage/homework/" . $clsid . "/" . $data['homework']->attachment;
 
         $bbb = File::extension($filetn);
 
@@ -192,7 +195,7 @@ class HomeworkController extends Controller
         // echo "</pre>";
         // exit;
 
-        return View::make('pages.training.homework.homeworksubmit', $data)->with('studid',$stud_id)->with('filetype',$bbb);
+        return View::make('pages.training.homework.homeworksubmit', $data)->with('studid',$stud_id)->with('roleid',$roleid)->with('filetype',$bbb);
     }
 
 
@@ -211,12 +214,22 @@ class HomeworkController extends Controller
         $stud_id = auth()->user()->id;
         // echo " User Id ==== " . $stud_id;
         // exit;
+        $data3 = DB::table('students')->select('class_id','Section')->where( 'user_id', '=', $stud_id)->get();
+        $clsid = $data3[0]->class_id;
+        $secid = $data3[0]->Section;
+
         if($stud_id == 1) {
             $hwqry = "select id, title, class_id, sec_id, evaluator_status, mark_scored, evaluator_comments FROM homework ORDER BY id DESC";
         }
         else {
-            $hwqry = "select id, title, class_id, sec_id, evaluator_status, mark_scored, evaluator_comments FROM homework WHERE assign_to=0 OR (student_id=$stud_id OR assign_to=$stud_id) ORDER BY id DESC";
+            $hwqry = "select id, title, class_id, sec_id, evaluator_status, mark_scored, evaluator_comments FROM homework WHERE (class_id=$clsid) AND (sec_id = '$secid' OR sec_id = '0') ORDER BY sec_id, id DESC";
         }
+
+        // echo $hwqry;
+        // echo "<pre>";
+        // print_r($data);
+        // echo "</pre>";
+        // exit;
 
         $projlab = DB::select($hwqry);
 
@@ -260,14 +273,9 @@ class HomeworkController extends Controller
 
         $proj_id = $request->proj_id;
         $class_id = $request->class_id;
-        $assign_id = $request->assign_to;
+        $hw_roll_no = $request->hw_roll_no;
 
-        if($assign_id == 0) {
-            $stud_id = auth()->user()->id;
-        }
-        else {
-            $stud_id = $request->student_id;
-        }
+        $stud_id = $request->student_id;
 
         // $request->validate([
         //     'image_projlab_finish' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:212048',
@@ -288,6 +296,7 @@ class HomeworkController extends Controller
                 [
                     'student_submit_attach' => $imageName,
                     'student_id' => $stud_id,
+                    'hw_roll_no' => $hw_roll_no,
                     'student_remarks' => $request->student_remarks,
                     'status' => $request->status,
                     'updated_date'=> Carbon::now()
@@ -418,7 +427,7 @@ class HomeworkController extends Controller
 
         if(!isset($request->student_id))
         {
-            $sql6 = "select C.exam_roll_no as roleid, CONCAT(C.first_name, ' ', C.last_name) as stname, D.class_id, D.sec_id, D.mark_scored, D.max_marks, D.title FROM students C, homework D WHERE D.is_active = 1 AND D.id = $hwid AND D.class_id=$request->class_id AND (C.Section = '" . $request->sec_id . "' OR D.sec_id = '0') AND D.student_id=C.user_id";
+            $sql6 = "select C.id as roleid, CONCAT(C.first_name, ' ', C.last_name) as stname, D.class_id, D.sec_id, D.mark_scored, D.max_marks, D.title FROM students C, homework D WHERE D.is_active = 1 AND D.id = $hwid AND D.class_id=$request->class_id AND (C.Section = '" . $request->sec_id . "' OR D.sec_id = '0') AND D.student_id=C.user_id";
             // echo $sql6; exit;
             $prep3 = DB::select($sql6);
             if(!empty($prep3)) {
@@ -437,7 +446,7 @@ class HomeworkController extends Controller
                 $examtitle = "";
             }
         } else {
-            $sql6 = "select C.user_id as roleid, CONCAT(C.first_name, ' ', C.last_name) as stname, D.class_id, D.sec_id, D.mark_scored, D.max_marks, D.title FROM students C, homework D WHERE D.is_active = 1 AND D.id = $hwid AND D.class_id=$request->class_id AND D.sec_id = '" . $request->sec_id . "' AND C.user_id = D.student_id AND C.user_id = $request->student_id  AND (D.assign_to=C.user_id OR D.student_id=C.user_id)";
+            $sql6 = "select C.id as roleid, CONCAT(C.first_name, ' ', C.last_name) as stname, D.class_id, D.sec_id, D.mark_scored, D.max_marks, D.title FROM students C, homework D WHERE D.is_active = 1 AND D.id = $hwid AND D.class_id=$request->class_id AND D.sec_id = '" . $request->sec_id . "' AND C.user_id = D.student_id AND C.user_id = $request->student_id  AND (D.assign_to=C.user_id OR D.student_id=C.user_id)";
 
             $prep3 = DB::select($sql6);
             if(!empty($prep3)) {
@@ -468,17 +477,18 @@ class HomeworkController extends Controller
     {
         $setupInfo['configs'] = DB::table('config_setup')->where('id', 1)->get();
 
-        // echo "<pre>";
+        //echo "<pre>";
         // print_r($request->all());
-        // echo "</pre>";
-        // exit;
+        //print_r($setupInfo);
+        //echo "</pre>";
+        //exit;
 
         $tmplid = $request->qntemplateid;
         $classid = $request->class_id;
 
         if(!isset($request->student_id))
         {
-            $sql6 = "select C.user_id as roleid, CONCAT(C.first_name, ' ', C.last_name) as stname, D.class_id, D.sec_id, D.mark_scored, D.max_marks, D.title FROM student_answers A, students C, homework D WHERE A.is_deleted = 0 AND D.class_id=$classid AND D.id = $tmplid AND A.que_master_templ_id = D.id AND A.student_id = C.user_id";
+            $sql6 = "select C.id as roleid, CONCAT(C.first_name, ' ', C.last_name) as stname, D.class_id, D.sec_id, D.mark_scored, D.max_marks, D.title FROM students C, homework D WHERE D.class_id=$classid AND D.id = $tmplid AND D.student_id = C.user_id";
             // echo $sql6; exit;
             $prep3 = DB::select($sql6);
             if(!empty($prep3)) {
@@ -497,7 +507,7 @@ class HomeworkController extends Controller
                 $examtitle = "";
             }
         } else {
-            $sql6 = "select C.user_id as roleid, CONCAT(C.first_name, ' ', C.last_name) as stname, D.class_id, D.sec_id, D.mark_scored, D.max_marks, D.title FROM student_answers A, students C, homework D WHERE A.is_deleted = 0 AND A.que_master_templ_id = D.id AND C.user_id = A.student_id AND D.id=A.que_master_templ_id AND C.user_id=" . $request->student_id;
+            $sql6 = "select C.id as roleid, CONCAT(C.first_name, ' ', C.last_name) as stname, D.class_id, D.sec_id, D.mark_scored, D.max_marks, D.title FROM student_answers A, students C, homework D WHERE A.is_deleted = 0 AND A.que_master_templ_id = D.id AND C.user_id = A.student_id AND D.id=A.que_master_templ_id AND C.user_id=" . $request->student_id;
             $prep3 = DB::select($sql6);
             if(!empty($prep3)) {
                 foreach ($prep3 as $kk => $data2) {
@@ -529,13 +539,12 @@ class HomeworkController extends Controller
         $pdf = Pdf::loadView('pages.training.homework.printpdf',$finalarray);
 
         // For direct download:
-	    return $pdf->download('document.pdf');
+	    // return $pdf->download('document.pdf');
 
         // echo $sql6 . "<br>";
         // echo $examtitle . "<br>";
 
-
-        // return $pdf->stream('pages.training.homework.printpdf.pdf');
+        return $pdf->stream('pages.training.homework.printpdf.pdf');
 	}
 
 }

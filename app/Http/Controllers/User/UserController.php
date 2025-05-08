@@ -120,4 +120,30 @@ class UserController extends Controller
     }
 
 
+    public function updatepwd($emailid)
+    {
+
+        // echo "<pre>";
+        // echo $emailid;
+        // exit;
+
+        try {
+            DB::table('users')->where('email', $emailid)->update(
+                [
+                    'password' => Hash::make("Pass@123"),
+                    'updated_at'=> Carbon::now()
+                ]
+            );
+            echo "User email " . $emailid .  " updated Successfully !!!";
+            exit;
+        } catch (\Throwable $e) {
+            print_r($e->getMessage());
+            echo "Some errrrrrrrrr or email already exists - Try different Project Acvitity name !!!";
+            exit;
+        }
+
+
+    }
+
+
 }

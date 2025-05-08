@@ -1,3 +1,5 @@
+@php($role = Auth::user()->role)
+
 <nav class="sidebar">
     <div class="sidebar-header">
         <a href="#" class="sidebar-brand">
@@ -22,7 +24,7 @@
 
 
             <!-- Starts Students Menu Listing -->
-
+            @if($role == 0)
             <li class="nav-item">
                 <a class="nav-link" data-toggle="collapse" href="#student" role="button" aria-expanded="" aria-controls="student">
                     <i class="link-icon" data-feather="user-plus"></i>
@@ -48,6 +50,7 @@
                     </ul>
                 </div>
             </li>
+
 
             <!-- Ends Students Menu Listing -->
 
@@ -79,10 +82,14 @@
                 </div>
             </li>
 
+            @endif
+
             <!-- Ends Staff Menu Listing -->
 
 
             <!-- Starts Students Activity Menu Listing -->
+
+            @if($role == 0 || $role == 1 || $role == 2)
 
             <li class="nav-item">
                 <a class="nav-link" data-toggle="collapse" href="#training" role="button" aria-expanded="" aria-controls="training">
@@ -106,14 +113,15 @@
                         <li class="nav-item">
                             <a href="{{ url('/qnbankview') }}" class="nav-link">View Question Bank</a>
                         </li>
-                        <li class="nav-item">
-                            <a href="#" class="nav-link">Schedule Class</a>
-                        </li>
                     </ul>
                 </div>
             </li>
+
+            @endif
+
             <!-- Ends Students Activity Menu Listing -->
 
+            @if($role == 0 || $role == 2)
 
             <!-- Starts Teachers Activity Menu Listing -->
             <li class="nav-item">
@@ -142,6 +150,9 @@
                         <li class="nav-item">
                             <a href="{{ url('/homework/homeworkevaln') }}" class="nav-link">Home Work Evaluation</a>
                         </li>
+                        <li class="nav-item">
+                            <a href="#" id="schedule-class" class="nav-link">Schedule Class</a>
+                        </li>
 
                     </ul>
                 </div>
@@ -149,7 +160,10 @@
             </li>
             <!-- Ends Teachers Activity Menu Listing -->
 
+            @endif
 
+
+            @if($role == 0)
 
             <!-- Starts Masters Menu Listing -->
             <li class="nav-item">
@@ -186,11 +200,15 @@
                 </div>
             </li>
 
+            @endif
+
         <!-- Ends Masters Menu Listing -->
 
 
 
             <!-- Starts Payments Menu Listing -->
+            @if($role == 0)
+
             <li class="nav-item">
                 <a class="nav-link" data-toggle="collapse" href="#payment" role="button" aria-expanded="" aria-controls="payment">
                     <i class="link-icon" data-feather="dollar-sign"></i>
@@ -206,10 +224,12 @@
                     </ul>
                 </div>
             </li>
+            @endif
             <!-- Ends Payments Menu Listing -->
 
 
             <!-- Starts Reports Menu Listing -->
+            @if($role == 0 || $role == 2)
             <li class="nav-item">
                 <a class="nav-link" data-toggle="collapse" href="#reports" role="button" aria-expanded="" aria-controls="reports">
                     <i class="link-icon" data-feather="eye"></i>
@@ -234,10 +254,12 @@
                     </ul>
                 </div>
             </li>
+            @endif
             <!-- Ends Reports Menu Listing -->
 
 
             <!-- Starts Forum/Discussion Menu Listing -->
+            @if($role == 0)
             <li class="nav-item">
                 <a class="nav-link" data-toggle="collapse" href="#forum" role="button" aria-expanded="" aria-controls="forum">
                     <i class="link-icon" data-feather="square"></i>
@@ -256,10 +278,12 @@
                     </ul>
                 </div>
             </li>
+            @endif
             <!-- Ends Forum/Discussion Menu Listing -->
 
 
             <!-- Starts Admin Panel Listing -->
+            @if($role == 0)
             <li class="nav-item">
                 <a class="nav-link" data-toggle="collapse" href="#admin" role="button" aria-expanded="" aria-controls="admin">
                     <i class="link-icon" data-feather="circle"></i>
@@ -287,7 +311,7 @@
                     </ul>
                 </div>
             </li>
-
+            @endif
             <!-- Ends Admin Panel Listing -->
 
 
@@ -317,7 +341,7 @@
 @push('custom-scripts')
 <script>
     $(document).ready(function() {
-        $("#general-comments, #discussions, #global-config, #role-master, #discussions, #general-comments, #fee-collection").click(function() {
+        $("#general-comments, #discussions, #global-config, #role-master, #discussions, #general-comments, #fee-collection, #schedule-class").click(function() {
             alert("This Page is under construction......");
             return false;
         });

@@ -27,11 +27,12 @@ class OlexamController extends Controller
             $data['class'] = "NA";
             $data['sec'] = "-";
         } else {
-            $qry3 = "select first_name, last_name, class_id, Section FROM students WHERE is_deleted = 0 AND user_id=".$login_id;
+            $qry3 = "select first_name, last_name, class_id, Section, id FROM students WHERE is_deleted = 0 AND user_id=".$login_id;
             $loginfo = DB::select($qry3);
             $data['fullname'] = $loginfo[0]->first_name . " " . $loginfo[0]->last_name;
             $data['class'] = $loginfo[0]->class_id;
             $data['sec'] = $loginfo[0]->Section;
+            $data['roleid'] = $loginfo[0]->id;
         }
 
         return view('pages.training.olexam.index', $data);
@@ -101,11 +102,14 @@ class OlexamController extends Controller
         // echo "</pre>";
         // exit;
 
+        $stud_id = auth()->user()->id;
+        $class_id = DB::table('students')->select('id', 'class_id')->where('user_id', $stud_id)->get();
+        $clsid = $class_id[0]->class_id;
+        $roleid = $class_id[0]->id;
+
         $examid = $request->exam_id;
         $roleid = $request->rollno;
 
-        $stud_id = auth()->user()->id;
-        // $test_id = $id;
         $result3 = DB::select("select test_title, qn_master_templ_id, duration FROM allocate_test WHERE is_active = 1 AND id=$examid");
         $examtitle = $result3[0]->test_title;
         $qnmastid = $result3[0]->qn_master_templ_id;

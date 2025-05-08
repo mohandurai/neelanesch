@@ -22,6 +22,9 @@
                 <p class="alert {{ Session::get('alert-class', 'alert-success') }}">{{ Session::get('message') }}</p>
             @endif
 
+        <form action="{{ url('homework/homeworkfinish') }}" method="post" enctype="multipart/form-data">
+            @csrf
+
         <div class="form-group">
           <table id="dataTableExample" class="table">
             @if(!empty($homework))
@@ -60,6 +63,8 @@
                         </iframe>
                         @elseif ($filetype == 'png' || $filetype == 'gif' || $filetype == 'jpg' || $filetype == 'jpeg' || $filetype == 'bmp')
                             <img src="{{ url($showimg) }}" style="border-radius:0%; width:300px;height:150px;"/>
+                        @elseif ($filetype == '')
+                            <p>No Image Attached....</p>
                         @else
                             <a target="_blank" href="{{ url($showimg) }}">{{ $projLabAct->attachment }}</a>
                         @endif
@@ -69,16 +74,12 @@
 
           <tr>
             <td>
+                <input type="hidden" name="proj_id" value="{{$homework->id}}">
+                <input type="hidden" name="class_id" value="{{$homework->class_id}}">
+                <input type="hidden" name="hw_roll_no" value="{{$roleid}}">
+                <input type="hidden" name="student_id" value="{{$studid}}">
 
-          <form action="{{ url('homework/homeworkfinish') }}" method="post" enctype="multipart/form-data">
-            @csrf
-
-            <input type="hidden" name="proj_id" value="{{$homework->id}}">
-            <input type="hidden" name="class_id" value="{{$homework->class_id}}">
-            <input type="hidden" name="assign_to" value="{{$homework->assign_to}}">
-            <input type="hidden" name="student_id" value="{{$studid}}">
-
-                <label for="title">Upload Finished Activity File : </label>
+            <label for="title">Upload Finished Activity File : </label>
             </td>
             <td>:</td>
             <td>
