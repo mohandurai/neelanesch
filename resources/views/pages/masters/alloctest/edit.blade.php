@@ -117,10 +117,10 @@
                 <tr>
                     <td>Exam Status</td><td>:</td>
                     <td>
-                        <select class="form-control" id="mode_test" name="mode_test">
-                            <option value="0">Select Exam Mode</option>
-                            <option value="1" selected>Active</option>
-                            <option value="2">InActive</option>
+                        <select class="form-control" id="is_active" name="is_active">
+                            <option value="0" {{ $allocte->is_active == 0 ? 'selected' : '' }}>Select Exam Mode</option>
+                            <option value="1" {{ $allocte->is_active == 1 ? 'selected' : '' }}>Active</option>
+                            <option value="2" {{ $allocte->is_active == 2 ? 'selected' : '' }}>InActive</option>
                         </select>
                     </td>
                 </tr>

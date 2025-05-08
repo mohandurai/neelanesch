@@ -167,9 +167,8 @@ class AlloctestController extends Controller
                     'terms' => $request->term,
                     'start_date' => $request->start_date,
                     'end_date' => $request->end_date,
-                    'mode_of_test' => $request->mode_test,
-                    'updated_date' => Carbon::now(),
-                    'is_active' => 1
+                    'is_active' => $request->is_active,
+                    'updated_date' => Carbon::now()
                 ]
             );
         } catch (\Throwable $e) {
