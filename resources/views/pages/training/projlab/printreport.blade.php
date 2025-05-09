@@ -29,10 +29,7 @@
 
 @section('content')
 
-<form action="{{ url('projlab/printpdf') }}" method="post">
-@csrf
-
-<div class="row">
+<div class="row" id="pdf_content">
     <div class="col-md-12 grid-margin stretch-card">
         <div class="card">
 
@@ -103,10 +100,11 @@
                     <td width="30%" align="center">
                         <input type="hidden" name="qntemplateid" value="{{ $tmplid }}">
                         <input type="hidden" name="class_id" value="{{ $stud_data[0][4] }}">
-                        <button type="submit" class="btn btn-primary">Export PDF</button>
+                        <!-- <button type="submit" class="btn btn-primary">Export PDF</button> -->
+                        <button class="btn btn-primary" onclick="downloadAsPDF();" ><i class="fas fa-download" ></i> PDF</button>
                     </td>
                     <td width="30%" align="center">
-                        <button type="submit" class="btn btn-primary">Report Send Parent</button>
+                        <button class="btn btn-primary pull-right mr-10" onclick="downloadAsIMG();" ><i class="fas fa-download" ></i> IMAGE</button>
                     </td>
                 </tr>
             </table>
@@ -121,16 +119,50 @@
 @endsection
 
 @push('plugin-scripts')
-<script src="{{ asset('assets/plugins/datatables-net/jquery.dataTables.js') }}"></script>
-<script src="{{ asset('assets/plugins/datatables-net-bs4/dataTables.bootstrap4.js') }}"></script>
+<script src="{{ asset('assets/js/html2canvas/html2canvas.min.js') }}"></script>
+<script src="{{ asset('assets/js/html2pdf/html2pdf.bundle.js') }}"></script>
 @endpush
 
-@push('custom-scripts')
-<script src="{{ asset('assets/js/data-table.js') }}"></script>
-@endpush
 
 @push('custom-scripts')
-<script>
+<script type="text/javascript">
 
+function downloadAsPDF()
+{
+//   alert("PDF Download AAAAA");
+//   return false;
+    // showLoader();
+  var element = document.getElementById('pdf_content');
+  var opt = {
+    margin:       1,
+    filename:     'consolidated_report <?=date("Y-m-d")?>.pdf',
+    image:        { type: 'jpeg', quality: 0.98 },
+    html2canvas:  { scale: 2 },
+    jsPDF:        { unit: 'in', format: 'letter', orientation: 'landscape' }
+  };
+
+// New Promise-based usage:
+html2pdf().set(opt).from(element).save().then(function(){
+  hideLoader();
+});
+
+}
+
+function downloadAsIMG()
+{
+  // showLoader();
+
+	html2canvas(document.getElementById("pdf_content")).then(function (canvas) {
+	    var anchorTag = document.createElement("a");
+			anchorTag.download = 'consolidated_report <?=date("Y-m-d")?>.jpg';
+			anchorTag.href = canvas.toDataURL();
+			anchorTag.target = '_blank';
+			anchorTag.click();
+		});
+
+		 hideLoader();
+
+
+}
 </script>
 @endpush

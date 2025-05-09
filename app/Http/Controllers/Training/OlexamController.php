@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Training;
 
+date_default_timezone_set("Asia/Calcutta");
+
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\View;
@@ -111,10 +113,28 @@ class OlexamController extends Controller
         $examid = $request->exam_id;
         $roleid = $request->rollno;
 
-        $result3 = DB::select("select test_title, qn_master_templ_id, duration FROM allocate_test WHERE is_active = 1 AND id=$examid");
+        $result3 = DB::select("select test_title, qn_master_templ_id, duration, start_date, end_date FROM allocate_test WHERE is_active = 1 AND id=$examid");
         $examtitle = $result3[0]->test_title;
         $qnmastid = $result3[0]->qn_master_templ_id;
         $examDur = $result3[0]->duration;
+        $stdt = $result3[0]->start_date;
+        $enddt = $result3[0]->end_date;
+
+        $now = date("Y-m-d h:i:sa");
+
+        function isBetween($from, $till, $input) {
+            $fromTime = strtotime($from);
+            $toTime = strtotime($till);
+            $inputTime = strtotime($input);
+
+            return($inputTime >= $fromTime and $inputTime <= $toTime);
+        }
+
+        $checkExamDt = isBetween($stdt, $enddt, $now);
+
+        if($checkExamDt == false) {
+            return redirect()->route('olexam.index')->with('message', "Allocated Exam Date not Valid .... Please Check in Allocation of Exam !!!");
+        }
 
         // echo $qnmastid . " MMMMMMMMMM   " . $stud_id;
         // exit;
@@ -275,7 +295,7 @@ class OlexamController extends Controller
             return View('pages.training.olexam.attendexam')->with('message', "Error Submitting Answers - Try once again !!!");
         }
 
-        return redirect()->route('olexam.index')->with('message', "Saving answers Successfully !!!");
+        return redirect()->route('olexam.index')->with('message', "Finished Exam and Recorded Successfully !!!");
     }
 
     public function correct()
