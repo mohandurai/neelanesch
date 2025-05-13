@@ -117,8 +117,44 @@
                             else
                                 return "Female"
                         }},
-                    { data: 'department', name: 'department' },
-                    { data: 'role', name: 'role' },
+                    { data: 'department', name: 'department', "render": function (data, type, row) {
+                            if (row.department == 1)
+                                return "Teaching"
+                            else if (row.department == 2)
+                                return "Lab Support"
+                            else if (row.department == 3)
+                                return "Accounts"
+                            else if (row.department == 4)
+                                return "Support Activity"
+                            else if (row.department == 5)
+                                return "Security"
+                            else if (row.department == 6)
+                                return "Office Staff"
+                            else
+                                return "Others"
+                        }},
+                    { data: 'role', name: 'role', "render": function (data, type, row) {
+                            if (row.role == 0)
+                                return "Admin"
+                            else if (row.role == 1)
+                                return "Student"
+                            else if (row.role == 2)
+                                return "Teacher"
+                            else if (row.role == 3)
+                                return "HeadMaster"
+                            else if (row.role == 4)
+                                return "Accountant"
+                            else if (row.role == 5)
+                                return "Clerk"
+                            else if (row.role == 6)
+                                return "Cleaner"
+                            else if (row.role == 7)
+                                return "Cashier"
+                            else if (row.role == 8)
+                                return "Office Assistant"
+                            else
+                                return "Others"
+                        }},
                     { data: 'action', name : 'action', orderable : false, searchable: false}
                  ]
 

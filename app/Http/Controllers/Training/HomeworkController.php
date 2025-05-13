@@ -120,15 +120,20 @@ class HomeworkController extends Controller
         $stud_id = auth()->user()->id;
 
         if($stud_id == 1) {
-            $data['fullname'] = "Admin" . " " . "Central";
-            $data['class'] = "NA";
-            $data['sec'] = "-";
-        } else {
+                $data['fullname'] = "Admin" . " " . "Central";
+                $data['class'] = "0";
+                $clssid = "0";
+                $data['sec'] = "0";
+                $secid = "0";
+                $data['hw_roll_no'] = 1;
+        }  else {
             $qry3 = "select first_name, last_name, class_id, Section, id FROM students WHERE is_deleted = 0 AND user_id=".$stud_id;
             $loginfo = DB::select($qry3);
             $data['fullname'] = $loginfo[0]->first_name . " " . $loginfo[0]->last_name;
-            $data['class'] = $loginfo[0]->class_id;
-            $data['sec'] = $loginfo[0]->Section;
+            $clssid = $loginfo[0]->class_id;
+            $data['class'] = $clssid;
+            $secid = $loginfo[0]->Section;
+            $data['sec'] = $secid;
             $data['hw_roll_no'] = $loginfo[0]->id;
         }
 
@@ -140,14 +145,33 @@ class HomeworkController extends Controller
         // echo $id;
         // exit;
         $stud_id = auth()->user()->id;
-        $data3 = DB::table('students')->select('class_id','Section')->where( 'user_id', '=', $stud_id)->get();
-        $clsid = $data3[0]->class_id;
-        $secid = $data3[0]->Section;
+
+        if($stud_id == 1) {
+                $data['fullname'] = "Admin" . " " . "Central";
+                $data['class'] = "0";
+                $clssid = "0";
+                $data['sec'] = "0";
+                $secid = "0";
+                $data['hw_roll_no'] = 1;
+        }  else {
+            $qry3 = "select first_name, last_name, class_id, Section, id FROM students WHERE is_deleted = 0 AND user_id=".$stud_id;
+            $loginfo = DB::select($qry3);
+            $data['fullname'] = $loginfo[0]->first_name . " " . $loginfo[0]->last_name;
+            $clssid = $loginfo[0]->class_id;
+            $data['class'] = $clssid;
+            $secid = $loginfo[0]->Section;
+            $data['sec'] = $secid;
+            $data['hw_roll_no'] = $loginfo[0]->id;
+        }
+
+        // $data3 = DB::table('students')->select('class_id','Section')->where( 'user_id', '=', $stud_id)->get();
+        // $clsid = $data3[0]->class_id;
+        // $secid = $data3[0]->Section;
 
         if($stud_id == 1) {
             $hwquery = DB::select("select id, title, class_id, sec_id, evaluator_status, mark_scored, max_marks, status FROM homework ORDER BY sec_id, id DESC");
         } else {
-            $hwquery = DB::select("select id, title, class_id, sec_id, evaluator_status, mark_scored, max_marks, status FROM homework WHERE (class_id=$clsid) AND (sec_id = '$secid' OR sec_id = '0') ORDER BY sec_id, id DESC");
+            $hwquery = DB::select("select id, title, class_id, sec_id, evaluator_status, mark_scored, max_marks, status FROM homework WHERE (class_id=$clssid) AND (sec_id = '$secid' OR sec_id = '0') ORDER BY sec_id, id DESC");
         }
         // echo $hwquery;
         // exit;

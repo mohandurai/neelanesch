@@ -7,8 +7,8 @@
 @section('content')
 <nav class="page-breadcrumb">
   <ol class="breadcrumb">
-    <li class="breadcrumb-item"><a href="#">Masters</a></li>
-    <li class="breadcrumb-item active" aria-current="page"><a href="{{ url('video/index') }}">Video Master</a></li>
+    <li class="breadcrumb-item"><a href="#">Question Bank</a></li>
+    <li class="breadcrumb-item active" aria-current="page"><a href="{{ url('qnbank/index') }}">Question Bank</a></li>
   </ol>
 </nav>
 
@@ -17,23 +17,23 @@
     <div class="card">
       <div class="card-body">
         <h4 style="margin-bottom:10px;">
-            Edit Video Master
+            Edit Question Bank
             @if(Session::has('message'))
                 <p class="alert {{ Session::get('alert-class', 'alert-success') }}">{{ Session::get('message') }}</p>
             @endif
         </h4>
 
         <div class="table-responsive">
-        <form action="{{ url('video') }}/update" method="post" enctype="multipart/form-data">
+        <form action="{{ url('qnbank') }}/update" method="post" enctype="multipart/form-data">
         @csrf
         <table id="dataTableExample" class="table">
-            @if(!empty($video))
+            @if(!empty($qnbank))
                 <tr>
                     <td>ID</td><td>:</td>
                     <td>
                     <input type="hidden" class="form-control" name="id"
-                    value="{{$video->id}}">
-                         {{$video->id}}
+                    value="{{$qnbank->id}}">
+                         {{$qnbank->id}}
                     </td>
                 </tr>
                 <tr>

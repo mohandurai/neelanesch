@@ -64,6 +64,7 @@
                     <td>
                         @php($showimg2 = "storage/project_activity/class_".$projLabEval->class_id."/".$projLabEval->student_submit_attach)
                         @php($infoPath = pathinfo($showimg2))
+                        @php(print_r($infoPath))
                         @php($ftype = $infoPath['extension'])
                         @if($ftype == "pdf")
                             <iframe src="{{ url($showimg2) }}" class="embed-responsive-item" width="500" height="200"  allowfullscreen></iframe>

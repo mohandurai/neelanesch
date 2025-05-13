@@ -24,7 +24,7 @@ class QuestionbankController extends Controller
     public function getqnmasters($id2)
         {
 
-            $options2 = '<option value="999">All Chapters</option>';
+            $options2 = '<option value="0">All Chapters</option>';
             $res3 = DB::select("SELECT id, title FROM `question_master_template` WHERE class_id=$id2 ORDER BY title");
 
             foreach($res3 as $data3) {

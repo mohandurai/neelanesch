@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Config;
 use DB;
+use File;
 use DataTables;
 use Carbon\Carbon;
 
@@ -85,7 +86,7 @@ class QnbankController extends Controller
 
         if($request->file()) {
 
-            $fileName = "Class" . $request->class_id . "_Term" . $request->term . "_" . $request->file->getClientOriginalName();
+            $fileName = "Class" . $request->class_id . "_" . $request->file->getClientOriginalName();
 
             $filePath = $request->file('file')->storeAs('quebank', $fileName, 'public');
 

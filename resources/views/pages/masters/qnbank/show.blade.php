@@ -4,6 +4,13 @@
   <link href="{{ asset('assets/plugins/datatables-net/dataTables.bootstrap4.css') }}" rel="stylesheet" />
 @endpush
 
+@php
+    //echo "<pre>";
+    //print_r($qnbank);
+    //echo "</pre>";
+    //exit;
+@endphp
+
 @section('content')
 <nav class="page-breadcrumb">
   <ol class="breadcrumb">
@@ -44,7 +51,11 @@
             @endif
           </table>
 
-          <iframe width="100%" height="300%"  src="{{ url('/view-pdf', ['filename' => $qnbank->file_path]) }}">Your browser isn't compatible</iframe>
+            @php($activimg = "storage/quebank/" . $qnbank->file_path . ".pdf")
+
+                <iframe src="{{ url($activimg) }}" class="embed-responsive-item" width="500" height="200"  allowfullscreen></iframe>
+
+          <!-- <iframe width="100%" height="300%"  src="{{ url('/view-pdf', ['filename' => $qnbank->file_path]) }}">Your browser isn't compatible</iframe> -->
 
         </div>
 
