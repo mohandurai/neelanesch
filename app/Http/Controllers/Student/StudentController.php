@@ -221,7 +221,6 @@ class StudentController extends Controller
                 'gender'  =>   $request->gender,
                 'dob'  =>   $request->dob,
                 'marks_history'  =>  $request->marks_history,
-                'fees_paid_history'  => $request->fees_paid_history,
                 'upload_pps_image_info' => $request->upload_pps_image_info,
                 'updated_date' => Carbon::now(),
                 'is_deleted'  => 0

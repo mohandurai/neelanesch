@@ -236,8 +236,8 @@ class StaffController extends Controller
      */
     public function destroy($id)
     {
-        DB::table('students')->delete($id);
-        return redirect()->route('student.index')->with('message', 'Student removed successfully');
+        DB::table('users')->delete($id);
+        return redirect()->route('staff.index')->with('message', 'Staff removed successfully');
     }
 
 

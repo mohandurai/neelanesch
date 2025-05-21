@@ -4,6 +4,13 @@
   <link href="{{ asset('assets/plugins/datatables-net/dataTables.bootstrap4.css') }}" rel="stylesheet" />
 @endpush
 
+@php
+	//echo "<pre>";
+	//print_r($studinfo);
+	//echo "</pre>";
+    //exit;
+@endphp
+
 @section('content')
 <nav class="page-breadcrumb">
   <ol class="breadcrumb">
@@ -102,13 +109,6 @@
                     <td>Marks History</td><td>:</td>
                     <td>
                         <input type="text" class="form-control" name="marks_history" value="{{$studinfo->marks_history}}">
-                    </td>
-                </tr>
-
-                <tr>
-                    <td>Fees Paid Info.</td><td>:</td>
-                    <td>
-                        <input type="text" class="form-control" name="fees_paid_history" value="{{$studinfo->fees_paid_history}}">
                     </td>
                 </tr>
 
