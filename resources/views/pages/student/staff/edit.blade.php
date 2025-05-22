@@ -4,6 +4,13 @@
   <link href="{{ asset('assets/plugins/datatables-net/dataTables.bootstrap4.css') }}" rel="stylesheet" />
 @endpush
 
+@php
+	//echo "<pre>";
+	//print_r($studinfo);
+	//echo "</pre>";
+    //exit;
+@endphp
+
 @section('content')
 <nav class="page-breadcrumb">
   <ol class="breadcrumb">
@@ -17,14 +24,14 @@
     <div class="card">
       <div class="card-body">
         <h4 style="margin-bottom:10px;">
-            Edit Students Record
+            Edit Staff Record
             @if(Session::has('message'))
                 <p class="alert {{ Session::get('alert-class', 'alert-success') }}">{{ Session::get('message') }}</p>
             @endif
         </h4>
 
         <div class="table-responsive">
-        <form action="{{ url('student/update') }}" method="post">
+        <form action="{{ url('staff/update') }}" method="post">
         @csrf
         <table id="dataTableExample" class="table">
             @if(!empty($studinfo))
@@ -35,47 +42,23 @@
                     </td>
                 </tr>
                 <tr>
-                    <td>User ID</td><td>:</td>
-                    <td>
-                        <input type="text" class="form-control" name="user_id" value="{{$studinfo->user_id}}" readonly>
-                    </td>
-                </tr>
-                <tr>
                     <td>First Name</td><td>:</td>
                     <td>
-                        <input type="text" class="form-control" name="first_name" value="{{$studinfo->first_name}}" required>
-                    </td>
-                </tr>
-                <tr>
-                    <td>Last Name</td><td>:</td>
-                    <td>
-                        <input type="text" class="form-control" name="last_name" value="{{$studinfo->last_name}}">
+                        <input type="text" class="form-control" name="name" value="{{$studinfo->name}}" required>
                     </td>
                 </tr>
 
                 <tr>
                     <td>Email ID</td><td>:</td>
                     <td>
-                        <input type="text" class="form-control" name="email" value="{{$studinfo->email}}" readonly>
+                        <input type="text" class="form-control" name="email" value="{{$studinfo->email}}">
                     </td>
                 </tr>
 
                 <tr>
                     <td>Contact Info</td><td>:</td>
                     <td>
-                        <input type="number" class="form-control" name="mobile" value="{{$studinfo->mobile}}">
-                    </td>
-                </tr>
-
-                <tr>
-                    <td>Class ID</td><td>:</td>
-                    <td>
-                        <select class="form-control" name="class_id">
-                            <option value="0">Select Class</option>
-                        @foreach($classlist as $kk => $clist)
-                            <option value="{{$kk}}" {{ $studinfo->class_id == $kk ? 'selected' : '' }}>{{$clist}}</option>
-                        @endforeach
-                        </select>
+                        <input type="number" class="form-control" name="mobile" value="{{$studinfo->contact_info}}">
                     </td>
                 </tr>
 
@@ -91,47 +74,48 @@
                     </td>
                 </tr>
 
+
                 <tr>
-                    <td>Date of Birth</td><td>:</td>
+                    <td>Department</td><td>:</td>
                     <td>
-                        <input type="date" class="form-control" name="dob" value="{{$studinfo->dob}}">
+                        <select class="form-control" name="department">
+                            <option value="0">Select Department</option>
+                            <option value="1" {{ $studinfo->department == 1 ? 'selected' : '' }}>Teaching</option>
+                            <option value="2" {{ $studinfo->department == 2 ? 'selected' : '' }}>Lab Support</option>
+                            <option value="3" {{ $studinfo->department == 3 ? 'selected' : '' }}>Accounts</option>
+                            <option value="4" {{ $studinfo->department == 4 ? 'selected' : '' }}>Support Activity</option>
+                            <option value="5" {{ $studinfo->department == 5 ? 'selected' : '' }}>Security</option>
+                            <option value="6" {{ $studinfo->department == 6 ? 'selected' : '' }}>Office Staff</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Role</td><td>:</td>
+                    <td>
+                        <select class="form-control" name="role">
+                            <option value="0">Select Role</option>
+                            <option value="1" {{ $studinfo->role == 1 ? 'selected' : '' }}>Teacher</option>
+                            <option value="2" {{ $studinfo->role == 2 ? 'selected' : '' }}>Head Master</option>
+                            <option value="3" {{ $studinfo->role == 3 ? 'selected' : '' }}>Accountant</option>
+                            <option value="4" {{ $studinfo->role == 4 ? 'selected' : '' }}>Clert</option>
+                            <option value="5" {{ $studinfo->role == 5 ? 'selected' : '' }}>Lab Assistant</option>
+                            <option value="6" {{ $studinfo->role == 6 ? 'selected' : '' }}>Cashier</option>
+                            <option value="7" {{ $studinfo->role == 7 ? 'selected' : '' }}>Office Assistant</option>
+                        </select>
                     </td>
                 </tr>
 
                 <tr>
-                    <td>Marks History</td><td>:</td>
+                    <td>Status</td><td>:</td>
                     <td>
-                        <input type="text" class="form-control" name="marks_history" value="{{$studinfo->marks_history}}">
+                        <select class="form-control" name="status">
+                            <option value="0">Select Status</option>
+                            <option value="1" {{ $studinfo->status == 1 ? 'selected' : '' }}>Active</option>
+                            <option value="2" {{ $studinfo->status == 2 ? 'selected' : '' }}>InActive</option>
+                        </select>
                     </td>
                 </tr>
 
-                <tr>
-                    <td>Fees Paid Info.</td><td>:</td>
-                    <td>
-                        <input type="text" class="form-control" name="fees_paid_history" value="{{$studinfo->fees_paid_history}}">
-                    </td>
-                </tr>
-
-                <tr>
-                    <td>Uploaded Image Info.</td><td>:</td>
-                    <td>
-                        <input type="text" class="form-control" name="upload_pps_image_info" value="{{$studinfo->upload_pps_image_info}}">
-                    </td>
-                </tr>
-
-                <tr>
-                    <td>Login Required</td><td>:</td>
-                    <td>
-                        <input type="text" class="form-control" name="require_login" value="{{$studinfo->require_login}}">
-                    </td>
-                </tr>
-
-                <tr>
-                    <td>Modified Date</td><td>:</td>
-                    <td>
-                        <input type="text" class="form-control" name="need_login" value="{{$studinfo->updated_date}}">
-                    </td>
-                </tr>
           </table>
         </div>
         </div>

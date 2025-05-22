@@ -165,20 +165,23 @@ class StaffController extends Controller
             // echo "<pre>";
             // print_r($row);
             // exit;
-            $chekEmail = sizeof(DB::table('users')->where('email', '=', $row[2])->get());
+            $chekEmail = sizeof(DB::table('users')->where('email', '=', $row[1])->get());
             if($chekEmail > 0 ) {
-                echo $row[2] . '<<<<==== This email id already exists students master record. Please try different emailid. Student Name ' . $row[0] . ' ' . $row[1] . '<br>';
+                echo $row[2] . '<<<<==== This email id already exists in staff master record. Please try different emailid. Staff Name ' . $row[0] . ' ' . $row[1] . '<br>';
             } else {
 
-                if ($row[9] == "1") {
                     $lastInsertedId = DB::table('users')->insertGetId([
-                        'name' => $row[0] . " " . $row[1],
-                        'email' => $row[2],
-                        'password' => Hash::make("Pass@123"),
+                            'name' => $row[0],
+                            'email' => $row[1],
+                            'password' => Hash::make("Pass@123"),
+                            'category'  => 2,
+                            'contact_info'  => $row[2],
+                            'gender'  => $row[3],
+                            'department'  =>  $row[4],
+                            'role'  => $row[5],
+                            'status'  =>   $row[6],
+                            'updated_at' => Carbon::now(),
                     ]);
-                } else {
-                    $lastInsertedId = null;
-                }
 
                 // echo $insUId . " Yesssssssssssssss";
                 // exit;
@@ -188,7 +191,7 @@ class StaffController extends Controller
 
         fclose($handle);
 
-        return redirect()->route('student.index')->with('message', "Bulk Import Completed Successfully !!!");
+        return redirect()->route('staff.index')->with('message', "Bulk Import Completed Successfully !!!");
     }
 
 
@@ -208,23 +211,20 @@ class StaffController extends Controller
         // echo "</pre>";
         // exit;
 
-        DB::table('students')->where('id', $request->id)->update(
+        DB::table('users')->where('id', $request->id)->update(
             [
-                'first_name'  =>   $request->first_name,
-                'last_name'  =>   $request->last_name,
-                'mobile'  =>   $request->mobile,
-                'class_id'  =>   $request->class_id,
-                'require_login' => $request->require_login,
+                'name'  =>   $request->name,
+                'contact_info'  =>   $request->mobile,
+                'email'  =>   $request->email,
                 'gender'  =>   $request->gender,
-                'dob'  =>   $request->dob,
-                'marks_history'  =>  $request->marks_history,
-                'fees_paid_history'  => $request->fees_paid_history,
-                'upload_pps_image_info' => $request->upload_pps_image_info,
-                'updated_date' => Carbon::now(),
-                'is_deleted'  => 0
+                'department'  =>  $request->department,
+                'role'  => $request->role,
+                'status'  =>   $request->status,
+                'category'  => 2,
+                'updated_at' => Carbon::now(),
             ]
         );
-        return redirect()->route('student.index')->with('message', 'Student Info updated successfully.');
+        return redirect()->route('staff.index')->with('message', 'Staff Info updated successfully.');
     }
 
 
@@ -254,7 +254,7 @@ class StaffController extends Controller
         $data['studinfo'] = DB::table('students')->where('id', $id)->first();
         // print_r($data);
         // exit;
-        return View::make('pages.student.student.show', $data);
+        return View::make('pages.student.staff.show', $data);
     }
 
 
@@ -272,7 +272,7 @@ class StaffController extends Controller
         }
         // print_r($classArr);
         // exit;
-        $data['studinfo'] = DB::table('students')->where('id', $id)->first();
-        return View::make('pages.student.student.edit', $data)->with('classlist', $classArr);
+        $data['studinfo'] = DB::table('users')->where('id', $id)->first();
+        return View::make('pages.student.staff.edit', $data)->with('classlist', $classArr);
     }
 }

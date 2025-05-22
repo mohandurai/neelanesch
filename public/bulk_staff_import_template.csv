@@ -1,5 +1,2 @@
-First Name,Last Name,Email,Mobile,Class,Section,Gender,DOB,Upload Image,Require Login
-Test 1 student,Student 1,student1@eschool.com,3333333334,"1, 2 ,3 …","A, B , C",1-Male. 2-Female,YYYY-MM-DD,yourppimage.png,Yes / No
-,,,,,,,,,
-,,,,,,,,,
-,,,,,,,,,
+Name,Email,Mobile,Gender,Department,Role,Status
+Test 1 student,student1@eschool.com,3333333334,"1 - Male, 2 - Female, 3- Transgender ",1-Teaching 2-Lab Support 3-Accounts 4-Support Activity 5-Security 6-Office Staff ,0 - Admin 1-Student 2-Teacher 3-HeadMaster 4-Accountant 5-Clerk 6-Cleaner 7-Cashier 8-Office Assistant,"1 - Active, 2 - InActive "
