@@ -27,6 +27,11 @@
             </div>
 
             <div class="form-group">
+            <label for="title">Remarks</label>
+            <input type="text" class="form-control" id="details" name="details">
+            </div>
+
+            <div class="form-group">
                 <label` for="exampleFormControlSelect1">Active</label>
                 <select class="form-control" id="is_deleted" name="is_deleted">
                 <option value="0" selected>Yes</option>

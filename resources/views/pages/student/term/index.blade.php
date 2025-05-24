@@ -30,7 +30,7 @@
                 <tr>
                     <th>ID</th>
                     <th>Title</th>
-                    <th>Schoold ID</th>
+                    <th>Remarks</th>
                     <th>Actions</th>
                 </tr>
             </thead>
@@ -86,7 +86,7 @@
            columns: [
                     { data: 'id', name: 'id' },
                     { data: 'title', name: 'title'},
-                    { data: 'school_id', name: 'school_id' },
+                    { data: 'details', name: 'details' },
                     { data: 'action', name : 'action', orderable : false, searchable: false}
                  ]
 

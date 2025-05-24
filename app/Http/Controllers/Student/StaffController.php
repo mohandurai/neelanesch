@@ -251,7 +251,7 @@ class StaffController extends Controller
      */
     public function show($id)
     {
-        $data['studinfo'] = DB::table('students')->where('id', $id)->first();
+        $data['staffinfo'] = DB::table('users')->where('id', $id)->first();
         // print_r($data);
         // exit;
         return View::make('pages.student.staff.show', $data);

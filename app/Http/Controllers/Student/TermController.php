@@ -22,7 +22,7 @@ class TermController extends Controller
     public function termlist()
     {
 
-        $chaps = DB::select("SELECT id, title, school_id FROM `terms` WHERE is_deleted=0 ORDER BY title");
+        $chaps = DB::select("SELECT id, title, details FROM `terms` WHERE is_deleted=0 ORDER BY title");
 
         return datatables()->of($chaps)
             ->addColumn('action', function ($selected) {
@@ -51,7 +51,7 @@ class TermController extends Controller
             DB::table('terms')->insert(
                 array(
                        'title'  =>   $request->title,
-                       'school_id'   =>   1,
+                       'details'   =>  $request->details,
                        'created_date'   => Carbon::now(),
                        'updated_date'   => Carbon::now(),
                        'is_deleted'   => 0
@@ -83,23 +83,14 @@ class TermController extends Controller
         // echo "</pre>";
         // exit;
 
-        DB::table('students')->where('id', $request->id)->update(
+        DB::table('terms')->where('id', $request->id)->update(
             [
-                'first_name'  =>   $request->first_name,
-                'last_name'  =>   $request->last_name,
-                'mobile'  =>   $request->mobile,
-                'class_id'  =>   $request->class_id,
-                'require_login' => $request->require_login,
-                'gender'  =>   $request->gender,
-                'dob'  =>   $request->dob,
-                'marks_history'  =>  $request->marks_history,
-                'fees_paid_history'  => $request->fees_paid_history,
-                'upload_pps_image_info' => $request->upload_pps_image_info,
-                'updated_date' => Carbon::now(),
-                'is_deleted'  => 0
+                'title'  =>   $request->title,
+                'details'  =>   $request->details,
+                'updated_date' => Carbon::now()
             ]
         );
-        return redirect()->route('student.index')->with('message', 'Student Info updated successfully.');
+        return redirect()->route('term.index')->with('message', 'Term Info updated successfully.');
     }
 
 
@@ -111,8 +102,8 @@ class TermController extends Controller
      */
     public function destroy($id)
     {
-        DB::table('students')->delete($id);
-        return redirect()->route('student.index')->with('message', 'Student removed successfully');
+        DB::table('terms')->delete($id);
+        return redirect()->route('term.index')->with('message', 'Term removed successfully');
     }
 
 
@@ -136,10 +127,10 @@ class TermController extends Controller
      */
     public function show($id)
     {
-        $data['studinfo'] = DB::table('students')->where('id', $id)->first();
+        $data['staffinfo'] = DB::table('terms')->where('id', $id)->first();
         // print_r($data);
         // exit;
-        return View::make('pages.student.student.show', $data);
+        return View::make('pages.student.term.show', $data);
     }
 
 
@@ -157,7 +148,7 @@ class TermController extends Controller
         }
         // print_r($classArr);
         // exit;
-        $data['studinfo'] = DB::table('students')->where('id', $id)->first();
-        return View::make('pages.student.student.edit', $data)->with('classlist', $classArr);
+        $data['terminfo'] = DB::table('terms')->where('id', $id)->first();
+        return View::make('pages.student.term.edit', $data)->with('classlist', $classArr);
     }
 }

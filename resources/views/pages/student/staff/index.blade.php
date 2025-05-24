@@ -137,20 +137,18 @@
                             if (row.role == 0)
                                 return "Admin"
                             else if (row.role == 1)
-                                return "Student"
-                            else if (row.role == 2)
                                 return "Teacher"
-                            else if (row.role == 3)
+                            else if (row.role == 2)
                                 return "HeadMaster"
-                            else if (row.role == 4)
+                            else if (row.role == 3)
                                 return "Accountant"
-                            else if (row.role == 5)
+                            else if (row.role == 4)
                                 return "Clerk"
-                            else if (row.role == 6)
+                            else if (row.role == 5)
                                 return "Cleaner"
-                            else if (row.role == 7)
+                            else if (row.role == 6)
                                 return "Cashier"
-                            else if (row.role == 8)
+                            else if (row.role == 7)
                                 return "Office Assistant"
                             else
                                 return "Others"
