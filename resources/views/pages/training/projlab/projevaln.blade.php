@@ -131,7 +131,14 @@
                 { data: 'id', name: 'id' },
                 { data: 'title', name: 'title'},
                 { data: 'class_id', name: 'class_id' },
-                { data: 'sec_id', name: 'sec_id' },
+                { data: 'sec_id', render: function(data, type, row, meta) {
+                        if(row.sec_id == '0') {
+                            return "ALL";
+                        } else {
+                            return row.sec_id;
+                        }
+                    }
+                },
                 { data: 'evaluator_status', name: 'evaluator_status' },
                 { data: 'mark_scored', name: 'mark_scored' },
                 { data: 'max_marks', name: 'max_marks' },

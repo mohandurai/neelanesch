@@ -42,7 +42,8 @@ class QuestionController extends Controller
     public function getcontentsubject($id)
     {
 
-        $subQry = "select AA.id as id, AA.title as title from subject_master as AA, content_master as BB WHERE BB.class_id=AA.class_id AND BB.subject_id=AA.id AND BB.video_type_id=1  AND BB.is_active = 1 AND BB.class_id=$id";
+        // $subQry = "select AA.id as id, AA.title as title from subject_master as AA, content_master as BB WHERE BB.class_id=AA.class_id AND BB.subject_id=AA.id AND BB.video_type_id=1  AND BB.is_active = 1 AND BB.class_id=$id";
+        $subQry = "select AA.id as id, AA.title as title from subject_master as AA WHERE AA.is_active = 1 AND AA.class_id=$id";
         // echo $subQry; exit;
         $subs = DB::select($subQry);
         $options = '<option value="0" selected disabled>Select Subject</option>';
@@ -133,7 +134,9 @@ class QuestionController extends Controller
         $id = explode("~~~", $ids);
         // echo $id[0] . "   " . $id[1];
         // exit;
-        $qry6 = "select CC.id as id, CC.title as title from subject_master as AA, content_master as BB, chapters as CC WHERE AA.id=$id[0] AND CC.class_id=$id[1] AND BB.subject_id=$id[0] AND  BB.chapter_id=CC.id AND BB.video_type_id=1 AND AA.is_active = 1 ORDER BY BB.title";
+        // $qry6 = "select CC.id as id, CC.title as title from subject_master as AA, content_master as BB, chapters as CC WHERE AA.id=$id[0] AND CC.class_id=$id[1] AND BB.subject_id=$id[0] AND  BB.chapter_id=CC.id AND BB.video_type_id=1 AND AA.is_active = 1 ORDER BY BB.title";
+        // $qry6 = "select CC.id as id, CC.title as title from subject_master as AA, chapters as CC WHERE AA.id=CC.subject_id AND CC.class_id=$id[1] AND CC.subject_id=$id[0] AND AA.is_active = 1 ORDER BY AA.title";
+        $qry6 = "SELECT * FROM `chapters` CC WHERE CC.class_id=$id[1] AND CC.subject_id=$id[0] ORDER BY CC.title";
         // echo $qry6; exit;
         $subs = DB::select($qry6);
         $options = "";

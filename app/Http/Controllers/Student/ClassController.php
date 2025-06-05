@@ -22,7 +22,7 @@ class ClassController extends Controller
     public function masterclasslist()
     {
 
-        $chaps = DB::select("SELECT id, class, school_id FROM `student_class` WHERE is_deleted=0 ORDER BY class");
+        $chaps = DB::select("SELECT id, class, remarks FROM `student_class` WHERE is_deleted=0 ORDER BY class");
 
         return datatables()->of($chaps)
             ->addColumn('action', function ($selected) {
@@ -48,9 +48,10 @@ class ClassController extends Controller
         ]);
 
         try {
-            DB::table('terms')->insert(
+            DB::table('student_class')->insert(
                 array(
-                       'title'  =>   $request->title,
+                       'class'  =>   $request->title,
+                       'remarks'   =>   $request->remarks,
                        'school_id'   =>   1,
                        'created_date'   => Carbon::now(),
                        'updated_date'   => Carbon::now(),
@@ -62,10 +63,10 @@ class ClassController extends Controller
         }
         catch (\Throwable $e) {
             print_r($e->getMessage());
-            return View::make('pages.student.term.index')->with('message', "Term Title already exists - Try different video name !!!");
+            return View::make('pages.student.class.index')->with('message', "Class Title already exists - Try different video name !!!");
         }
 
-        return redirect()->route('term.index')->with('message', "New Term Created Successfully !!!");
+        return redirect()->route('class.index')->with('message', "New Class Created Successfully !!!");
     }
 
 
@@ -83,23 +84,15 @@ class ClassController extends Controller
         // echo "</pre>";
         // exit;
 
-        DB::table('students')->where('id', $request->id)->update(
+        DB::table('student_class')->where('id', $request->id)->update(
             [
-                'first_name'  =>   $request->first_name,
-                'last_name'  =>   $request->last_name,
-                'mobile'  =>   $request->mobile,
-                'class_id'  =>   $request->class_id,
-                'require_login' => $request->require_login,
-                'gender'  =>   $request->gender,
-                'dob'  =>   $request->dob,
-                'marks_history'  =>  $request->marks_history,
-                'fees_paid_history'  => $request->fees_paid_history,
-                'upload_pps_image_info' => $request->upload_pps_image_info,
+                'class'  =>   $request->title,
+                'remarks'  =>   $request->remarks,
                 'updated_date' => Carbon::now(),
                 'is_deleted'  => 0
             ]
         );
-        return redirect()->route('student.index')->with('message', 'Student Info updated successfully.');
+        return redirect()->route('class.index')->with('message', 'Class Name updated successfully....');
     }
 
 
@@ -111,8 +104,8 @@ class ClassController extends Controller
      */
     public function destroy($id)
     {
-        DB::table('students')->delete($id);
-        return redirect()->route('student.index')->with('message', 'Student removed successfully');
+        DB::table('student_class')->delete($id);
+        return redirect()->route('class.index')->with('message', 'Class Name removed successfully');
     }
 
 
@@ -124,7 +117,7 @@ class ClassController extends Controller
      */
     public function create()
     {
-        return view('pages.student.term.create');
+        return view('pages.student.class.create');
     }
 
 
@@ -136,10 +129,10 @@ class ClassController extends Controller
      */
     public function show($id)
     {
-        $data['studinfo'] = DB::table('students')->where('id', $id)->first();
+        $data['clsinfo'] = DB::table('student_class')->where('id', $id)->first();
         // print_r($data);
         // exit;
-        return View::make('pages.student.student.show', $data);
+        return View::make('pages.student.class.show', $data);
     }
 
 
@@ -151,13 +144,7 @@ class ClassController extends Controller
      */
     public function edit($id)
     {
-        $classlist = DB::table('student_class')->select('id', 'class')->where('school_id', '=', 1)->where('is_deleted', '=', '0')->get();
-        foreach ($classlist as $arr) {
-            $classArr[$arr->id] = $arr->class;
-        }
-        // print_r($classArr);
-        // exit;
-        $data['studinfo'] = DB::table('students')->where('id', $id)->first();
-        return View::make('pages.student.student.edit', $data)->with('classlist', $classArr);
+        $data['clsinfo'] = DB::table('student_class')->where('id', $id)->first();
+        return View::make('pages.student.class.edit', $data);
     }
 }

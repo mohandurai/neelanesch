@@ -8,14 +8,14 @@
 
 @php
     //echo "<pre>";
-    //print_r($studinfo);
+    //print_r($clsinfo);
     //echo "</pre>";
     //exit;
 @endphp
 
 <nav class="page-breadcrumb">
   <ol class="breadcrumb">
-    <li class="breadcrumb-item"><a href="{{ url('student/index') }}">Students Master</a></li>
+    <li class="breadcrumb-item"><a href="{{ url('class/index') }}">Students Master</a></li>
     <li class="breadcrumb-item active" aria-current="page"><a href="#">Students Record</a></li>
   </ol>
 </nav>
@@ -25,7 +25,7 @@
     <div class="card">
       <div class="card-body">
         <h4 style="margin-bottom:10px;">
-        Students Master &nbsp;&nbsp;&nbsp;&nbsp;<a class="btn btn-primary" href="{{ url('/student')}}/{{$studinfo->id}}/edit" role="button">Edit Student {{$studinfo->id}} - {{$studinfo->first_name}}</a>
+        Students Master &nbsp;&nbsp;&nbsp;&nbsp;<a class="btn btn-primary" href="{{ url('/class')}}/{{$clsinfo->id}}/edit" role="button">Edit Student {{$clsinfo->id}} - {{$clsinfo->class}}</a>
             @if(Session::has('message'))
                 <p class="alert {{ Session::get('alert-class', 'alert-success') }}">{{ Session::get('message') }}</p>
             @endif
@@ -33,8 +33,8 @@
 
         <div class="table-responsive">
           <table id="dataTableExample" class="table">
-            @if(!empty($studinfo))
-            @foreach($studinfo as $kk => $vals)
+            @if(!empty($clsinfo))
+            @foreach($clsinfo as $kk => $vals)
                 <tr>
                     <td> {{ ucfirst(str_replace("_"," ",$kk)) }} </td><td>:</td><td>{{ $vals }}</td>
                 </tr>

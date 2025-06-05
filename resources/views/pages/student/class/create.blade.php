@@ -7,8 +7,8 @@
 @section('content')
 <nav class="page-breadcrumb">
   <ol class="breadcrumb">
-    <li class="breadcrumb-item"><a href="{{ url('student/index') }}">Term Record</a></li>
-    <li class="breadcrumb-item active" aria-current="page">Terms Master</li>
+    <li class="breadcrumb-item"><a href="{{ url('class/index') }}">Class Record</a></li>
+    <li class="breadcrumb-item active" aria-current="page">Class Master</li>
   </ol>
 </nav>
 
@@ -16,14 +16,19 @@
   <div class="col-md-12 grid-margin stretch-card">
     <div class="card">
       <div class="card-body">
-        <h4 style="margin-bottom:10px;">Create New Term</h4>
+        <h4 style="margin-bottom:10px;">Create New Class</h4>
 
         <div class="table-responsive">
-        <form id="submitForm3" action="{{ url('term/store') }}" method="post">
+        <form id="submitForm3" action="{{ url('class/store') }}" method="post">
             @csrf
             <div class="form-group">
-            <label for="title">Term Name</label>
+            <label for="title">Class Name</label>
             <input type="text" class="form-control" id="title" name="title" required>
+            </div>
+
+            <div class="form-group">
+            <label for="title">Remarks</label>
+            <input type="text" class="form-control" id="remarks" name="remarks">
             </div>
 
             <div class="form-group">
@@ -36,7 +41,7 @@
 
        </div>
       </div>
-      <button type="submit" class="btn btn-primary">Create Term</button>
+      <button type="submit" class="btn btn-primary">Create Class</button>
       </form>
       <input style="margin-top:20px;" type="button" value="Back" onClick="javascript:history.go(-1);">
     </div>
@@ -51,24 +56,7 @@
 
 @push('custom-scripts')
   <script src="{{ asset('assets/js/data-table.js') }}"></script>
-  <script>
 
-    $('#submitForm3').submit(function() {
-        if($('#gender').val() == 0) {
-            alert("Select Gender .....");
-            return false;
-        }
-        if($('#Section').val() == 0) {
-            alert("Select Section .....");
-            return false;
-        }
-        if($('#class_id').val() == 0) {
-            alert("Select Class .....");
-            return false;
-        }
-    });
-
-  </script>
 @endpush
 
 

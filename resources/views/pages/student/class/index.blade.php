@@ -10,7 +10,7 @@
     <div class="card">
       <div class="card-body">
         <h4>
-            Class Master &nbsp;&nbsp;&nbsp;&nbsp;<a class="btn btn-primary" href="{{ url('term/create') }}" role="button">Create New Class</a>
+            Class Master &nbsp;&nbsp;&nbsp;&nbsp;<a class="btn btn-primary" href="{{ url('class/create') }}" role="button">Create New Class</a>
         </h4>
 
         <br>
@@ -30,7 +30,7 @@
                 <tr>
                     <th>ID</th>
                     <th>Title</th>
-                    <th>Schoold ID</th>
+                    <th>Remarks</th>
                     <th>Actions</th>
                 </tr>
             </thead>
@@ -86,7 +86,7 @@
            columns: [
                     { data: 'id', name: 'id' },
                     { data: 'class', name: 'class'},
-                    { data: 'school_id', name: 'school_id' },
+                    { data: 'remarks', name: 'remarks' },
                     { data: 'action', name : 'action', orderable : false, searchable: false}
                  ]
 
