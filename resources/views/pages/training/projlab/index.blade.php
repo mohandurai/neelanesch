@@ -82,8 +82,16 @@
                     <div class="form-group">
                         <label for="exampleFormControlSelect1">Select Report Type</label>
                         <select class="form-control" id="report_type" name="report_type">
-                            <option value="2" selected>Consolidated</option>
+                            <option value="0" selected>Select Type</option>
+                            <option value="2">Consolidated</option>
                             <option value="1">Individual</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group" id="type1" style="display: none;">
+                        <label for="title">Select Student Roll ID</label>
+                        <select class="form-control" id="studroll_id" name="studroll_id">
+                            <option value="0" selected>Select Student</option>
                         </select>
                     </div>
 
@@ -118,6 +126,40 @@ $(document).ready(function() {
     $("#sec_id option[value=0]").prop('selected', true);
     $("#student_id option[value=0]").prop('selected', true);
     $("#report_type option[value=0]").prop('selected', true);
+});
+
+
+$('#report_type').change(function() {
+
+        var typid = $(this).val();
+        var projid = $('#projlab_id').val();
+        // alert("UUUUUUUUUUU "+typid+" XXXXXXXXXXX "+projid);
+        // return false;
+
+        if(typid == 1) {
+
+            $('div#type1').show();
+            $('#studroll_id').html("<option value='0' selected>Select Student</option>");
+
+            $.ajax({
+                type: 'GET',
+                url: "{{ url('getallstudents') }}/"+projid,
+                // complete: function() {
+                //     $('#psdatasourcSpinner').hide();
+                // },
+                success: function(data3) {
+                    console.log(data3);
+                    $('#studroll_id').append(data3);
+                    // $(".table-responsive").html(data);
+                }
+            });
+
+        } else {
+
+            $('#type1').hide();
+
+        }
+
 });
 
 

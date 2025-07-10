@@ -111,6 +111,12 @@
                             <a href="{{ url('/homework/homeworkindex') }}" class="nav-link">Home Work Submit</a>
                         </li>
                         <li class="nav-item">
+                            <a href="{{ url('/classlist') }}" class="nav-link">Teacher Training Kit (TTK)</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ url('/cltlist') }}" class="nav-link">Computer Lab Tutor (CLT)</a>
+                        </li>
+                        <li class="nav-item">
                             <a href="{{ url('/qnbankview') }}" class="nav-link">View Question Bank</a>
                         </li>
                     </ul>
@@ -163,7 +169,7 @@
             @endif
 
 
-            @if($role == 0)
+            @if($role == 0 || $role == 2)
 
             <!-- Starts Masters Menu Listing -->
             <li class="nav-item">

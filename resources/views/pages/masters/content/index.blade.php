@@ -55,9 +55,17 @@ table{
         <table id="tracker_datatable" class="table">
             <thead>
                 <tr>
+                    <td width="20px"></td>
+                    <td  width="320px"><input type="text" class="form-control filter-input" placeholder="Find ..." data-column="1" /></td>
+                    <td><input type="text" class="form-control filter-input" placeholder="Find ..." data-column="2" /></td>
+                    <td><input type="text" class="form-control filter-input" placeholder="Find ..." data-column="3" /></td>
+                    <td><input type="text" class="form-control filter-input" placeholder="Find ..." data-column="4" /></td>
+                    <td></td>
+                    <td><button type="button" id="clear-filter">Clear</td>
+                </tr>
+                <tr>
                     <th>ID</th>
                     <th>Title</th>
-                    <th>Video Name</th>
                     <th>Type</th>
                     <th>Class ID</th>
                     <th>Subject</th>
@@ -67,7 +75,6 @@ table{
             </thead>
             <tbody>
                 <tr>
-                    <td></td>
                     <td></td>
                     <td></td>
                     <td></td>
@@ -140,27 +147,46 @@ table{
                 });
             },
            columns: [
-                    { data: 'cm_id', name: 'cm_id', width: '15px' },
-                    { data: 'cm_title', render: function(data, type, row, meta) {
-                        if (type === 'display') {
-                            data = typeof data === 'string' && data.length > 20 ? data.substring(0, 20) + ' ...' : data;
-                        }
-                            return data;
-                        }, width: '220px' },
-                    { data: 'filename', render: function(data, type, row, meta) {
-                        if (type === 'display') {
-                            data = typeof data === 'string' && data.length > 20 ? data.substring(0, 20) + ' ...' : data;
-                        }
-                            return data;
-                        }, width: '280px' },
+                    { data: 'cm_id', name: 'cm_id' , width: '20px'},
+                    { data: 'cm_title', name: 'cm_title' , width: '280px'},
+                    // { data: 'cm_title', render: function(data, type, row, meta) {
+                    //     if (type === 'display') {
+                    //         data = typeof data === 'string' && data.length > 20 ? data.substring(0, 20) + ' ...' : data;
+                    //     }
+                    //         return data;
+                    //     }, width: '220px' },
+                    // { data: 'filename', render: function(data, type, row, meta) {
+                    //     if (type === 'display') {
+                    //         data = typeof data === 'string' && data.length > 20 ? data.substring(0, 20) + ' ...' : data;
+                    //     }
+                    //         return data;
+                    //     }, width: '280px' },
                     { data: 'vm_type', name: 'vm_type' },
-                    { data: 'cm_clid', name: 'cm_clid' },
+                    { data: 'cm_clid', name: 'cm_clid'},
                     { data: 'subject', name: 'subject' },
                     { data: 'status', name: 'status' },
-                    { data: 'action', name : 'action', orderable : false, searchable: true, width: '190px'}
-                 ],
-            fixedColumns: true,
+                    { data: 'action', name : 'action', orderable : false, searchable: true }
+                 ]
         });
+
+        $('#clear-filter').click(function() {
+            table6.search('').columns().search('').draw();
+            $('.filter-input-integer').val('');
+            $('.filter-input').val('');
+        });
+
+
+        $('.filter-input').keypress(function (e) {
+            var key = e.which;
+            if(key == 13)  // the enter key code
+            {
+                // alert($(this).val());
+                //var svalue = $(this).val();
+                table6.column( $(this).data('column') ).search( $(this).val() ).draw();
+            }
+
+        });
+
     });
 
 </script>

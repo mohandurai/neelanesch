@@ -44,17 +44,16 @@
                     <div class="form-group">
                         <label for="title">Select Section</label>
                         <select class="form-control" id="sec_id" name="sec_id">
-                            <option value="0" selected>Select Section</option>
-                            <option value="A">A</option>
-                            <option value="B">B</option>
-                            <option value="c">C</option>
-                            <option value="D">D</option>
-                            <option value="E">E</option>
-                            <option value="F">F</option>
-                            <option value="G">G</option>
-                            <option value="H">H</option>
-                            <option value="I">I</option>
-                            <option value="J">J</option>
+                            <option value="0" selected>ALL</option>
+                            <option value="A1">A1</option>
+                            <option value="A2">A2</option>
+                            <option value="A3">A3</option>
+                            <option value="A4">A4</option>
+                            <option value="A5">A5</option>
+                            <option value="A6">A6</option>
+                            <option value="A7">A7</option>
+                            <option value="A8">A8</option>
+                            <option value="A9">A9</option>
                         </select>
                     </div>
 
@@ -65,11 +64,19 @@
                         </select>
                     </div>
 
-                    <div class="form-group">
+                     <div class="form-group">
                         <label for="exampleFormControlSelect1">Select Report Type</label>
                         <select class="form-control" id="report_type" name="report_type">
-                            <option value="2" selected>Consolidated</option>
+                            <option value="0">Select Type</option>
+                            <option value="2">Consolidated</option>
                             <option value="1">Individual</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group" id="type1" style="display: none;">
+                        <label for="title">Select Student Roll ID</label>
+                        <select class="form-control" id="studroll_id" name="studroll_id">
+                            <option value="0" selected>Select Student</option>
                         </select>
                     </div>
 
@@ -102,9 +109,43 @@
 $(document).ready(function() {
     $("#class_id option[value=0]").prop('selected', true);
     $("#sec_id option[value=0]").prop('selected', true);
-    $("#student_id option[value=0]").prop('selected', true);
+    $("#studroll_id option[value=0]").prop('selected', true);
     $("#report_type option[value=0]").prop('selected', true);
 });
+
+$('#report_type').change(function() {
+
+        var typid = $(this).val();
+        var projid = $('#que_templ_id').val();
+        // alert("UUUUUUUUUUU "+typid+" XXXXXXXXXXX "+projid);
+        // return false;
+
+        if(typid == 1) {
+
+            $('div#type1').show();
+            $('#studroll_id').html("<option value='0' selected>Select Student</option>");
+
+            $.ajax({
+                type: 'GET',
+                url: "{{ url('getallstudents2') }}/"+projid,
+                // complete: function() {
+                //     $('#psdatasourcSpinner').hide();
+                // },
+                success: function(data3) {
+                    console.log(data3);
+                    $('#studroll_id').append(data3);
+                    // $(".table-responsive").html(data);
+                }
+            });
+
+        } else {
+
+            $('#type1').hide();
+
+        }
+
+});
+
 
 // $('#report_type').change(function() {
 

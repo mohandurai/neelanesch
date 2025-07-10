@@ -47,11 +47,15 @@
         <div class="table-responsive">
         <table id="tracker_datatable" class="table">
             <thead>
-                <!-- <tr>
+                <tr>
                     <td></td>
+                    <td><input type="text" class="form-control filter-input" placeholder="Find ..." data-column="1" /></td>
                     <td><input type="text" class="form-control filter-input" placeholder="Find ..." data-column="2" /></td>
-                    <td><input type="text" class="form-control filter-input" placeholder="Find  ..." data-column="3" /></td>
-                </tr> -->
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td><button type="button" id="clear-filter">Clear</td>
+                </tr>
                 <tr>
                     <th>ID</th>
                     <th>Title</th>
@@ -160,6 +164,27 @@
                 },
 
         });
+
+
+        $('#clear-filter').click(function() {
+            table6.search('').columns().search('').draw();
+            $('.filter-input-integer').val('');
+            $('.filter-input').val('');
+        });
+
+
+        $('.filter-input').keypress(function (e) {
+            var key = e.which;
+            if(key == 13)  // the enter key code
+            {
+                // alert($(this).val());
+                //var svalue = $(this).val();
+                table6.column( $(this).data('column') ).search( $(this).val() ).draw();
+            }
+
+        });
+
+
     });
 
 </script>

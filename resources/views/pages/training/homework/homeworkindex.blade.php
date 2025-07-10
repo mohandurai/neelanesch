@@ -127,16 +127,14 @@
                     <th>Title</th>
                     <th>Class</th>
                     <th>Section</th>
-                    <th>Evaluator Comments</th>
-                    <th>Marks Scored</th>
+                    <th>Subject</th>
+                    <th>Chapter</th>
                     <th>Max. Marks</th>
-                    <th>Status</th>
                     <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
-                    <td></td>
                     <td></td>
                     <td></td>
                     <td></td>
@@ -232,10 +230,9 @@ $(document).on('click', '#mediumButton4', function(e) {
                         }
                     }
                 },
-                { data: 'evaluator_status', name: 'evaluator_status' },
-                { data: 'mark_scored', name: 'mark_scored' },
+                { data: 'subject_id', name: 'subject_id' },
+                { data: 'chapter_id', name: 'chapter_id' },
                 { data: 'max_marks', name: 'max_marks' },
-                { data: 'status', name: 'status'},
                 { data: 'action', name : 'action', orderable : true, searchable: true}
             ]
 

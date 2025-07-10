@@ -82,6 +82,7 @@
                     <div class="form-group">
                         <label for="exampleFormControlSelect1">Select Report Type</label>
                         <select class="form-control" id="report_type" name="report_type">
+                            <option value="0" selected>Select Type</option>
                             <option value="2" selected>Consolidated</option>
                             <option value="1">Individual</option>
                         </select>

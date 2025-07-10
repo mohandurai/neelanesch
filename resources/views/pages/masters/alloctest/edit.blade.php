@@ -113,6 +113,26 @@
                     </td>
                 </tr>
 
+                <tr>
+                    <td>Paper Correction Type</td><td>:</td>
+                    <td>
+                        <select class="form-control" id="correction_type" name="correction_type">
+                            <option value="0" {{ $allocte->correction_type == 0 ? 'selected' : '' }}>Manual</option>
+                            <option value="1" {{ $allocte->correction_type == 1 ? 'selected' : '' }}>Automatic</option>
+                        </select>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>Exam Mode</td><td>:</td>
+                    <td>
+                        <select class="form-control" id="mode_of_test" name="mode_of_test">
+                            <option value="0" {{ $allocte->mode_of_test == 0 ? 'selected' : '' }}>Select Exam Mode</option>
+                            <option value="1" {{ $allocte->mode_of_test == 1 ? 'selected' : '' }}>Online</option>
+                            <option value="2" {{ $allocte->mode_of_test == 2 ? 'selected' : '' }}>Offline</option>
+                        </select>
+                    </td>
+                </tr>
 
                 <tr>
                     <td>Exam Status</td><td>:</td>

@@ -26,7 +26,10 @@ class ContentController extends Controller
 
     public function contentlist()
     {
-        $chaps = DB::table('content_master')->join('video_master', 'video_master.id', '=', 'content_master.video_id')->join('video_type_master', 'video_type_master.id', '=', 'content_master.video_type_id')->join('student_class', 'content_master.class_id', '=', 'student_class.id')->join('subject_master', 'content_master.subject_id', '=', 'subject_master.id')->select('content_master.id as cm_id', 'content_master.title as cm_title', 'video_master.file_path as filename', 'video_type_master.title as vm_type', 'student_class.class as cm_clid', 'subject_master.title as subject', 'content_master.is_active as status')->orderBy('content_master.created_date', 'desc');
+        // $chaps = DB::table('content_master')->join('video_master', 'video_master.id', '=', 'content_master.video_id')->join('video_type_master', 'video_type_master.id', '=', 'content_master.video_type_id')->join('student_class', 'content_master.class_id', '=', 'student_class.id')->join('subject_master', 'content_master.subject_id', '=', 'subject_master.id')->select('content_master.id as cm_id', 'content_master.title as cm_title', 'video_master.file_path as filename', 'video_type_master.title as vm_type', 'student_class.class as cm_clid', 'subject_master.title as subject', 'content_master.is_active as status')->orderBy('content_master.created_date', 'desc');
+
+        $chaps = DB::select("SELECT CM.id as cm_id, CM.title as cm_title, VTM.title as vm_type, SM.class_id as cm_clid, SM.title as subject, CM.is_active as status FROM content_master as CM, video_master as VM, video_type_master as VTM, subject_master as SM WHERE VM.id = CM.video_id AND VTM.id = CM.video_type_id AND SM.id = CM.subject_id ORDER by CM.created_date DESC");
+
         return datatables()->of($chaps)
             ->addColumn('action',function($selected){
                 return

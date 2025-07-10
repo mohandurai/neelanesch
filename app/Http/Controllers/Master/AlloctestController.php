@@ -20,7 +20,7 @@ class AlloctestController extends Controller
 
     public function alloctestlist()
     {
-        $allocListQry = "SELECT AA.id, AA.test_title, AA.start_date, AA.end_date, BB.title as subject, AA.class_id, AA.sec_id FROM `allocate_test` AA, `subject_master` BB WHERE BB.id = AA.subject ORDER BY id DESC;";
+        $allocListQry = "SELECT AA.id, AA.test_title, AA.start_date, AA.end_date, BB.title as subject, AA.class_id, AA.sec_id FROM `allocate_test` AA, `subject_master` BB WHERE BB.id = AA.subject ORDER BY id DESC";
         $res3 = DB::select($allocListQry);
         return datatables()->of($res3)
             ->addColumn('action', function ($selected) {
@@ -89,6 +89,7 @@ class AlloctestController extends Controller
                     'chapter' => $chapid,
                     'assign_to' => $request->assign_to,
                     'mode_of_test' => $request->mode_test,
+                    'correction_type' => $request->correction_type,
                     'created_date' => Carbon::now(),
                     'updated_date' => Carbon::now(),
                     'is_active' => 1
@@ -167,6 +168,8 @@ class AlloctestController extends Controller
                     'terms' => $request->term,
                     'start_date' => $request->start_date,
                     'end_date' => $request->end_date,
+                    'mode_of_test' => $request->mode_of_test,
+                    'correction_type' => $request->correction_type,
                     'is_active' => $request->is_active,
                     'updated_date' => Carbon::now()
                 ]

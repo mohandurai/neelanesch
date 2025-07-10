@@ -64,9 +64,11 @@
                     @csrf
 
                     <input type="hidden" name="test_id" value="{{ $test_id }}">
-                    <input type="hidden" name="student_id" value="{{ $stud_id }}">
+                    <input type="hidden" name="studname" value="{{ $studname }}">
                     <input type="hidden" name="qnstempid" value="{{ $qnstempid }}">
                     <input type="hidden" name="rollid" value="{{ $rollid }}">
+                    <input type="hidden" name="cortype" value="{{ $cortype }}">
+                    <input type="hidden" name="section6" value="{{ $sectn }}">
 
 
                        @php($count++)
@@ -182,65 +184,50 @@
                             <img src="{{ url('storage/images/'.$tt .'/'. $imgQuens[$tt][0]) }}" height="150em" width="200em" alt="" title="" />
                             @endif
 
-                            <div class="form-check form-check-inline">
+                            <div class="btn-group" role="group">
                                 @if($question[1] != null)
-                                <label class="form-check-label"> (1) &nbsp;&nbsp;&nbsp; {{$question[1]}} </label>
+                                <input type="radio" style="height:20px; width:20px; vertical-align: middle;" name="{{$kk}}_{{$qq}}" id="{{$kk}}_{{$qq}}" autocomplete="off" value="1">
+                                <label for="btnradio1">&nbsp;&nbsp;&nbsp; {{$question[1]}} </label>
                                 @endif
-                                @if(isset($imgQuens[$tt][1]))
-                                (1) &nbsp;&nbsp;&nbsp; <img src="{{ url('storage/images/'.$tt .'/'. $imgQuens[$tt][1]) }}" height="100em" width="150em" alt="" title="" />
-                                @endif
-                            </div>
 
-                            <div class="form-check form-check-inline">
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
                                 @if($question[2] != null)
-                                <label class="form-check-label"> (2) &nbsp;&nbsp;&nbsp; {{$question[2]}} </label>
+                                <input type="radio" style="height:20px; width:20px; vertical-align: middle;" name="{{$kk}}_{{$qq}}" id="{{$kk}}_{{$qq}}" autocomplete="off" value="2">
+                                <label for="btnradio2">&nbsp;&nbsp;&nbsp; {{$question[2]}} </label>
                                 @endif
-                                @if(isset($imgQuens[$tt][2]))
-                                (2) &nbsp;&nbsp;&nbsp; <img src="{{ url('storage/images/'.$tt .'/'. $imgQuens[$tt][2]) }}" height="100em" width="150em" alt="" title="" />
-                                @endif
-                            </div>
 
-                            <div class="form-check form-check-inline">
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
                                 @if($question[3] != null)
-                                <label class="form-check-label"> (3) &nbsp;&nbsp;&nbsp; {{$question[3]}} </label>
+                                <input type="radio" style="height:20px; width:20px; vertical-align: middle;" name="{{$kk}}_{{$qq}}" id="{{$kk}}_{{$qq}}" value="3">
+                                <label for="btnradio3">&nbsp;&nbsp;&nbsp; {{$question[3]}} </label>
                                 @endif
-                                @if(isset($imgQuens[$tt][3]))
-                                (3) &nbsp;&nbsp;&nbsp; <img src="{{ url('storage/images/'.$tt .'/'. $imgQuens[$tt][3]) }}" height="100em" width="150em" alt="" title="" />
-                                @endif
-                            </div>
 
-                            <div class="form-check form-check-inline">
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
                                 @if($question[4] != null)
-                                <label class="form-check-label"> (4) &nbsp;&nbsp;&nbsp; {{$question[4]}} </label>
+                                <input type="radio" style="height:20px; width:20px; vertical-align: middle;" name="{{$kk}}_{{$qq}}" id="{{$kk}}_{{$qq}}" value="4">
+                                <label for="btnradio3">&nbsp;&nbsp;&nbsp; {{$question[4]}} </label>
                                 @endif
-                                @if(isset($imgQuens[$tt][4]))
-                                (4) &nbsp;&nbsp;&nbsp; <img src="{{ url('storage/images/'.$tt .'/'. $imgQuens[$tt][4]) }}" height="100em" width="150em" alt="" title="" />
-                                @endif
-                            </div>
 
-                            <div class="form-check form-check-inline">
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
                                 @if($question[5] != null)
-                                <label class="form-check-label"> (5) &nbsp;&nbsp;&nbsp; {{$question[5]}} </label>
+                                <input type="radio" style="height:20px; width:20px; vertical-align: middle;" name="{{$kk}}_{{$qq}}" id="{{$kk}}_{{$qq}}" value="5">
+                                <label for="btnradio3">&nbsp;&nbsp;&nbsp; {{$question[5]}} </label>
                                 @endif
-                                @if(isset($imgQuens[$tt][5]))
-                                (5) &nbsp;&nbsp;&nbsp; <img src="{{ url('storage/images/'.$tt .'/'. $imgQuens[$tt][5]) }}" height="100em" width="150em" alt="" title="" />
-                                @endif
-                            </div>
 
-                            <div class="form-check form-check-inline">
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
                                 @if($question[6] != null)
-                                <label class="form-check-label"> (6) &nbsp;&nbsp;&nbsp; {{$question[6]}} </label>
+                                <input type="radio" style="height:20px; width:20px; vertical-align: middle;" name="{{$kk}}_{{$qq}}" id="{{$kk}}_{{$qq}}" value="6">
+                                <label for="btnradio3">&nbsp;&nbsp;&nbsp; {{$question[6]}} </label>
                                 @endif
-                                @if(isset($imgQuens[$tt][6]))
-                                (6) &nbsp;&nbsp;&nbsp; <img src="{{ url('storage/images/'.$tt .'/'. $imgQuens[$tt][6]) }}" height="100em" width="150em" alt="" title="" />
-                                @endif
+
                             </div>
 
-                            <br>
-
-                            <div class="form-text form-check-inline">
-                                <input type="text" placeholder="Type correct choice by 1,2,3..." class="form-control" name="{{$kk}}_{{$qq}}" id="{{$kk}}_{{$qq}}" value="">
-                            </div>
+                           <br>
 
                         </div>
 

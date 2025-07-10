@@ -4,14 +4,14 @@
   <link href="{{ asset('assets/plugins/datatables-net/dataTables.bootstrap4.css') }}" rel="stylesheet" />
 @endpush
 
-@section('content')
-
 @php
     //echo "<pre>";
-    //print_r($projLabEval);
+    //print_r($studSubProjval);
     //echo "</pre>";
     //exit;
 @endphp
+
+@section('content')
 
 <nav class="page-breadcrumb">
   <ol class="breadcrumb">
@@ -32,88 +32,93 @@
 
         <div class="form-group">
           <table id="dataTableExample" class="table">
-            @if(!empty($projLabEval))
+            @if(!empty($studSubProjval))
 
                 <tr>
-                    <td>ID</td><td>:</td><td>{{$projLabEval->id}}</td>
+                    <td>Project/Lab Title</td><td>:</td><td>{{$title}}</td>
                 </tr>
                 <tr>
-                    <td>Class</td><td>:</td><td>{{$projLabEval->class_id}}</td>
+                    <td>Proj/Act ID</td><td>:</td><td>{{$studSubProjval->proj_activity_id}}</td>
                 </tr>
                 <tr>
-                    <td>Project/Lab Title</td><td>:</td><td>{{$projLabEval->title}}</td>
+                    <td>Student Name</td><td>:</td><td>{{$studSubProjval->student_name}}</td>
                 </tr>
                 <tr>
-                    <td>Student ID</td><td>:</td><td>{{$projLabEval->student_id}}</td>
+                    <td>Roll ID</td><td>:</td><td>{{$studSubProjval->proj_roll_no}}</td>
                 </tr>
                 <tr>
                     <td>Activity Image</td><td>:</td>
                     <td>
-                        @php($activimg = "storage/project_activity/class_".$projLabEval->class_id."/".$projLabEval->attachment)
-                        @php($infoPath = pathinfo($activimg))
-                        @php($ftype = $infoPath['extension'])
+                        @if($attach_file != "")
+                            @php($activimg = "storage/project_activity/class_".$class_id."/".$attach_file)
+                            @php($infoPath = pathinfo($activimg))
+                            @php($ftype = $infoPath['extension'])
+                        @else
+                            @php($attach_file="")
+                            @php($ftype="")
+                            @php($activimg="")
+                        @endif
                         @if($ftype == "pdf")
                             <iframe src="{{ url($activimg) }}" class="embed-responsive-item" width="500" height="200"  allowfullscreen></iframe>
                         @else
                             <img src="{{ url($activimg) }}" style="border-radius:0%; width:300px;height:150px;"/>
                         @endif
+                        &nbsp;&nbsp;&nbsp;<a href="{{ url($activimg) }}" target="_blank">Open in New Tab</a>
                     </td>
                 </tr>
                 <tr>
                     <td>Upload Finished Activity Image</td><td>:</td>
                     <td>
-                        @php($showimg2 = "storage/project_activity/class_".$projLabEval->class_id."/".$projLabEval->student_submit_attach)
+                        @php($showimg2 = "storage/project_activity/class_".$class_id."/".$studSubProjval->student_submit_attach)
                         @php($infoPath = pathinfo($showimg2))
-                        @php(print_r($infoPath))
                         @php($ftype = $infoPath['extension'])
                         @if($ftype == "pdf")
                             <iframe src="{{ url($showimg2) }}" class="embed-responsive-item" width="500" height="200"  allowfullscreen></iframe>
                         @else
                             <img src="{{ url($showimg2) }}" style="border-radius:0%; width:300px;height:150px;"/>
                         @endif
-
+                        &nbsp;&nbsp;&nbsp;<a href="{{ url($showimg2) }}" target="_blank">Open in New Tab</a>
                     </td>
                 </tr>
                 <tr>
                     <td>Comments & Remarks</td><td>:</td>
                     <td>
-                        {{ $projLabEval->student_remarks }}
+                        {{ $studSubProjval->student_remarks }}
                     </td>
                 </tr>
                 <tr>
                     <td>Status</td><td>:</td>
                     <td>
-                        {{ $projLabEval->status }}
+                        {{ $studSubProjval->student_status }}
                     </td>
                 </tr>
-
-
           </table>
 
           <form action="{{ url('projlab/evaluatefinish') }}" method="post">
                 @csrf
 
-            <input type="hidden" name="id" value="{{$projLabEval->id}}">
+            <input type="hidden" name="id" value="{{$studSubProjval->id}}">
+            <input type="hidden" name="max_marks" value="{{$max_marks}}">
 
             <div class="form-group">
                 <label` for="exampleFormControlSelect1">Marks Scored</label>
-                <input type="number" class="form-control" name="mark_scored" value="{{ $projLabEval->mark_scored }}" required>
+                <input type="number" min="0" max="{{ $max_marks }}" class="form-control" name="mark_scored" value="{{ $studSubProjval->mark_scored }}" required>
             </div>
 
             <div class="form-group">
                 <label for="exampleFormControlTextarea1">Evaluator Comments & Remarks</label>
                 <textarea class="form-control" name="evaluator_comments" id="evaluator_comments" rows="5">
-                    {{$projLabEval->evaluator_comments}}
+                    {{ $studSubProjval->evaluator_comments }}
                 </textarea>
             </div>
 
             <div class="form-group">
                 <label` for="exampleFormControlSelect1">Evaluator Status</label>
                 <select class="form-control" id="evaluator_status" name="evaluator_status">
-                    <option value="Under-Progress" {{ ( $projLabEval->evaluator_status == "Under-Progress") ? 'selected' : '' }}>Under-Progress</option>
-                    <option value="Pending" {{ ( $projLabEval->evaluator_status == "Pending") ? 'selected' : '' }}>Pending</option>
-                    <option value="On-Hold" {{ ( $projLabEval->evaluator_status == "On-Hold") ? 'selected' : '' }}>On-Hold</option>
-                    <option value="Finished" {{ ( $projLabEval->evaluator_status == "Finished") ? 'selected' : '' }}>Finished</option>
+                    <option value="Under-Progress" {{ ( $studSubProjval->evaluator_status == "Under-Progress") ? 'selected' : '' }}>Under-Progress</option>
+                    <option value="Pending" {{ ( $studSubProjval->evaluator_status == "Pending") ? 'selected' : '' }}>Pending</option>
+                    <option value="On-Hold" {{ ( $studSubProjval->evaluator_status == "On-Hold") ? 'selected' : '' }}>On-Hold</option>
+                    <option value="Finished" {{ ( $studSubProjval->evaluator_status == "Finished") ? 'selected' : '' }}>Finished</option>
                 </select>
             </div>
 
@@ -140,4 +145,24 @@
 
 @push('custom-scripts')
   <script src="{{ asset('assets/js/data-table.js') }}"></script>
+@endpush
+
+@push('custom-scripts')
+<script>
+
+$(document).ready(function() {
+    $('textarea').html($('textarea').html().trim());
+});
+
+    function confirmation()
+    {
+        if(confirm('Are you sure to delete this record.....?'))
+        {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+</script>
 @endpush

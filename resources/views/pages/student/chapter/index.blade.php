@@ -55,19 +55,15 @@
         <div class="table-responsive">
         <table id="tracker_datatable" class="table">
             <thead>
-            <!-- <tr>
+                <tr>
                     <td></td>
-                    <td></td>
-                    <td>
-                        <input type="text" class="form-control filter-input" placeholder="Find..." data-column="2" />
-                    </td>
+                    <td><input type="text" class="form-control filter-input" placeholder="Find ..." data-column="1" /></td>
+                    <td><input type="text" class="form-control filter-input" placeholder="Find ..." data-column="2" /></td>
                     <td></td>
                     <td></td>
                     <td></td>
-                    <td>
-                        <a title="Clear filter selection" id="clear-filter" class="btn btn-info" href="#"><i class="fas fa-eraser"></i></a>
-                    </td>
-                </tr> -->
+                    <td><button type="button" id="clear-filter">Clear</td>
+                </tr>
                 <tr>
                     <th>ID</th>
                     <th>Title</th>
@@ -155,26 +151,6 @@
 
         });
 
-        // table6.columns().every(function() {
-        //     var column = this;
-
-        //     var select = $('<select><option value="2">Grade 1</option><option value="4">Grade 2</option><option value="5">Grade 3</option></select>')
-        //     .appendTo($("thead tr:eq(1) td").eq(this.index()))
-        //     .on('change', function() {
-        //         var val = $.fn.dataTable.util.escapeRegex(
-        //             $(this).val()
-        //         );
-
-        //         column
-        //         .search(val ? '^' + val + '$' : '', true, false)
-        //         .draw();
-        //     });
-
-        //     column.data().unique().sort().each(function(d, j) {
-        //         select.append('<option value="' + d + '">' + d + '</option>')
-        //     });
-
-        // });
 
         $('#clear-filter').click(function() {
             table6.search('').columns().search('').draw();
@@ -187,27 +163,12 @@
             var key = e.which;
             if(key == 13)  // the enter key code
             {
-                alert($(this).val());
+                // alert($(this).val());
                 //var svalue = $(this).val();
                 table6.column( $(this).data('column') ).search( $(this).val() ).draw();
             }
 
         });
-
-
-        // $('.filter-input-integer').keypress(function (e) {
-
-        //     var key = e.which;
-        //     if(key == 13)  // the enter key code
-        //     {
-        //         // alert("Yessssssssss");
-        //         var svalue = parseInt($(this).val());
-        //         // alert(svalue);
-        //         table6.column( $(this).data('column') ).search("^" + svalue + "$", true, false, true).draw();
-
-        //     }
-
-        // });
 
 
     });

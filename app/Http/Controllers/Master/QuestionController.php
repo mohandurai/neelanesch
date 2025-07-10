@@ -186,9 +186,9 @@ class QuestionController extends Controller
     public function storeqns(Request $request)
     {
         // return 0;
-        // echo "<pre>";
-        // print_r($request->all());
-        // echo "</pre>";
+        //echo "<pre>";
+        //print_r($request->all());
+        //echo "</pre>";
         // exit;
 
         $qn_master_temp_id = $request->qn_temp_id;
@@ -244,6 +244,8 @@ class QuestionController extends Controller
         // print_r($imgInfoArray);
         // echo "</pre>";
 
+        $qqq = 0;
+
         foreach ($request->all() as $key => $vals) {
             if ($key == "_token" || $key == "qn_temp_id") {
                 continue;
@@ -254,20 +256,9 @@ class QuestionController extends Controller
                 // exit;
                 if ($splitque[0] == "que") {
                     if ($splitque[1] == 7) {
-                        if ($splitque[2] == 1) {
-                            $joinOptions = $vals . "~~~~~" . $request->ops_7_1a . "~~~~~" . $request->ops_7_1b . "~~~~~" . $request->ops_7_1c . "~~~~~" . $request->ops_7_1d . "~~~~~" . $request->ops_7_1e . "~~~~~" . $request->ops_7_1f;
-                        } else if ($splitque[2] == 2) {
-                            $joinOptions = $vals . "~~~~~" . $request->ops_7_2a . "~~~~~" . $request->ops_7_2b . "~~~~~" . $request->ops_7_2c . "~~~~~" . $request->ops_7_2d . "~~~~~" . $request->ops_7_2e . "~~~~~" . $request->ops_7_2f;
-                        } else if ($splitque[2] == 3) {
-                            $joinOptions = $vals . "~~~~~" . $request->ops_7_3a . "~~~~~" . $request->ops_7_3b . "~~~~~" . $request->ops_7_3c . "~~~~~" . $request->ops_7_3d . "~~~~~" . $request->ops_7_3e . "~~~~~" . $request->ops_7_3f;
-                        } else if ($splitque[2] == 4) {
-                            $joinOptions = $vals . "~~~~~" . $request->ops_7_4a . "~~~~~" . $request->ops_7_4b . "~~~~~" . $request->ops_7_4c . "~~~~~" . $request->ops_7_4d . "~~~~~" . $request->ops_7_4e . "~~~~~" . $request->ops_7_4f;
-                        } else if ($splitque[2] == 5) {
-                            $joinOptions = $vals . "~~~~~" . $request->ops_7_5a . "~~~~~" . $request->ops_7_5b . "~~~~~" . $request->ops_7_5c . "~~~~~" . $request->ops_7_5d . "~~~~~" . $request->ops_7_5e . "~~~~~" . $request->ops_7_5f;
-                        } else if ($splitque[2] == 6) {
-                            $joinOptions = $vals . "~~~~~" . $request->ops_7_6a . "~~~~~" . $request->ops_7_6b . "~~~~~" . $request->ops_7_6c . "~~~~~" . $request->ops_7_6d . "~~~~~" . $request->ops_7_6e . "~~~~~" . $request->ops_7_6f;
-                        } else {
-                            $joinOptions = $vals . "~~~~~" . $request->ops_7_7a . "~~~~~" . $request->ops_7_7b . "~~~~~" . $request->ops_7_7c . "~~~~~" . $request->ops_7_7d . "~~~~~" . $request->ops_7_7e . "~~~~~" . $request->ops_7_7f;
+                        $qqq++;
+                        if ($splitque[2] == $qqq) {
+                            $joinOptions = $vals . "~~~~~" . $request->{"ops_7_" . $qqq . "a"} . "~~~~~" . $request->{"ops_7_" . $qqq . "b"} . "~~~~~" . $request->{"ops_7_" . $qqq . "c"} . "~~~~~" . $request->{"ops_7_" . $qqq . "d"} . "~~~~~" . $request->{"ops_7_" . $qqq . "e"} . "~~~~~" . $request->{"ops_7_" . $qqq . "f"};
                         }
 
                         $qnstemp[$splitque[1] . "_" . $splitque[2]] = $joinOptions;
@@ -320,7 +311,8 @@ class QuestionController extends Controller
 
 
                 } else {
-                    if( isset($splitque[1]) && $splitque[1] <> 6 ) {
+                    // if( isset($splitque[1]) && $splitque[1] <> 6 ) {
+                    if( isset($splitque[1]) ) {
                         $anstemp[$splitque[0] . "_" . $splitque[1]] = $vals;
                     }
 
@@ -328,36 +320,60 @@ class QuestionController extends Controller
               }
             }
 
-                // unset($anstemp['ops_7']);
-                //echo "<pre>";
-                //print_r($qnstemp);
-                //echo "<br><br>================================<br><br>";
-                //print_r($anstemp);
-                //exit;
+                unset($anstemp['ops_7']);
+                // echo "<pre>";
+                // print_r($qnstemp);
+                // echo "<br><br>================================<br><br>";
+                // print_r($anstemp);
+                // echo "</pre>";
+                // exit;
+
 
                 // $imginfo_json = json_encode($imgInfoArray, true);
                 $imginfo_json = "";
                 $que_json = json_encode($qnstemp, true);
                 $ans_json = json_encode($anstemp, true);
 
-                try {
-                    DB::table('question_master_qns_ans')->insert(
-                        array(
-                            'qn_master_temp_id'  =>   $qn_master_temp_id,
-                            'temp_questions'   =>   $que_json,
-                            'temp_answers'   => $ans_json,
-                            'image_qns_ans'   => $imginfo_json,
-                            'created_date'   => Carbon::now(),
-                            'updated_date'   => Carbon::now(),
-                            'is_active'   => 1
-                        )
-                    );
-                } catch (\Throwable $e) {
-                    print_r($e->getMessage());
-                    return "Error !!!";
-                }
 
-        return "Success";
+                if(isset($qn_master_temp_id)) {
+                    if($request->qn_temp_id == 0) {
+                        try {
+                            DB::table('question_master_qns_ans')->insert(
+                                array(
+                                    'qn_master_temp_id'  =>   $qn_master_temp_id,
+                                    'temp_questions'   =>   $que_json,
+                                    'temp_answers'   => $ans_json,
+                                    'image_qns_ans'   => $imginfo_json,
+                                    'created_date'   => Carbon::now(),
+                                    'updated_date'   => Carbon::now(),
+                                    'is_active'   => 1
+                                )
+                            );
+
+                            return "Success";
+
+                        } catch (\Throwable $e) {
+                            print_r($e->getMessage());
+                            return "Error !!!";
+                        }
+                    } else {
+                        try {
+                            DB::table('question_master_qns_ans')->where('qn_master_temp_id', $qn_master_temp_id)->update(
+                                array(
+                                    'temp_questions'   =>   $que_json,
+                                    'temp_answers'   => $ans_json,
+                                    'image_qns_ans'   => $imginfo_json,
+                                    'updated_date'   => Carbon::now()
+                                )
+                            );
+                        } catch (\Throwable $e) {
+                            print_r($e->getMessage());
+                            return "Error !!!";
+                        }
+
+                        return redirect()->route('question.index')->with('message', "Updated Template Successfully !!!");
+                    }
+                }
 
     }
 
@@ -528,12 +544,18 @@ class QuestionController extends Controller
 
                 }
 
+                if(isset($reord6)) {
+                    $reord6a = $reord6;
+                } else {
+                    $reord6a = array();
+                }
+
                 // echo "<pre>";
                 // print_r($Qns);
                 // print_r($reord6);
                 // exit;
 
-                return View::make('pages.masters.question.show', $data)->with('qnMasTitle', $qnTit)->with('romLet', $romanLetters)->with('qns2', $Qns)->with('reord6', $reord6);
+                return View::make('pages.masters.question.show', $data)->with('qnMasTitle', $qnTit)->with('romLet', $romanLetters)->with('qns2', $Qns)->with('reord6', $reord6a);
 
             }
 

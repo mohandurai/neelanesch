@@ -4,6 +4,14 @@
   <link href="{{ asset('assets/plugins/datatables-net/dataTables.bootstrap4.css') }}" rel="stylesheet" />
 @endpush
 
+@php
+    //echo "<pre>";
+    //print_r($projLabAct);
+    //echo "</pre>";
+    //exit;
+@endphp
+
+
 @section('content')
 <nav class="page-breadcrumb">
   <ol class="breadcrumb">
@@ -78,14 +86,14 @@
 
             <input type="hidden" name="proj_id" value="{{$projLabAct->id}}">
             <input type="hidden" name="class_id" value="{{$projLabAct->class_id}}">
-            <input type="hidden" name="assign_to" value="{{$projLabAct->assign_to}}">
+            <input type="hidden" name="stud_name" value="{{$stud_name}}">
             <input type="hidden" name="student_id" value="{{$studid}}">
 
-                <label for="title">Upload Finished Activity File : </label>
+            <label for="title">Upload Finished Activity File : </label>
             </td>
             <td>:</td>
             <td>
-                    @php($showimg2 = "storage/project_activity/class_".$projLabAct->class_id."/".$projLabAct->student_submit_attach)
+                    @php($showimg2 = "storage/project_activity/class_".$projLabAct->class_id."/".$studSubImg2)
                     <img src="{{ url($showimg2) }}" style="border-radius:0%; width:300px;height:150px;"/>
                     <input type="file" name="image_projlab_finish" class="form-control" accept=".mp4,.mp3,.jpeg,.ppt,.pptx,.jpg,.png,.bmp..mkv,.mov,.mpeg-2">
 
@@ -97,7 +105,7 @@
             </td>
             <td>:</td>
             <td>
-                <textarea class="form-control" name="student_remarks" id="exampleFormControlTextarea1" rows="5"> {{ $projLabAct->student_remarks }} </textarea>
+                <textarea class="form-control" name="student_remarks" id="exampleFormControlTextarea1" rows="5"> {{ $studRem }} </textarea>
             </td>
         </tr>
 
@@ -109,12 +117,12 @@
             <td>
                 <label` for="exampleFormControlSelect1"></label>
                 <select class="form-control" id="status" name="status">
-                    <option value="Not Started" {{ ( $projLabAct->status == "Not Started") ? 'selected' : '' }}> Not Started </option>
-                    <option value="In Progress" {{ ( $projLabAct->status == "In Progress") ? 'selected' : '' }}> In Progress</option>
-                    <option value="Pending" {{ ( $projLabAct->status == "Pending") ? 'selected' : '' }}> Pending</option>
-                    <option value="On Hold" {{ ( $projLabAct->status == "On Hold") ? 'selected' : '' }}> On Hold</option>
-                    <option value="Finished" {{ ( $projLabAct->status == "Finished") ? 'selected' : '' }}> Finished</option>
-                    <option value="Others" {{ ( $projLabAct->status == "Others") ? 'selected' : '' }}> Others</option>
+                    <option value="Not Started" {{ ( $studStat == "Not Started") ? 'selected' : '' }}> Not Started </option>
+                    <option value="In Progress" {{ ( $studStat == "In Progress") ? 'selected' : '' }}> In Progress</option>
+                    <option value="Pending" {{ ( $studStat == "Pending") ? 'selected' : '' }}> Pending</option>
+                    <option value="On Hold" {{ ( $studStat == "On Hold") ? 'selected' : '' }}> On Hold</option>
+                    <option value="Finished" {{ ( $studStat == "Finished") ? 'selected' : '' }}> Finished</option>
+                    <option value="Others" {{ ( $studStat == "Others") ? 'selected' : '' }}> Others</option>
                 </select>
             </td>
         </tr>

@@ -333,6 +333,16 @@
         $('#summernote58').summernote();
         $('#summernote59').summernote();
         $('#summernote510').summernote();
+        $('#summernote511').summernote();
+        $('#summernote512').summernote();
+        $('#summernote513').summernote();
+        $('#summernote514').summernote();
+        $('#summernote515').summernote();
+        $('#summernote516').summernote();
+        $('#summernote517').summernote();
+        $('#summernote518').summernote();
+        $('#summernote519').summernote();
+        $('#summernote520').summernote();
 
         $('#summernote71').summernote();
         $('#summernote72').summernote();
@@ -344,6 +354,16 @@
         $('#summernote78').summernote();
         $('#summernote79').summernote();
         $('#summernote710').summernote();
+        $('#summernote711').summernote();
+        $('#summernote712').summernote();
+        $('#summernote713').summernote();
+        $('#summernote714').summernote();
+        $('#summernote715').summernote();
+        $('#summernote716').summernote();
+        $('#summernote717').summernote();
+        $('#summernote718').summernote();
+        $('#summernote719').summernote();
+        $('#summernote720').summernote();
 
 
         $('#match-apply').click(function() {
@@ -404,6 +424,7 @@
         // Form submission
         $('#dynamicForm').submit(function(e) {
             e.preventDefault();
+            // alert("Testttttttt.......");
 
             var qnid = $("#qn_temp_id").attr('alt');
 
@@ -439,7 +460,7 @@
             });
             // alert(key65);
 
-            data6 = "&key6_1=" + key61 + "&key6_2=" + key62 + "&key6_3=" + key63 + "&key6_4=" + key64 + "&key6_5=" + key65;
+            data6 = "&key6_1=" + key61 + "&key6_2=" + key62 + "&key6_3=" + key63 + "&key6_4=" + key64 + "&key6_5=" + key65 + "&newold=0";
 
             var datastring = $("#dynamicForm").serialize()+data6;
             // console.log(datastring);

@@ -175,11 +175,15 @@ Route::middleware('auth')->group(function() {
     Route::get('/projlab/{id}/studsubmit', [ProjlabController::class, 'studsubmit'])->name('projlab.studsubmit');
     Route::get('/projlab/{id}/destroy', [ProjlabController::class, 'destroy'])->name('projlab.destroy');
     Route::get('/projlab/projevaln', [ProjlabController::class, 'projevaln'])->name('projlab.projevaln');
-    // Route::get('/projlab/eval', [ProjlabController::class, 'eval'])->name('projlab.eval');
-    Route::get('/projlab/{id}/evaluate', [ProjlabController::class, 'evaluate'])->name('projlab.evaluate');
+    Route::get('/projlab/{id}/evaluate2', [ProjlabController::class, 'evaluate2'])->name('projlab.evaluate2');
+    Route::get('/projlab/{id}/{pid}/evaluate', [ProjlabController::class, 'evaluate'])->name('projlab.evaluate');
     Route::post('/projlab/evaluatefinish', [ProjlabController::class, 'evaluatefinish'])->name('projlab.evaluatefinish');
     // Route::get('/projlab/{id}/projsubmituser', [ProjlabController::class, 'projsubmituser'])->name('projsubmituser');
     Route::post('/projlab/projsubmituser', [ProjlabController::class, 'projsubmituser'])->name('projsubmituser');
+
+    Route::get('/liststudsubmit/{id}', [ProjlabController::class, 'liststudsubmit'])->name('liststudsubmit');
+    Route::get('/getallstudents/{id}', [ProjlabController::class, 'getallstudents'])->name('getallstudents');
+    Route::get('/getallstudents2/{id}', [OlexamController::class, 'getallstudents2'])->name('getallstudents2');
 
     Route::post('/projlab/printreport', [ProjlabController::class, 'printreport'])->name('projlab.printreport');
     Route::post('/projlab/printpdf', [ProjlabController::class, 'printpdf'])->name('projlab.printpdf');
@@ -297,7 +301,7 @@ Route::middleware('auth')->group(function() {
 
 });
 
-// Route::get('payment', [RazorpayPaymentController::class, 'index']);
+Route::get('payment', [RazorpayPaymentController::class, 'index']);
 // Route::post('payment', [RazorpayPaymentController::class, 'store'])->name('razorpay.payment.store');
 
 

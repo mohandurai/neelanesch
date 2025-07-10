@@ -62,7 +62,7 @@
                 <form action="{{ url('olexam/savecorrected') }}" method="post">
                     @csrf
 
-                    <input type="hidden" name="allocTestId" value="{{ $allocTestId }}">
+                    
                     <input type="hidden" name="student_id" value="{{ $stud_id }}">
                     <input type="hidden" name="qn_template_id" value="{{ $qn_template_id }}">
 

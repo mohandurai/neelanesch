@@ -122,11 +122,17 @@
                 <input type="datetime-local" class="form-control" id="endstart" name="endstart" placeholder="End Date..." required>
             </div>
 
-
+            <div class="form-group">
+                <label` for="exampleFormControlSelect1">Paper Correction Type</label>
+                    <select class="form-control" id="correction_type" name="correction_type">
+                        <option value="0" selected>Manual</option>
+                        <option value="1">Automatic</option>
+                    </select>
+            </div>
 
             <div class="form-group">
                 <label` for="exampleFormControlSelect1">Exam Status</label>
-                    <select class="form-control" id="mode_test" name="mode_test">
+                    <select class="form-control" id="mode_of_test" name="mode_of_test">
                         <option value="0" selected>Select Exam Mode</option>
                         <option value="1">Active</option>
                         <option value="2">InActive</option>

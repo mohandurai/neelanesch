@@ -23,7 +23,7 @@
             @csrf
             <div class="form-group">
             <label for="title">Class Name</label>
-            <input type="text" class="form-control" id="title" name="title" required>
+            <input type="text" class="form-control" id="class_title" name="class_title" required>
             </div>
 
             <div class="form-group">
@@ -56,7 +56,6 @@
 
 @push('custom-scripts')
   <script src="{{ asset('assets/js/data-table.js') }}"></script>
-
 @endpush
 
 

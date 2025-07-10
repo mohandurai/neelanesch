@@ -38,10 +38,22 @@
         <table id="tracker_datatable" class="table">
             <thead>
                 <tr>
+                    <td></td>
+                    <td><input type="text" class="form-control filter-input" placeholder="Find ..." data-column="1" /></td>
+                    <td><input type="text" class="form-control filter-input" placeholder="Find ..." data-column="2" /></td>
+                    <td><input type="text" class="form-control filter-input" placeholder="Find ..." data-column="3" /></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td><button type="button" id="clear-filter">Clear</td>
+                </tr>
+                <tr>
                     <th>ID</th>
                     <th>Class</th>
                     <th>Exam Title</th>
-                    <th>Name</th>
+                    <th>Role No</th>
+                    <th>Student Name</th>
                     <th>Validated</th>
                     <th>Marks</th>
                     <th>Total Marks</th>
@@ -50,6 +62,7 @@
             </thead>
             <tbody>
                 <tr>
+                    <td></td>
                     <td></td>
                     <td></td>
                     <td></td>
@@ -103,8 +116,12 @@
            lengthMenu: [ [7, 10, 25, 50, -1], [7, 10, 25, 50, 'All'] ],
            columns: [
                     { data: 'id', name: 'id' },
-                    { data: 'class_id', name: 'class_id'},
+                    { data: 'class_id', render: function(data, type, row, meta) {
+                                return "Grade-" + row.class_id;
+                        }
+                    },
                     { data: 'title', name: 'title'},
+                    { data: 'examroll', name: 'examroll'},
                     { data: 'stname', name: 'stname'},
                     { data: 'is_validated', name: 'is_validated'},
                     { data: 'mark', name: 'mark' },
@@ -117,6 +134,24 @@
                            }
                         }
                  ]
+
+        });
+
+        $('#clear-filter').click(function() {
+            table6.search('').columns().search('').draw();
+            $('.filter-input-integer').val('');
+            $('.filter-input').val('');
+        });
+
+
+        $('.filter-input').keypress(function (e) {
+            var key = e.which;
+            if(key == 13)  // the enter key code
+            {
+                // alert($(this).val());
+                //var svalue = $(this).val();
+                table6.column( $(this).data('column') ).search( $(this).val() ).draw();
+            }
 
         });
 

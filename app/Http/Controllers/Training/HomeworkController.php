@@ -169,9 +169,9 @@ class HomeworkController extends Controller
         // $secid = $data3[0]->Section;
 
         if($stud_id == 1) {
-            $hwquery = DB::select("select id, title, class_id, sec_id, evaluator_status, mark_scored, max_marks, status FROM homework ORDER BY sec_id, id DESC");
+            $hwquery = DB::select("select id, title, class_id, sec_id, subject_id, chapter_id, max_marks FROM homework ORDER BY id DESC");
         } else {
-            $hwquery = DB::select("select id, title, class_id, sec_id, evaluator_status, mark_scored, max_marks, status FROM homework WHERE (class_id=$clssid) AND (sec_id = '$secid' OR sec_id = '0') ORDER BY sec_id, id DESC");
+            $hwquery = DB::select("select id, title, class_id, sec_id, subject_id, chapter_id, max_marks FROM homework WHERE (class_id=$clssid) AND (sec_id = '$secid' OR sec_id = '0') ORDER BY id DESC");
         }
         // echo $hwquery;
         // exit;
@@ -243,10 +243,10 @@ class HomeworkController extends Controller
         $secid = $data3[0]->Section;
 
         if($stud_id == 1) {
-            $hwqry = "select id, title, class_id, sec_id, evaluator_status, mark_scored, evaluator_comments FROM homework ORDER BY id DESC";
+            $hwqry = "select id, title, class_id, sec_id, subject_id, chapter_id, max_marks FROM homework ORDER BY id DESC";
         }
         else {
-            $hwqry = "select id, title, class_id, sec_id, evaluator_status, mark_scored, evaluator_comments FROM homework WHERE (class_id=$clsid) AND (sec_id = '$secid' OR sec_id = '0') ORDER BY sec_id, id DESC";
+            $hwqry = "select id, title, class_id, sec_id, subject_id, chapter_id, max_marks FROM homework WHERE (class_id=$clsid) AND (sec_id = '$secid' OR sec_id = '0') ORDER BY sec_id, id DESC";
         }
 
         // echo $hwqry;

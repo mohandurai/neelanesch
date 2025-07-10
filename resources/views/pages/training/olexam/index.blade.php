@@ -26,9 +26,9 @@
 @section('content')
 
 @php
-	//echo "<pre>";
-	//echo $fullname;
-	//echo "</pre>";
+    //echo "<pre>";
+    //echo $fullname;
+    //echo "</pre>";
     //exit;
 @endphp
 
@@ -52,28 +52,39 @@
                         <div class="form-group">
                             <label for="name" class="col-sm-2 control-label">Roll :</label>
                             <div class="col-sm-12">
-                                <input type="text" class="form-control" id="rollno" name="rollno" placeholder="Enter Roll No."  maxlength="20"  value="{{$roleid}}" readonly>
+                                <input type="text" class="form-control" id="rollno" name="rollno" placeholder="Enter Roll No."  maxlength="20" value="" required="">
                             </div>
                         </div>
 
                         <div class="form-group">
                             <label for="name" class="col-sm-2 control-label">Full&nbsp;Name&nbsp;:</label>
                             <div class="col-sm-12">
-                                <input type="text" class="form-control" id="stud_name" name="stud_name" value="{{$fullname}}" maxlength="50" readonly required="">
+                                <input type="text" class="form-control" id="stud_name" name="stud_name" value="" maxlength="100" required="">
                             </div>
                         </div>
 
                         <div class="form-group">
                             <label for="name" class="col-sm-2 control-label">Class :</label>
                             <div class="col-sm-12">
-                                <input type="text" class="form-control" id="class_id" name="class_id"  value="{{$class}}" maxlength="50" readonly required="">
+                                <input type="text" class="form-control" id="class_id" name="class_id" readonly required="">
                             </div>
                         </div>
 
                         <div class="form-group">
-                            <label for="name" class="col-sm-2 control-label">Section :</label>
+                            <label for="name" class="col-sm-2 control-label">Section : </label>
                             <div class="col-sm-12">
-                                <input type="text" class="form-control" readonly id="Section" name="Section" value="{{$sec}}" required="">
+                                <select class="form-control" id="Section" name="Section">
+                                    <option value="0" selected>ALL</option>
+                                    <option value="A1">A1</option>
+                                    <option value="A2">A2</option>
+                                    <option value="A3">A3</option>
+                                    <option value="A4">A4</option>
+                                    <option value="A5">A5</option>
+                                    <option value="A6">A6</option>
+                                    <option value="A7">A7</option>
+                                    <option value="A8">A8</option>
+                                    <option value="A9">A9</option>
+                                </select>
                             </div>
                         </div>
 
@@ -122,6 +133,17 @@
         <table id="tracker_datatable" class="table">
             <thead>
                 <tr>
+                    <td></td>
+                    <td><input type="text" class="form-control filter-input" placeholder="Find ..." data-column="1" /></td>
+                    <td><input type="text" class="form-control filter-input" placeholder="Find ..." data-column="2" /></td>
+                    <td><input type="text" class="form-control filter-input" placeholder="Find ..." data-column="3" /></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td><button type="button" id="clear-filter">Clear</td>
+                </tr>
+                <tr>
                     <th>ID</th>
                     <th>Exam Title</th>
                     <th>Qn.Master ID</th>
@@ -167,7 +189,14 @@
 
 $(document).on('click', '#mediumButton2', function(e) {
     var alloc_id = $(this).attr("alt");
-    $("#exam_id").val(alloc_id);
+    const myArray = alloc_id.split("~~~~~");
+    $("#exam_id").val(myArray[0]);
+    $("#class_id").val(myArray[2]);
+    if(myArray[1] == 0) {
+        $("#Section").val("");
+    } else {
+        $("#Section").val(myArray[1]);
+    }
 });
 
 // Submit button
@@ -213,8 +242,18 @@ $(document).ready(function() {
                 { data: 'id', name: 'id' },
                 { data: 'test_title', name: 'test_title'},
                 { data: 'qn_master_templ_id', name: 'qn_master_templ_id' },
-                { data: 'class_id', name: 'class_id' },
-                { data: 'sec_id', name: 'sec_id' },
+                { data: 'class_id', render: function(data, type, row, meta) {
+                            return "Grade-" + row.class_id;
+                    }
+                },
+                { data: 'sec_id', render: function(data, type, row, meta) {
+                        if(row.sec_id == '0') {
+                            return "ALL";
+                        } else {
+                            return row.sec_id;
+                        }
+                    }
+                },
                 { data: 'start_date', name: 'start_date' },
                 { data: 'end_date', name: 'end_date' },
                 { data: 'duration', name: 'duration' },
@@ -234,7 +273,7 @@ $(document).ready(function() {
         var key = e.which;
         if(key == 13)  // the enter key code
         {
-            alert($(this).val());
+            // alert($(this).val());
             //var svalue = $(this).val();
             table6.column( $(this).data('column') ).search( $(this).val() ).draw();
         }

@@ -18,7 +18,7 @@
 
 @php
     //echo "<pre>";
-    //print_r($configs);
+    //print_r($stud_data);
     //echo "</pre>";
     //exit;
 @endphp
@@ -49,19 +49,24 @@
                 </tr>
         </table>
 
-        <table width="90%" class="table2" cellspacing="10" cellpadding="10">
+        <table width="90%" class="table2" cellspacing="3" cellpadding="10">
             <tr>
             <td style="color:white; font-size:15; margin-left: 50;"> PROJECT/LAB ACTIVITY &nbsp;&nbsp;</td>
-            <td style="text-align: right;"> Class & Sec. : &nbsp;&nbsp;</td>
-                <td>
+            <td style="text-align: right;"> Class & Sec. :
+
                 @if(isset($stud_data[0][4]) || isset($stud_data[0][5]))
-                    {{$stud_data[0][4]}} - {{ $stud_data[0][5] }}
+                    @if($stud_data[0][5] == 0)
+                        {{$stud_data[0][4]}} - ALL
+                    @else
+                        {{$stud_data[0][4]}} - {{ $stud_data[0][5] }}
+                    @endif
                 @else
                     <p>Info. not available !!!</p>
                 @endif
-                </td>
-            <td style="text-align: right;">Project/Lab Activity Name : &nbsp;&nbsp;</td>
-                <td style="text-align: left;">{{$examtitle}}</td>
+            </td>
+            <td style="text-align: right;">Project/Lab Activity Name :
+                {{$examtitle}}
+            </td>
             </tr>
         </table>
 
@@ -99,7 +104,6 @@
                     </td>
                     <td width="30%" align="center">
                         <input type="hidden" name="qntemplateid" value="{{ $tmplid }}">
-                        <input type="hidden" name="class_id" value="{{ $stud_data[0][4] }}">
                         <!-- <button type="submit" class="btn btn-primary">Export PDF</button> -->
                         <button class="btn btn-primary" onclick="downloadAsPDF();" ><i class="fas fa-download" ></i> PDF</button>
                     </td>

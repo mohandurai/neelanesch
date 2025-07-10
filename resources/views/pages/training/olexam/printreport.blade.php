@@ -17,7 +17,7 @@
 @endpush
 
 @php
-    //echo "<pre>";
+    ////echo "<pre>";
     //print_r($stud_data);
     //echo "</pre>";
     //exit;
@@ -52,14 +52,18 @@
             <tr>
             <td style="color:white; font-size:15; margin-left: 50;">ONLINE EXAMINATION &nbsp;&nbsp;</td>
 
-            <td style="text-align: right;"> Class & Sec. : &nbsp;&nbsp;</td>
-                <td>
+            <td style="text-align: right;"> Class & Sec. :
+
                 @if(isset($stud_data[0][4]) || isset($stud_data[0][5]))
-                    {{$stud_data[0][4]}} - {{ $stud_data[0][5] }}
+                    @if($stud_data[0][5] == 0)
+                        {{$stud_data[0][4]}} - ALL
+                    @else
+                        {{$stud_data[0][4]}} - {{ $stud_data[0][5] }}
+                    @endif
                 @else
                     <p>Info. not available !!!</p>
                 @endif
-                </td>
+            </td>
             <td style="text-align: right;">Exam Name : &nbsp;&nbsp;</td>
                 <td style="text-align: left;">{{$examtitle}}</td>
             </tr>
@@ -99,7 +103,9 @@
                     </td>
                     <td width="30%" align="center">
                         <input type="hidden" name="qntemplateid" value="{{ $tmplid }}">
-                        <input type="hidden" name="class_id" value="{{ $stud_data[0][4] }}">
+                        @if(!empty($stud_data))
+                            <input type="hidden" name="class_id" value="{{ $stud_data[0][4] }}">
+                        @endif
                         <!-- <button type="submit" class="btn btn-primary">Export PDF</button> -->
                         <button class="btn btn-primary" onclick="downloadAsPDF();" ><i class="fas fa-download" ></i> PDF</button>
                     </td>
@@ -150,15 +156,15 @@ function downloadAsIMG()
 {
   // showLoader();
 
-	html2canvas(document.getElementById("pdf_content")).then(function (canvas) {
-	    var anchorTag = document.createElement("a");
-			anchorTag.download = 'consolidated_report <?=date("Y-m-d")?>.jpg';
-			anchorTag.href = canvas.toDataURL();
-			anchorTag.target = '_blank';
-			anchorTag.click();
-		});
+    html2canvas(document.getElementById("pdf_content")).then(function (canvas) {
+        var anchorTag = document.createElement("a");
+            anchorTag.download = 'consolidated_report <?=date("Y-m-d")?>.jpg';
+            anchorTag.href = canvas.toDataURL();
+            anchorTag.target = '_blank';
+            anchorTag.click();
+        });
 
-		 hideLoader();
+         hideLoader();
 
 
 }

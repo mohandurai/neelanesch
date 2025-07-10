@@ -45,46 +45,32 @@
                     <input type="hidden" name="exam_id" id="exam_id">
 
                         <div class="form-group">
-                            <label for="name" class="col-sm-2 control-label">Roll :</label>
+                            <label for="name" class="col-sm-2 control-label">Roll No.</label>
                             <div class="col-sm-12">
-                                <input type="text" class="form-control" id="proj_roll_no" name="proj_roll_no" placeholder="Enter Roll No." value="{{$proj_roll_no}}" readonly>
+                                <input type="text" class="form-control" id="proj_roll_no" name="proj_roll_no" placeholder="Enter Roll No." value="">
                             </div>
                         </div>
 
                         <div class="form-group">
                             <label for="name" class="col-sm-2 control-label">Full&nbsp;Name&nbsp;:</label>
                             <div class="col-sm-12">
-                                <input type="text" class="form-control" id="stud_name" name="stud_name" value="{{$fullname}}" maxlength="50" readonly required="">
+                                <input type="text" class="form-control" id="stud_name" name="stud_name" value="" maxlength="50" required>
                             </div>
                         </div>
 
                         <div class="form-group">
                             <label for="name" class="col-sm-2 control-label">Class :</label>
                             <div class="col-sm-12">
-                                <input type="text" class="form-control" id="class_id" name="class_id"  value="{{$class}}" maxlength="50" readonly required="">
+                                <input type="text" class="form-control" id="class_id" name="class_id"  value="{{$class}}" maxlength="50" readonly>
                             </div>
                         </div>
 
                         <div class="form-group">
                             <label for="name" class="col-sm-2 control-label">Section :</label>
                             <div class="col-sm-12">
-                                <input type="text" class="form-control" readonly id="Section" name="Section" value="{{$sec}}" required="">
+                                <input type="text" class="form-control" readonly id="Section" name="Section" value="{{$sec}}" readonly>
                             </div>
                         </div>
-
-                        <!-- <div class="form-group">
-                            <label for="name" class="col-sm-2 control-label">Term :</label>
-                            <div class="col-sm-12">
-                                <input type="text" class="form-control" id="term" name="term" placeholder="Term Name ..." value="" maxlength="50" required="">
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label class="col-sm-2 control-label">Subject</label>
-                            <div class="col-sm-12">
-                                <textarea id="subject_id" name="subject_id" required="" placeholder="Enter Subject Name ....." class="form-control"></textarea>
-                            </div>
-                        </div> -->
 
                         <div class="col-sm-offset-2 col-sm-10">
                             <button type="submit" class="btn btn-primary" value="create">Begin Project</button>
@@ -129,16 +115,14 @@
                     <th>Title</th>
                     <th>Class</th>
                     <th>Section</th>
-                    <th>Evaluator Comments</th>
-                    <th>Marks Scored</th>
+                    <th>Subject</th>
+                    <th>Chapter</th>
                     <th>Max. Marks</th>
-                    <th>Status</th>
                     <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
-                    <td></td>
                     <td></td>
                     <td></td>
                     <td></td>
@@ -233,10 +217,9 @@ $(document).on('click', '#mediumButton3', function(e) {
                         }
                     }
                 },
-                { data: 'evaluator_status', name: 'evaluator_status' },
-                { data: 'mark_scored', name: 'mark_scored' },
+                { data: 'subject_id', name: 'subject_id' },
+                { data: 'chapter_id', name: 'chapter_id' },
                 { data: 'max_marks', name: 'max_marks' },
-                { data: 'status', name: 'status'},
                 { data: 'action', name : 'action', orderable : true, searchable: true}
             ]
 

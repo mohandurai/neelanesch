@@ -44,14 +44,14 @@ class ClassController extends Controller
         // exit;
 
         $request->validate([
-            'title' => 'required'
+            'class_title' => 'required'
         ]);
 
         try {
             DB::table('student_class')->insert(
                 array(
-                       'class'  =>   $request->title,
-                       'remarks'   =>   $request->remarks,
+                       'class'  =>   $request->class_title,
+                       'remarks'  =>   $request->remarks,
                        'school_id'   =>   1,
                        'created_date'   => Carbon::now(),
                        'updated_date'   => Carbon::now(),
@@ -88,11 +88,11 @@ class ClassController extends Controller
             [
                 'class'  =>   $request->title,
                 'remarks'  =>   $request->remarks,
-                'updated_date' => Carbon::now(),
-                'is_deleted'  => 0
+                'is_deleted'  =>   $request->is_deleted,
+                'updated_date' => Carbon::now()
             ]
         );
-        return redirect()->route('class.index')->with('message', 'Class Name updated successfully....');
+        return redirect()->route('class.index')->with('message', 'Class Info updated successfully.');
     }
 
 
@@ -105,7 +105,7 @@ class ClassController extends Controller
     public function destroy($id)
     {
         DB::table('student_class')->delete($id);
-        return redirect()->route('class.index')->with('message', 'Class Name removed successfully');
+        return redirect()->route('class.index')->with('message', 'Class Info removed successfully');
     }
 
 
@@ -144,7 +144,13 @@ class ClassController extends Controller
      */
     public function edit($id)
     {
-        $data['clsinfo'] = DB::table('student_class')->where('id', $id)->first();
+        $data['clsinfo'] = DB::table('student_class')->where('id', '=', $id)->where('is_deleted', '=', '0')->first();
+        // foreach ($classlist as $arr) {
+        //     $classArr[$arr->id] = $arr->class;
+        // }
+        // echo "<pre>";
+        // print_r($data);
+        // exit;
         return View::make('pages.student.class.edit', $data);
     }
 }

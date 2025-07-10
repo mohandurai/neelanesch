@@ -56,9 +56,9 @@
                     <th>Title</th>
                     <th>Class</th>
                     <th>Section</th>
-                    <th>Evaluator Status</th>
-                    <th>Marks Scored</th>
-                    <th>Evaluator Comments</th>
+                    <th>Subject</th>
+                    <th>Chapter</th>
+                    <th>Max. Marks</th>
                     <th>Actions</th>
                 </tr>
             </thead>
@@ -137,9 +137,9 @@
                         }
                     }
                 },
-                { data: 'evaluator_status', name: 'evaluator_status' },
-                { data: 'mark_scored', name: 'mark_scored' },
-                { data: 'evaluator_comments', name: 'evaluator_comments'},
+                { data: 'subject_id', name: 'subject_id' },
+                { data: 'chapter_id', name: 'chapter_id' },
+                { data: 'max_marks', name: 'max_marks' },
                 { data: 'action', name : 'action', orderable : true, searchable: true}
             ]
 

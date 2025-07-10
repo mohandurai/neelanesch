@@ -86,7 +86,7 @@
            columns: [
                     { data: 'id', name: 'id' },
                     { data: 'class', name: 'class'},
-                    { data: 'remarks', name: 'remarks' },
+                    { data: 'remarks', name: 'remarks'},
                     { data: 'action', name : 'action', orderable : false, searchable: false}
                  ]
 

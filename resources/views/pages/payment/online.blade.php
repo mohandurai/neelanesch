@@ -11,20 +11,24 @@
 
     <div class="table-responsive">
 
-    <form action="{{ url('chapter/store') }}" method="post">
+    <form action="{{ url('payment/store') }}" method="post">
         {{ csrf_field() }}
 
             <div class="form-group">
                 <label for="title">Select Class</label>
                 <select class="form-control" id="class_id" name="class_id">
-                    <option selected="selected" value="0">Select Class</option>
+                    <option value="0" selected disabled>Select Class</option>
+                            @foreach($classlist as $clist)
+                            <option value="{{$clist->id}}">{{$clist->class}}</option>
+                            @endforeach
+                    </select>
                 </select>
             </div>
 
             <div class="form-group">
                 <label for="title">Select Section</label>
                 <select class="form-control" id="sec_id" name="sec_id">
-                    <option value="Z" selected>ALL</option>
+                    <option value="0" selected>ALL</option>
                     <option value="A">A</option>
                     <option value="B">B</option>
                     <option value="C">C</option>
