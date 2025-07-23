@@ -50,12 +50,10 @@
   <div class="col-md-12 grid-margin stretch-card"`>
     <div class="card">
       <div class="card-body">
-        <h4 style="margin-bottom:10px;">
-            Question Master Template View
+        <label style="color:yellow;"> Question Master Info. </label>
             @if(Session::has('message'))
                 <p class="alert {{ Session::get('alert-class', 'alert-success') }}">{{ Session::get('message') }}</p>
             @endif
-        </h4>
 
         <div class="table-responsive">
           <table id="dataTableExample" class="table">
@@ -77,9 +75,10 @@
                     <td>Chapter Name</td><td>:</td><td>{{$question->chapter_id}}</td>
                 </tr>
             </table>
-                <br><br>
+            <hr class="bg-danger border-2 border-top border-danger" />
+
             <table cellpadding="10px" cellspacing="10px">
-                <tr><td colspan="3" align="center">Question Template View :</td></tr>
+                <tr><td colspan="3" align="left"><label style="color:yellow;"> Questions Structural View </label></td></tr>
                 <tr><th>Question Type</th><th>No. of Questions</th><th>Each Marks</th><th>Total</th></tr>
                 @php($aa=0)
                 @php($totMark=0)
@@ -106,8 +105,12 @@
           </table>
           @endif
         </div>
-      </div>
 
+              <hr class="bg-danger border-2 border-top border-danger" />
+
+            <label style="color:yellow;"> Questions Master View </label>
+
+      </div>
 
 
     @php($tt=0)
@@ -123,10 +126,6 @@
     @foreach($qns2 as $kk => $quest)
 
         @php($count++)
-
-        <br>
-        <label style="color:yellow;"><h5>{{$romLet[$count]}}. {{$qnMasTitle[$kk]}}</h5></label>
-        <br>
 
           @foreach($quest as $qq => $question)
 
@@ -182,7 +181,6 @@
 
                 <div class="form-group">
                     Q. No-{{$qq}}. <textarea class="text_box_note" id="summernote5{{$qq}}">{{$question}}</textarea>
-                    <br>
                 </div>
 
             @elseif($kk == 6)
@@ -294,8 +292,6 @@
                         </table>
 
                     </div>
-
-                    <br>
 
                 @endif
 

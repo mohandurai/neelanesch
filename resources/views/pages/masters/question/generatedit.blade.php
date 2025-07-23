@@ -57,8 +57,8 @@
 
                         @php($count++)
 
-                        <label style="color:yellow;">
-                            <h5>{{$romlet[$count]}}. {{$qh}}</h5>
+                        <label style="color:yellow;font-weight:bold;font-size:18px;">
+                            {{$romlet[$count]}}. {{$qh}}
                         </label>
 
 
@@ -201,7 +201,8 @@
 
                     @elseif($kk == 7)
 
-                    <br>{{ $qq }}) &nbsp;&nbsp;&nbsp;
+                    <br>{{ $qq }}) &nbsp;&nbsp;&nbsp; <button type="button" id="del_{{$kk}}_{{$qq}}" alt="{{$kk}}_{{$qq}}" class="btn btn-danger delete-que">Delete</button>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <button type="button" id="add_{{$kk}}_new" alt="{{$kk}}_{{$qq}}" class="btn btn-primary add-que"">Add New</button>
 
                     @php($aaa = $kk . "_" . $qq)
                     @if(isset($qns[$aaa]))
@@ -400,6 +401,17 @@
     $(document).ready(function() {
 
         // $("#table-1").tableDnD();
+        $('.delete-que').click(function() {
+            var altVal = $(this).attr('alt');
+            alert("UUUUUUUUUUUUUU   " + altVal);
+            return false;
+        });
+
+        $('.add-que').click(function() {
+            var altVal = $(this).attr('alt');
+            alert("Addddddddd   " + altVal);
+            return false;
+        });
 
         $('#summernote51').summernote();
         $('#summernote52').summernote();

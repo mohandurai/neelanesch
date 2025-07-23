@@ -186,9 +186,9 @@ class QuestionController extends Controller
     public function storeqns(Request $request)
     {
         // return 0;
-        //echo "<pre>";
-        //print_r($request->all());
-        //echo "</pre>";
+        // echo "<pre>";
+        // print_r($request->all());
+        // echo "</pre>";
         // exit;
 
         $qn_master_temp_id = $request->qn_temp_id;
@@ -320,12 +320,13 @@ class QuestionController extends Controller
               }
             }
 
-                unset($anstemp['ops_7']);
+                // unset($anstemp['ops_7']);
                 // echo "<pre>";
                 // print_r($qnstemp);
                 // echo "<br><br>================================<br><br>";
                 // print_r($anstemp);
-                // echo "</pre>";
+                // echo "</pre></br>";
+                // echo $qn_master_temp_id;
                 // exit;
 
 
@@ -336,7 +337,7 @@ class QuestionController extends Controller
 
 
                 if(isset($qn_master_temp_id)) {
-                    if($request->qn_temp_id == 0) {
+                    if($request->newold == 0) {
                         try {
                             DB::table('question_master_qns_ans')->insert(
                                 array(

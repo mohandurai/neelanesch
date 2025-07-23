@@ -72,6 +72,7 @@
             <table style="margin-top: 20px;" border="1" cellspacing="10" cellpadding="10">
                 <tr align="center">
                     <th align="center">S-No.</th>
+                    <th align="center">Section</th>
                     <th align="center">Roll No.</th>
                     <th align="center">Student Name</th>
                     <th align="center">Marks Scored</th>
@@ -83,6 +84,7 @@
                     @php($kk++)
                     <tr>
                         <td>{{$kk}}</td>
+                        <td>{{$stinfo[5]}}</td>
                         <td>{{$stinfo[0]}}</td>
                         <td>{{$stinfo[1]}}</td>
                         <td>{{$stinfo[2]}}</td>

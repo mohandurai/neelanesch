@@ -473,6 +473,8 @@ class OlexamController extends Controller
         // exit;
         // $stud_id = Auth::id() . "~~~~~" . $id;
 
+        $setupInfo['configs'] = DB::table('config_setup')->where('id', 1)->get();
+
         $res4 = DB::select("select alloc_test_id, que_master_templ_id, A.exam_roll_no as examroll, A.student_name as stname, answer FROM student_answers as A WHERE A.is_deleted = 0 AND A.id=$id");
         $stud_id = $res4[0]->examroll;
         $qntempid = $res4[0]->que_master_templ_id;
@@ -537,6 +539,23 @@ class OlexamController extends Controller
 
         $romanLetters = array(1 => "I", 2 => "II", 3 => "III", 4 => "IV", 5 => "V", 6 => "VI", 7 => "VII", 8 => "VIII", 9 => "IX", 10 => "X", 11 => "XI", 12 => "XII", 13 => "XIII", 14 => "XIV", 15 => "XV", 16 => "XVI", 17 => "XVII", 18 => "XVIII", 19 => "XIX", 20 => "XX");
 
+        $sql6 = "select A.exam_roll_no as examroll, A.student_name as stname, D.class_id, A.mark, D.total_marks, D.title FROM student_answers A, question_master_template D WHERE A.is_deleted = 0 AND A.que_master_templ_id = $qntempid AND A.que_master_templ_id = D.id";
+            $prep3 = DB::select($sql6);
+            if(!empty($prep3)) {
+                foreach ($prep3 as $kk => $data2) {
+                    $examtitle = $data2->title;
+                    $info3[$kk][0] = $data2->examroll;
+                    $info3[$kk][1] = $data2->stname;
+                    $info3[$kk][2] = $data2->mark;
+                    $info3[$kk][3] = $data2->total_marks;
+                    $info3[$kk][4] = $data2->class_id;
+                    $info3[$kk][5] = 0;
+                }
+            } else {
+                $info3 = [];
+                $examtitle = "";
+            }
+
         // echo "<pre>";
         // print_r($QnsTitle);
         // print_r($Qns);
@@ -551,7 +570,7 @@ class OlexamController extends Controller
 
         // return redirect()->route('olexam.correct')->with('message', "Saving answers Successfully !!!");
 
-        return view('pages.training.olexam.view')->with('qntit', $QnsTitle)->with('qns', $Qns)->with('romlet', $romanLetters)->with('examtitle2', $examtitle2)->with('stud_id', $stud_id)->with('stud_name', $student_name)->with('stud_ans', $stud_answer)->with('act_ans', $act_answer)->with('qn_template_id', $qntempid)->with('allocTestId', $allc_id)->with('eachmark', $emark);
+        return view('pages.training.olexam.view',$setupInfo)->with('qntit', $QnsTitle)->with('qns', $Qns)->with('romlet', $romanLetters)->with('examtitle2', $examtitle2)->with('stud_id', $stud_id)->with('stud_name', $student_name)->with('stud_ans', $stud_answer)->with('act_ans', $act_answer)->with('qn_template_id', $qntempid)->with('allocTestId', $allc_id)->with('eachmark', $emark)->with('examtitle',$examtitle);
     }
 
     public function savecorrected(Request $request)
@@ -647,12 +666,12 @@ class OlexamController extends Controller
         // echo "</pre>";
         // exit;
 
-
         $tmplid = $request->que_templ_id;
+        $secid = $request->sec_id;
 
         if($request->report_type == 1)
         {
-            $sql6 = "select A.exam_roll_no as examroll, A.student_name as stname, D.class_id, A.mark, D.total_marks, D.title FROM student_answers A, question_master_template D WHERE A.is_deleted = 0 AND A.exam_roll_no='". $request->studroll_id ."' AND A.que_master_templ_id = $tmplid AND A.que_master_templ_id = D.id";
+            $sql6 = "select A.exam_roll_no as examroll, A.section, A.student_name as stname, D.class_id, A.mark, D.total_marks, D.title FROM student_answers A, question_master_template D WHERE A.is_deleted = 0 AND A.exam_roll_no='". $request->studroll_id ."' AND A.que_master_templ_id = $tmplid AND A.que_master_templ_id = D.id";
             // echo $sql6; exit;
             $prep3 = DB::select($sql6);
             if(!empty($prep3)) {
@@ -664,14 +683,22 @@ class OlexamController extends Controller
                     $info3[$kk][2] = $data2->mark;
                     $info3[$kk][3] = $data2->total_marks;
                     $info3[$kk][4] = $data2->class_id;
-                    $info3[$kk][5] = 0;
+                    $info3[$kk][5] = $data2->section;
                 }
             } else {
                 $info3 = [];
                 $examtitle = "";
             }
         } else {
-            $sql6 = "select A.exam_roll_no as examroll, A.student_name as stname, D.class_id, A.mark, D.total_marks, D.title FROM student_answers A, question_master_template D WHERE A.is_deleted = 0 AND A.que_master_templ_id = $tmplid AND A.que_master_templ_id = D.id";
+            if($secid == 0) {
+                $sql6 = "select A.exam_roll_no as examroll, A.section, A.student_name as stname, D.class_id, A.mark, D.total_marks, D.title FROM student_answers A, question_master_template D WHERE A.is_deleted = 0 AND A.que_master_templ_id = $tmplid AND A.que_master_templ_id = D.id";
+            } else {
+                $sql6 = "select A.exam_roll_no as examroll, A.section, A.student_name as stname, D.class_id, A.mark, D.total_marks, D.title FROM student_answers A, question_master_template D WHERE A.is_deleted = 0 AND A.section='". $secid ."' AND A.que_master_templ_id = $tmplid AND A.que_master_templ_id = D.id";
+            }
+            // $sql6 = "select A.exam_roll_no as examroll, A.section, A.student_name as stname, D.class_id, A.mark, D.total_marks, D.title FROM student_answers A, question_master_template D WHERE A.is_deleted = 0 AND A.section='". $secid ."' AND A.que_master_templ_id = $tmplid AND A.que_master_templ_id = D.id";
+
+            // echo $sql6; exit;
+
             $prep3 = DB::select($sql6);
             if(!empty($prep3)) {
                 foreach ($prep3 as $kk => $data2) {
@@ -681,7 +708,7 @@ class OlexamController extends Controller
                     $info3[$kk][2] = $data2->mark;
                     $info3[$kk][3] = $data2->total_marks;
                     $info3[$kk][4] = $data2->class_id;
-                    $info3[$kk][5] = 0;
+                    $info3[$kk][5] = $data2->section;
                 }
             } else {
                 $info3 = [];

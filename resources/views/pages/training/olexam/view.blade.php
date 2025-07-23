@@ -16,25 +16,58 @@
 </style>
 @endpush
 
+@php
+    //echo "<pre>";
+    //print_r($stud_ans);
+    //echo "================================================================= <br><br>";
+    //print_r($act_ans);
+    //echo "</pre>";
+    //exit;
+@endphp
+
+@php($logourl = 'storage/images/' . $configs[0]->logo_url)
+
 @section('content')
 
 <div class="row">
     <div class="col-md-12 grid-margin stretch-card">
         <div class="card">
 
-        <table class="table2">
+       <table class="table2">
                 <tr>
                     <td align="center">
-                        <img src="{{ asset('assets/images/image3_horizon.png') }}" height="150em" width="200em" alt="" title="" />
+                        <img src="{{ asset($logourl) }}" height="150em" width="200em" alt="" title="" />
                     <br><br>
                     </td>
                     <td>
-                        <h3>Cannosa English Medium School</h3>
-                        No. XXXX, Stree Name detailed, District Name - 600017
-                        <br>Contact Details : 98406 12345
-                        <br>Website  : www.eschool.com - email - admin@eschool.com<br>
+                        <h3>{{$configs[0]->organization_name}}</h3>
+                        {{$configs[0]->address1}}  {{$configs[0]->address2}}
+                        <br>Contact Details : {{$configs[0]->contact_phone1}} / {{$configs[0]->contact_phone2}}
+                        <br>Website  : {{$configs[0]->website_url}}
+                        <br>email : {{$configs[0]->email_id}}
                     </td>
                 </tr>
+        </table>
+
+        <table width="90%" class="table2" cellspacing="10" cellpadding="10">
+            <tr>
+            <td style="color:white; font-size:15; margin-left: 50;">ONLINE EXAMINATION &nbsp;&nbsp;</td>
+
+            <td style="text-align: right;"> Class & Sec. :
+
+                @if(isset($stud_data[0][4]) || isset($stud_data[0][5]))
+                    @if($stud_data[0][5] == 0)
+                        {{$stud_data[0][4]}} - ALL
+                    @else
+                        {{$stud_data[0][4]}} - {{ $stud_data[0][5] }}
+                    @endif
+                @else
+                    <p>Info. not available !!!</p>
+                @endif
+            </td>
+            <td style="text-align: right;">Exam Name : &nbsp;&nbsp;</td>
+                <td style="text-align: left;">{{$examtitle}}</td>
+            </tr>
         </table>
 
         <table align="center" width="80%" class="table2">
@@ -207,7 +240,11 @@
                                 <div >&nbsp;&nbsp;&nbsp;&nbsp;
                                     @php($arr2 = $kk . "_" . $qq)
                                     <label class="form-check-label">
-                                        Student Answer : {{$stud_ans[$arr2]}}
+                                        @if(!isset($stud_ans[$arr2]))
+                                            Student Answer : 0
+                                        @else
+                                            Student Answer : {{$stud_ans[$arr2]}}
+                                        @endif
                                     </label>
                                 </div>
 
@@ -220,10 +257,12 @@
                                 </div>
 
                                 <div >&nbsp;&nbsp;&nbsp;&nbsp;
-                                    @if($stud_ans[$arr2] == $act_ans[$arr2])
-                                    @php($markval = $eachmark[7])
+                                    @if(!isset($stud_ans[$arr2]))
+                                        @php($markval = 0)
+                                    @elseif($stud_ans[$arr2] == $act_ans[$arr2])
+                                        @php($markval = $eachmark[7])
                                     @else
-                                    @php($markval = 0)
+                                        @php($markval = 0)
                                     @endif
                                     <label class="form-check-label">Corrected Marks by Teacher :
                                         {{$markval}}
@@ -304,80 +343,3 @@
 <script src="{{ asset('assets/js/data-table.js') }}"></script>
 @endpush
 
-@push('custom-scripts')
-<script>
-    // $(document).ready(function() {
-    //     $("#class_id option[value=0]").prop('selected', true);
-    //     $("#subject_id option[value=0]").prop('selected', true);
-    //     $("#chapter_id option[value=0]").prop('selected', true);
-    //     $("#mode_test option[value=0]").prop('selected', true);
-    // });
-
-
-    //     $("input:checkbox.qntemplate").click(function() {
-    //         var seltemp1 = "#qntemplate"+$(this).val()+"order";
-    //         var seltemp2 = "#qntemplate"+$(this).val()+"noqns";
-    //         var seltemp3 = "#qntemplate"+$(this).val()+"markque";
-    //         // return false;
-    //         if(!$(this).is(":checked")) {
-    //             $(seltemp1).prop( "disabled", true );
-    //             $(seltemp1).val('0');
-    //             $(seltemp2).prop( "disabled", true );
-    //             $(seltemp2).val('0');
-    //             $(seltemp3).prop( "disabled", true );
-    //             $(seltemp3).val('0');
-    //         } else {
-    //             // alert('you are checked ... ' + $(this).val());
-    //             $(seltemp1).removeAttr('disabled');
-    //             $(seltemp2).removeAttr('disabled');
-    //             $(seltemp3).removeAttr('disabled');
-    //         }
-
-    //     });
-
-    //     $('#class_id').change(function() {
-    //         // alert("UUUUUUUUUUU"); return false;
-    //         $('#subject_id').html('');
-    //         $("#subject_id option[value=0]").prop('selected', true);
-
-    //         var clsid = $(this).val();
-
-    //         $.ajax({
-    //             type: 'GET',
-    //             url: "{{ url('/getcontentsubject') }}/"+clsid,
-    //             // complete: function() {
-    //             //     $('#psdatasourcSpinner').hide();
-    //             // },
-    //             success: function(data2) {
-    //                 console.log(data2);
-    //                 $('#subject_id').append(data2);
-    //                 // $(".table-responsive").html(data);
-    //             }
-    //         });
-
-    //     });
-
-    //     $('#subject_id').change(function() {
-    //         // alert("TTTTTTTTTTTT"); return false;
-    //         $('#chapter_id').html('');
-    //         $("#chapter_id option[value=0]").prop('selected', true);
-
-    //         var subid = $(this).val();
-    //         var clsid = $("#class_id").val();
-
-    //         $.ajax({
-    //             type: 'GET',
-    //             url: "{{ url('/getcontentchapt') }}/"+subid+"~~~"+clsid,
-    //             // complete: function() {
-    //             //     $('#psdatasourcSpinner').hide();
-    //             // },
-    //             success: function(data2) {
-    //                 console.log(data2);
-    //                 $('#chapter_id').append(data2);
-    //                 // $(".table-responsive").html(data);
-    //             }
-    //         });
-
-    //     });
-</script>
-@endpush
